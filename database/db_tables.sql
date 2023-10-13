@@ -30,7 +30,7 @@ CREATE TABLE Image(
     PlayerID int not null,
     TimeStamp DATE,
     ImageData LONGBLOB,
-    FOREIGN KEY (PlayerID) REFERENCES Player(PlayerID),
+    FOREIGN KEY (PlayerID) REFERENCES PlayerAccount(PlayerID) ON UPDATE CASCADE,
     PRIMARY KEY (ImageID)
 
 );
@@ -43,7 +43,7 @@ CREATE TABLE GameMap(
     MapVersion double precision DEFAULT 1.0,
     MapData LONGBLOB,
     FOREIGN KEY (ImageID) REFERENCES Image(ImageID),
-    FOREIGN KEY (DataID) REFERENCES ProcessedImageData(DataID),
+    FOREIGN KEY (DataID) REFERENCES ProcessedImageData(DataID) ON UPDATE CASCADE,
     PRIMARY KEY (MapID)
 );
 
@@ -52,7 +52,7 @@ CREATE TABLE GameSave(
     PlayerID int not null,
     TimePlayed int DEFAULT  0,
     ProgressData LONGBLOB,
-    FOREIGN KEY (PlayerID) REFERENCES Player(PlayerID),
+    FOREIGN KEY (PlayerID) REFERENCES PlayerAccount(PlayerID) ON UPDATE CASCADE,
     PRIMARY KEY (ProgressID)
 );
 
@@ -71,8 +71,8 @@ CREATE TABLE BackUp(
     ProgressID int not null,
     BackUpData LONGBLOB,
     TimeStamp DATE,
-    FOREIGN KEY (PlayerID) REFERENCES Player(PlayerID),
-    FOREIGN KEY (ProgressID) REFERENCES GameSave(ProgressID),
+    FOREIGN KEY (PlayerID) REFERENCES PlayerAccount(PlayerID) ON UPDATE CASCADE,
+    FOREIGN KEY (ProgressID) REFERENCES GameSave(ProgressID) ON UPDATE CASCADE,
     PRIMARY KEY (RecoveryID)
 );
 
@@ -81,7 +81,7 @@ CREATE TABLE ProcessedImageData(
     ImageID int not null,
     ImageData LONGBLOB,
     TimeStamp Date,
-    FOREIGN KEY (ImageID) REFERENCES Image(ImageID),
+    FOREIGN KEY (ImageID) REFERENCES Image(ImageID) ON UPDATE CASCADE,
     PRIMARY KEY (DataID)
 
 );
@@ -91,7 +91,7 @@ CREATE TABLE MapUpdate(
     MapID int not null,
     UpdateData LONGBLOB,
     TimeStamp Date,
-    FOREIGN KEY (MapID) REFERENCES GameMap(MapID),
+    FOREIGN KEY (MapID) REFERENCES GameMap(MapID) ON UPDATE CASCADE,
     PRIMARY KEY (UpdateID)
 );
 
@@ -100,8 +100,8 @@ CREATE TABLE Owns(
     ItemID int not null,
     PlayerID int not null,
     ItemQuantity int not null DEFAULT 1,
-    FOREIGN KEY (ItemID) REFERENCES Item(ItemID),
-    FOREIGN KEY (PlayerID) REFERENCES PlayerAccount(PlayerID),
+    FOREIGN KEY (ItemID) REFERENCES Item(ItemID) ON UPDATE CASCADE,
+    FOREIGN KEY (PlayerID) REFERENCES PlayerAccount(PlayerID)ON UPDATE CASCADE ,
     PRIMARY KEY (ItemID, PlayerID)
 );
 
@@ -110,9 +110,9 @@ CREATE TABLE Composed(
     MapID int not null,
     DataID int not null,
     ImageID int not null,
-    FOREIGN KEY (MapID) REFERENCES GameMap(MapID),
-    FOREIGN KEY (DataID) REFERENCES ProcessedImageData(DataID),
-    FOREIGN KEY (ImageID) REFERENCES Image(ImageID),
+    FOREIGN KEY (MapID) REFERENCES GameMap(MapID)ON UPDATE CASCADE ,
+    FOREIGN KEY (DataID) REFERENCES ProcessedImageData(DataID)ON UPDATE CASCADE ,
+    FOREIGN KEY (ImageID) REFERENCES Image(ImageID)ON UPDATE CASCADE,
     PRIMARY KEY (MapID, DataID, ImageID)
 );
 
