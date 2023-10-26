@@ -1,0 +1,33 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="SunnyLand"
+run/main_scene="res://World/world.tscn"
+config/features=PackedStringArray("4.1", "Forward Plus")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=360
+window/size/viewport_height=240
+window/size/window_width_override=2880
+window/size/window_height_override=1920
+window/stretch/mode="canvas_items"
+
+[layer_names]
+
+2d_physics/layer_1="world"
+2d_physics/layer_2="player_collision"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

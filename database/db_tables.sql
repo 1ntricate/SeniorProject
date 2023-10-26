@@ -16,7 +16,6 @@ CREATE TABLE PlayerAccount(
     PlayerID int not null AUTO_INCREMENT,
     UserName varchar(50) not null,
     Email varchar(50) not null,
-    Plaintext varchar(60) DEFAULT NULL,
     Password varchar(60) DEFAULT NULL,
     CurrentLevel int DEFAULT  0,
     CurrentExperience int DEFAULT  0,
