@@ -1,0 +1,2 @@
+﻿40847
+/home/anh/Downloads/Godot_v3.5.3-stable_mono_x11_64/Godot_v3.5.3-stable_mono_x11.64
