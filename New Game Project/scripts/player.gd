@@ -1,15 +1,22 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
-var velocity: Vector2 = Vector2()
+var enemy_in_range = false
+var enemy_atk_cooldown = true
+var health = 100
+var hunger = 100
+var alive = true
+
 var direction: Vector2 = Vector2()
 var click_position: Vector2 = Vector2()
 var cur_dir = "none"
 var is_attacking = false
-onready var animation = $AnimatedSprite
+
+@onready var animation = $AnimatedSprite2D
 var speed = 100
 
 func _ready():
 	animation.play("front_idle")
+	$hunger_timer.start()
 
 func read_input():
 	velocity = Vector2()
@@ -60,7 +67,9 @@ func read_input():
 		play_animation(0)
 
 	velocity = velocity.normalized()
-	velocity = move_and_slide(velocity * 200)
+	set_velocity(velocity * 200)
+	move_and_slide()
+	velocity = velocity
 
 func play_animation(movement):
 	match cur_dir:
@@ -90,19 +99,90 @@ func play_animation(movement):
 				animation.play("back_idle")
 
 func play_attack_animation():
+	Global.player_current_atk = true
 	match cur_dir:
 		"right":
 			animation.set_flip_h(false)
 			animation.play("attack_side")
+			$deal_dmg_cooldown.start()
 		"left":
 			animation.set_flip_h(true)
 			animation.play("attack_side")
+			$deal_dmg_cooldown.start()
 		"down":
 			animation.set_flip_h(true)
 			animation.play("attack_down")
+			$deal_dmg_cooldown.start()
 		"up":
 			animation.set_flip_h(true)
 			animation.play("attack_up")
+			$deal_dmg_cooldown.start()
 
 func _physics_process(delta):
 	read_input()
+	enemy_atk()
+	update_hp()
+	update_hunger_bar()
+	if health <= 0:
+		alive = false # go back to menu
+		health = 0
+		print("You are dead")
+		self.queue_free()
+
+func player():
+	pass
+
+func _on_playerhitbox_body_entered(body):
+	if body.has_method("enemy"):
+		enemy_in_range = true
+
+func _on_playerhitbox_body_exited(body):
+	if body.has_method("enemy"):
+		enemy_in_range = false
+
+func enemy_atk():
+	if enemy_in_range and enemy_atk_cooldown == true:
+		health -= 20
+		enemy_atk_cooldown = false
+		$atk_cooldown.start()
+		print(health)
+
+func _on_atk_cooldown_timeout():
+	enemy_atk_cooldown = true
+	if health <= 0:
+		health = 0
+	if health > 100:
+		health = 100
+
+func _on_deal_dmg_cooldown_timeout():
+	$deal_dmg_cooldown.stop()
+	Global.player_current_atk = false
+	is_attacking = false
+
+func update_hp():
+	var hpbar = $Player_HP
+	hpbar.value = health
+	if health > 100:
+		hpbar.visible = false
+	else:
+		hpbar.visible = true
+		
+func _on_hunger_timer_timeout():
+	# Decrease hunger by 1 every second
+	if hunger > 0:
+		hunger -= 5
+		print("Hunger:", hunger)
+
+	# Check if the player is starving
+	if hunger == 0:
+		health -= 1
+		hunger = 0
+		print("You are starving!")
+		
+func update_hunger_bar():
+	var hungerbar = $HungerBar
+	hungerbar.value = hunger
+	if hunger > 100:
+		hungerbar.visible = false
+	else:
+		hungerbar.visible = true

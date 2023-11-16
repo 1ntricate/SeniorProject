@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://j4ar8bdi7p0l"]
+
+[ext_resource type="Texture2D" uid="uid://ckc0501l3p57u" path="res://images/Green_circle.png" id="1_clkfl"]
+
+[node name="Hunger" type="Node2D"]
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+offset_left = -8.0
+offset_top = -7.0
+offset_right = 9.0
+offset_bottom = 8.0
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("1_clkfl")
+texture_progress = ExtResource("1_clkfl")
+tint_under = Color(1, 0.0117647, 0.027451, 1)
