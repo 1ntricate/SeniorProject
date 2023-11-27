@@ -424,15 +424,18 @@ collision_layer = 3
 script = ExtResource("2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -4)
 shape = SubResource("1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.898438, 0.638021)
 sprite_frames = SubResource("2")
-animation = &"attack_up"
+animation = &"attack_side"
+frame_progress = 0.7288
 
 [node name="player-hitbox" type="Area2D" parent="."]
+visible = false
 position = Vector2(0, -5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="player-hitbox"]
@@ -446,8 +449,11 @@ wait_time = 0.5
 
 [node name="hunger_timer" type="Timer" parent="."]
 
+[node name="thirsty_timer" type="Timer" parent="."]
+
 [connection signal="body_entered" from="player-hitbox" to="." method="_on_playerhitbox_body_entered"]
 [connection signal="body_exited" from="player-hitbox" to="." method="_on_playerhitbox_body_exited"]
 [connection signal="timeout" from="atk_cooldown" to="." method="_on_atk_cooldown_timeout"]
 [connection signal="timeout" from="deal_dmg_cooldown" to="." method="_on_deal_dmg_cooldown_timeout"]
 [connection signal="timeout" from="hunger_timer" to="." method="_on_hunger_timer_timeout"]
+[connection signal="timeout" from="thirsty_timer" to="." method="_on_thirsty_timer_timeout"]

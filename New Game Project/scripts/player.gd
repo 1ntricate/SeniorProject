@@ -4,6 +4,7 @@ var enemy_in_range = false
 var enemy_atk_cooldown = true
 var health = 100
 var hunger = 100
+var thirsty = 100
 var alive = true
 
 var direction: Vector2 = Vector2()
@@ -17,6 +18,7 @@ var speed = 100
 func _ready():
 	animation.play("front_idle")
 	$hunger_timer.start()
+	$thirsty_timer.start()
 
 func read_input():
 	velocity = Vector2()
@@ -123,6 +125,7 @@ func _physics_process(delta):
 	enemy_atk()
 	update_hp()
 	update_hunger_bar()
+	update_thirsty_bar()
 	if health <= 0:
 		alive = false # go back to menu
 		health = 0
@@ -170,7 +173,7 @@ func update_hp():
 func _on_hunger_timer_timeout():
 	# Decrease hunger by 1 every second
 	if hunger > 0:
-		hunger -= 5
+		hunger -= 1
 		print("Hunger:", hunger)
 
 	# Check if the player is starving
@@ -186,3 +189,26 @@ func update_hunger_bar():
 		hungerbar.visible = false
 	else:
 		hungerbar.visible = true
+
+
+func _on_thirsty_timer_timeout():
+	# Decrease thirsty by 1 every second
+	if thirsty > 0:
+		thirsty -= 1
+		print("Thirsty:", thirsty)
+
+	# Check if the player is starving
+	if thirsty == 0:
+		health -= 1
+		thirsty = 0
+		print("You need water!")
+	
+func update_thirsty_bar():
+	var thirstybar = $ThirstyBar
+	thirstybar.value = thirsty
+	if thirsty > 100:
+		thirstybar.visible = false
+	else:
+		thirstybar.visible = true
+		
+		

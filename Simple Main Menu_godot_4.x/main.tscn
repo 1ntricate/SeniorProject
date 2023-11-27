@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b3yltsjud5jrm" path="res://main_bk.png" id="2_yx7rg"]
 [ext_resource type="Script" path="res://src/Scroll_Label.gd" id="3_v2ba3"]
 
-[node name="main" type="Node"]
+[node name="menu" type="Node"]
 
 [node name="MainMenu" type="Control" parent="."]
 layout_mode = 3
