@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cat5fdjft0is"]
+[gd_scene load_steps=4 format=3 uid="uid://cat5fdjft0is"]
 
 [ext_resource type="Script" path="res://Menu.gd" id="1_jqnwo"]
 [ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_3cckf"]
+[ext_resource type="PackedScene" uid="uid://bui3n11mxchgr" path="res://scenes/Netwock.tscn" id="3_b3c0i"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -14,8 +15,10 @@ script = ExtResource("1_jqnwo")
 
 [node name="Background" type="TextureProgressBar" parent="."]
 layout_mode = 2
-offset_right = 1152.0
-offset_bottom = 646.0
+offset_left = 7.0
+offset_top = -19.0
+offset_right = 1159.0
+offset_bottom = 627.0
 nine_patch_stretch = true
 texture_under = ExtResource("2_3cckf")
 
@@ -35,7 +38,12 @@ text = "Start"
 
 [node name="DB_connect" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Connect to DB"
+text = "Login"
+
+[node name="Netwock" parent="MarginContainer/VBoxContainer/DB_connect" instance=ExtResource("3_b3c0i")]
+layout_mode = 1
+offset_left = 293.0
+offset_right = 293.0
 
 [node name="image_process" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -50,4 +58,5 @@ layout_mode = 2
 text = "EXIT"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/image_process" to="." method="_on_image_process_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
