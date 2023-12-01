@@ -3,7 +3,7 @@ import os
 import numpy as np
 import csv
 import pandas as pd
-
+from skimage.feature.texture import graycomatrix, graycoprops
 
 # splits input image into patches then extracts the average color and edge count of each patch
 # these features are used as inputs for a KNN classication
@@ -16,13 +16,13 @@ def load_csv(csv_file):
         next(reader)  # Skip the header row
         for row in reader:
             # Extract the features (B, G, R, Edge Count), label, and type from each row
-            features = [float(row[0]), float(row[1]), float(row[2]), float(row[3])]
-            label = row[4]
-            type = row[5]
+            features = [float(row[0]), float(row[1]), float(row[2]), float(row[3]),float(row[4]), float(row[5]), float(row[6]),float(row[7])]
+            label = row[8]
+            type = row[9]
             known_data.append((features, label,type))
     return known_data
 
-def resize_image(image_path, crop_size):
+def resize_image(image_path, re_size):
     # Load the image
     image = cv2.imread(image_path)
     
@@ -32,7 +32,7 @@ def resize_image(image_path, crop_size):
         return None
     
     # Resize the image to the desired size
-    resized_image = cv2.resize(image, (crop_size[0], crop_size[1]))
+    resized_image = cv2.resize(image, (re_size[0], re_size[1]))
     
     return resized_image
 
@@ -74,9 +74,14 @@ def euclidean_distance(input_vector, element_vector):
     input_vector = np.array(input_vector, dtype='float64')  
     element_vector = np.array(element_vector, dtype='float64')  
     
+    # Print the input vectors
+    #print(f"Input vector: {input_vector}")
+    #print(f"Element vector: {element_vector}")
+    
     # Calculate the Euclidean distance
     distance = np.sqrt(np.sum((input_vector - element_vector) ** 2))
-    #print(f"Euclidean distance:{distance}")
+    #print(f"Euclidean distance: {distance}")
+    
     return distance
 
 # predict lables & types
@@ -95,44 +100,56 @@ def Knn(input_vector, known_data, k, threshold):
     class_counts = {}
     type_counts = {}
     labels_types =[]
+    types = []
     # iterate through k nearest neighbors, predict labels
     for i in range(k):
+        
         type = sorted_distances_and_labels[i][2] 
         label = sorted_distances_and_labels[i][1] 
         d_d = sorted_distances_and_labels[i][0]  
         if d_d <= threshold:
             print(f"{i+1} distance: {d_d} label: {label}, type: {type}")
             labels_types.append((label,type))
+            types.append(type)
         else:
             # outlier
             print(f"{i+1} No elements within distance threshold")
-    index = 0
-    if 0 <= index < len(labels_types):
-        label, type = labels_types[index]
+    for type in types:
         if type in type_counts:
-            type_counts[type] +=1
-        else: 
-            type_counts[type] = 1
-    else:
-        label = 'outlier'
-        if 'outlier' in class_counts:
-            class_counts['outlier'] += 1
+            type_counts[type] += 1
         else:
-            class_counts['outlier'] = 1
-    print(f"Label: {label} type: {type}")
-
-    max_count2 = 0
-    best_type = -1
+            type_counts[type] = 1
     
-    for type, count in type_counts.items():
-        #print(f"label: {label} count: {count}")
-        if count > max_count2:
-            max_count2 = count
-            best_type = type
-    #if (max_count2 > max_count):
-    #    best_label = best_type
+    #smallest_distance_label = sorted_distances_and_labels[0][1]
+    #most_common_type = max(type_counts, key=type_counts.get)
+    if not sorted_distances_and_labels:
+        smallest_distance_label = 'Outlier'
+    else:
+        smallest_distance_label = sorted_distances_and_labels[0][1]
 
-    return label, best_type
+    if not type_counts:
+        most_common_type = 'Outlier'
+    else:
+        most_common_type = max(type_counts, key=type_counts.get)
+    
+
+    return smallest_distance_label, most_common_type
+
+def compute_texture_features(patch):
+    # Convert the patch to grayscale
+    gray = cv2.cvtColor(patch, cv2.COLOR_BGR2GRAY)
+    
+    # Compute the GLCM matrix
+    glcm = graycomatrix(gray, distances=[1], angles=[0], levels=256, symmetric=True, normed=True)
+    
+    # Compute GLCM properties
+    contrast = graycoprops(glcm, prop='contrast')[0, 0]
+    dissimilarity = graycoprops(glcm, prop='dissimilarity')[0, 0]
+    homogeneity = graycoprops(glcm, prop='homogeneity')[0, 0]
+    energy = graycoprops(glcm, prop='energy')[0, 0]
+    
+    return contrast, dissimilarity, homogeneity, energy
+
 
 def get_patch_info(patch_info_array):
     feature_vectors = []
@@ -157,7 +174,7 @@ def get_patch_info(patch_info_array):
 def add_text_to_patches(resized_image, label,type, patch_num):
     border_color = (0, 255, 0) 
     # Add label text to the patch
-    text = f"{patch_num}:{label}, {type}"
+    text = f"{patch_num}: {type}, {label}"
     text_position = (10, 30) 
     cv2.putText(patch_2, text, text_position, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
     # Calculate the x and y coordinates to place the patch in the result image
@@ -175,8 +192,8 @@ def add_text_to_patches(resized_image, label,type, patch_num):
     # Place the labeled patch onto the result image
     result_image[y:y+patch_size[1], x:x+patch_size[0]] = patch_2
    
-# Image crop size (width, height) in pixels
-crop_size = (1500, 900) 
+# Resize image (width, height) in pixels
+re_size = (1500, 900) 
 # Patch size (width, height) in pixels
 patch_size = (300, 300)
 
@@ -189,31 +206,30 @@ csv_file= 'known_data.csv'
 known_data = load_csv(csv_file)
 
 # weights for features
-color_weights = [0.5, 0.5, 0.5]  # B, G, R
-edge_count_weight = 1.50
+# [B, G, R, Edge Count, Contrast, Dissimilarity, Homogeneity, Energy]
+weights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]  
 
-# lists
 patch_info = []
 patches = []
 
 # k nearest neghbors to consider
-k = 4
+k = 5
 # distance threshold for knn
-threshold = 1.9
+threshold = 2.2
 # Begin
 
 # load input image (image to identify)
-filename = '5_landscape.jpg'
+filename = 'backyard.jpg'
 print(f"Input image: {filename}\n")
 
 # Input image folder
 input_img_path = os.path.join('input_images', filename)
 
 # resize the image
-resized_image = resize_image(input_img_path, crop_size)
+resized_image = resize_image(input_img_path, re_size)
 result_image = resized_image.copy()
 
-# loop throuogh all 15 patches
+# loop throuogh all patches
 if resized_image is not None:
     print("Image resized successfully.")
     # Split the resized image into patches
@@ -222,12 +238,16 @@ if resized_image is not None:
     for i, patch in enumerate(patches):
         average_color = avg_patch_color(patch)
         edges = patch_edges(patch, low_threshold, high_threshold)
-    
+        contrast, dissimilarity, homogeneity, energy = compute_texture_features(patch)
         # dictionary to store information about the patch
         patch_data = {
             'patch_num': i + 1,
             'average_color_BGR': average_color,
             'edge_count': edges,
+            'contrast':contrast,
+            'dissimilarity': dissimilarity,
+            'homogeneity': homogeneity,
+            'energy': energy,
         }
         patch_info.append(patch_data)
     # Convert the list of patch information dictionaries into a NumPy array
@@ -243,9 +263,12 @@ for patch_data in patch_info_array:
     patch_num = patch_data['patch_num']
     average_color_BGR = patch_data['average_color_BGR']
     edge_count = patch_data['edge_count']
-
+    contrast = patch_data['contrast']
+    dissimilarity = patch_data['dissimilarity']
+    homogeneity = patch_data['homogeneity']
+    energy = patch_data['energy']   
     # Create a feature vector with B, G, R, and edge count
-    feature_vector = [average_color_BGR[0], average_color_BGR[1], average_color_BGR[2], edge_count]
+    feature_vector = [average_color_BGR[0], average_color_BGR[1], average_color_BGR[2], edge_count,contrast,dissimilarity, homogeneity,energy]
     
     # Combine image name and patch number as the label and add it to the feature vector
     label = f"{input_img_name}_{patch_num}"
@@ -253,18 +276,25 @@ for patch_data in patch_info_array:
     
     # Append the patch vector to the feature_vectors list
     feature_vectors.append(feature_vector)
-
+'''
 # Extract the first 4 values of each feature vector in both datasets (numerical values)
 feature_vectors_values = [feature_vector[:4] for feature_vector in feature_vectors]
+known_data_values = [data[0] for data in known_data]
+'''
+# Extract all values of each feature vector in both datasets (numerical values)
+feature_vectors_values = [feature_vector[:8] for feature_vector in feature_vectors]  # Exclude the label
 known_data_values = [data[0] for data in known_data]
 
 # Combine both datasets
 combined_values = feature_vectors_values + known_data_values
 
+print(f"feature vector values len:{len(feature_vectors_values[0])}")
+print(f"known data len:{len(known_data_values[0])}")
+
 # Calculate mean and standard deviation separately for each feature
 mean = np.mean(combined_values, axis=0)
 std_dev = np.std(combined_values, axis=0)
-
+'''
 # Normalize each feature with its custom weight
 normalized_feature_vectors = [
     [(feature_value * weight - feature_mean) / feature_std_dev for feature_value, weight, feature_mean, feature_std_dev in zip(feature_vector[:3], color_weights, mean[:3], std_dev[:3])] +
@@ -279,6 +309,23 @@ normalized_known_data = [
 
 # re-add labels to the normalized lists
 normalized_input_features = [(normalized_feature_vector, feature_vector[4]) for normalized_feature_vector, feature_vector in zip(normalized_feature_vectors, feature_vectors)]
+normalized_known_features = [(normalized_data, data[1], data[2]) for normalized_data, data in zip(normalized_known_data, known_data)]
+'''
+
+normalized_feature_vectors = [
+    [(feature_value * weight - feature_mean) / feature_std_dev
+     for feature_value, weight, feature_mean, feature_std_dev in zip(feature_vector, weights, mean, std_dev)]
+    for feature_vector in feature_vectors_values
+]
+
+normalized_known_data = [
+    [(data_value * weight - data_mean) / data_std_dev
+     for data_value, weight, data_mean, data_std_dev in zip(data, weights, mean, std_dev)]
+    for data in known_data_values
+]
+
+# Re-add labels to the normalized lists
+normalized_input_features = [(normalized_feature_vector, feature_vector[8]) for normalized_feature_vector, feature_vector in zip(normalized_feature_vectors, feature_vectors)]
 normalized_known_features = [(normalized_data, data[1], data[2]) for normalized_data, data in zip(normalized_known_data, known_data)]
 
 # Knn classification

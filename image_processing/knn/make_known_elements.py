@@ -2,6 +2,8 @@ import cv2
 import os
 import numpy as np
 import csv
+from skimage.feature.texture import graycomatrix, graycoprops
+
 
 # resizes images in the elements folder to patch size 300x300 and extracts the 
 # following features of each element: Average color in Blue, Green, Red, and the total number of edges.
@@ -11,7 +13,27 @@ import csv
 # a new type of element (e.g. dog) create a folder name dog and put dog images in the folder.
 # then run this script followd by knn.py
 
+# load and resize images in the elemnts folder
+def load_elements(folder_path, target_size=(300, 300)):
+    images = []  # List to store loaded and resized images
+    image_names = []  # List to store image names
+    
+    # Iterate through all files in the folder
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        
+        # Check if the file is an image (you can customize the image extensions)
+        if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp')):
+            image = cv2.imread(file_path)
+            if image is not None:
+                # Resize the image to the target size
+                resized_image = cv2.resize(image, target_size)
+                images.append(resized_image)
+                image_names.append(filename)  # Store the image name
+    
+    return images, image_names  # Return both resized images and image names
 
+'''
 # load all elements in the folder
 def load_elements(folder_path):
     images = []  # List to store loaded images
@@ -29,6 +51,7 @@ def load_elements(folder_path):
                 image_names.append(filename)  # Store the image name
     
     return images, image_names  # Return both images and image names
+'''
 
 # Calculate the average color of element
 def avg_element_color(element):
@@ -51,6 +74,27 @@ def element_edges(element, low_threshold, high_threshold):
     
     return edge_count
 
+def compute_texture_features(element):
+    # Convert the element to grayscale
+    gray = cv2.cvtColor(element, cv2.COLOR_BGR2GRAY)
+    
+    # Compute the GLCM matrix
+    glcm = graycomatrix(gray, distances=[1], angles=[0], levels=256, symmetric=True, normed=True)
+    
+    # Compute GLCM properties
+    contrast = graycoprops(glcm, prop='contrast')[0, 0]
+    dissimilarity = graycoprops(glcm, prop='dissimilarity')[0, 0]
+    homogeneity = graycoprops(glcm, prop='homogeneity')[0, 0]
+    energy = graycoprops(glcm, prop='energy')[0, 0]
+    '''
+    print("contrast: ", contrast)
+    print("dissimilarity: ", dissimilarity)
+    print("homogeneity", homogeneity)
+    print("energy: ", energy)
+    print("correlation",correlation)
+    print("\n")
+    '''
+    return contrast, dissimilarity, homogeneity, energy
 
 # Create a list to store information about each element
 element_info = []
@@ -71,14 +115,18 @@ for type_folder in subfolders:
         for i, (element, image_name) in enumerate(zip(loaded_images, image_names)):
             average_color = avg_element_color(element)
             edges = element_edges(element, low_threshold, high_threshold)
-    
+            contrast, dissimilarity, homogeneity, energy = compute_texture_features(element)
             # store information about the element
             element_data = {
                 'element_num': i + 1,
                 'average_color_BGR': average_color,
                 'edge_count': edges,
+                'contrast': contrast,
+                'dissimilarity': dissimilarity,
+                'homogeneity': homogeneity,
+                'energy': energy,
                 'image_name': image_name,  # Add the image name to the dictionary
-                'type_label': type_label 
+                'type_label': type_label,
             }
             element_info.append(element_data)
     
@@ -97,9 +145,12 @@ for element_data in element_info_array:
     #img_name = img_name.split('.')[0]
     type_label = element_data['type_label']
     #print(type_label)
-
+    contrast = element_data['contrast']
+    dissimilarity = element_data['dissimilarity']
+    homogeneity = element_data['homogeneity']
+    energy = element_data['energy']        
     # Create a feature vector with B, G, R, and edge count
-    feature_vector = [average_color_BGR[0], average_color_BGR[1], average_color_BGR[2], edge_count, img_name, type_label]
+    feature_vector = [average_color_BGR[0], average_color_BGR[1], average_color_BGR[2], edge_count,contrast,dissimilarity, homogeneity,energy,img_name, type_label]
     
     # Append the feature vector to the feature_vectors list
     feature_vectors.append(feature_vector)
@@ -112,8 +163,8 @@ for fv in feature_vectors:
 csv_file = 'known_data.csv'
 
 # column names
-header = ["Blue", "Green", "Red", "Edge Count", "Label", "Type"]
-
+#header = ["Blue", "Green", "Red", "Edge Count", "Label", "Type"]
+header = ["Blue", "Green", "Red", "Edge Count", "Contrast", "Dissimilarity", "Homogeneity", "Energy", "Label", "Type"]
 # Write the data to a CSV file
 with open(csv_file, mode='w', newline='') as file:
     writer = csv.writer(file)
