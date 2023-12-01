@@ -121,7 +121,6 @@ func play_attack_animation():
 			$deal_dmg_cooldown.start()
 
 func _physics_process(delta):
-	
 	read_input()
 	enemy_atk()
 	update_hp()
@@ -136,9 +135,7 @@ func _physics_process(delta):
 		# pause everything when dead	
 		get_tree().paused = true
 		# reset scene
-		get_tree().reload_current_scene()
-
-	
+		get_tree().reload_current_scene()	
 	
 func player():
 	pass
