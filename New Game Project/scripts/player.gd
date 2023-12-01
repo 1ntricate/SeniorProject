@@ -137,15 +137,7 @@ func _physics_process(delta):
 		get_tree().paused = true
 		# reset scene
 		get_tree().reload_current_scene()
-		 # Check if the player has reached the right edge of the viewport
-	if position.x > get_viewport_rect().size.x - animation.frame_size.x / 2:
-		position.x = get_viewport_rect().size.x - animation.frame_size.x / 2
-		velocity = Vector2(0, velocity.y)
 
-# Check if the player has reached the left edge of the viewport
-	elif position.x < 0 + animation.frame_size.x / 2:
-		position.x = 0 + animation.frame_size.x / 2
-		velocity = Vector2(0, velocity.y)
 	
 	
 func player():
