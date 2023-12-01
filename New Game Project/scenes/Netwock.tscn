@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bui3n11mxchgr"]
 
-[ext_resource type="Script" path="res://Netwock.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/Netwock.gd" id="1"]
 
 [node name="Netwock" type="Control"]
 layout_mode = 3

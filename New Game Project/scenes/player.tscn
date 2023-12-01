@@ -425,6 +425,8 @@ script = ExtResource("2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
+light_mask = 2
+visibility_layer = 3
 position = Vector2(0, -4)
 shape = SubResource("1")
 
@@ -436,6 +438,8 @@ frame_progress = 0.7288
 
 [node name="player-hitbox" type="Area2D" parent="."]
 visible = false
+light_mask = 3
+visibility_layer = 3
 position = Vector2(0, -5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="player-hitbox"]

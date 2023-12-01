@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cat5fdjft0is"]
 
-[ext_resource type="Script" path="res://Menu.gd" id="1_jqnwo"]
+[ext_resource type="Script" path="res://scripts/Menu.gd" id="1_jqnwo"]
 [ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_3cckf"]
 [ext_resource type="PackedScene" uid="uid://bui3n11mxchgr" path="res://scenes/Netwock.tscn" id="3_b3c0i"]
 

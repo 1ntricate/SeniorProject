@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://c53yo0rg5us25"]
+
+[ext_resource type="Texture2D" uid="uid://cu6738p4o6i0s" path="res://images/GAMEOVER.png" id="1_24432"]
+
+[node name="Gameover" type="Node2D"]
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture_under = ExtResource("1_24432")
+texture_progress = ExtResource("1_24432")
+tint_under = Color(1, 1, 0.407843, 1)

@@ -121,17 +121,33 @@ func play_attack_animation():
 			$deal_dmg_cooldown.start()
 
 func _physics_process(delta):
+	
 	read_input()
 	enemy_atk()
 	update_hp()
 	update_hunger_bar()
 	update_thirsty_bar()
+	$GameOver.visible = false
 	if health <= 0:
-		alive = false # go back to menu
+		alive = false 
 		health = 0
 		print("You are dead")
-		self.queue_free()
+		$GameOver.visible = true
+		# pause everything when dead	
+		get_tree().paused = true
+		# reset scene
+		get_tree().reload_current_scene()
+		 # Check if the player has reached the right edge of the viewport
+	if position.x > get_viewport_rect().size.x - animation.frame_size.x / 2:
+		position.x = get_viewport_rect().size.x - animation.frame_size.x / 2
+		velocity = Vector2(0, velocity.y)
 
+# Check if the player has reached the left edge of the viewport
+	elif position.x < 0 + animation.frame_size.x / 2:
+		position.x = 0 + animation.frame_size.x / 2
+		velocity = Vector2(0, velocity.y)
+	
+	
 func player():
 	pass
 
@@ -210,5 +226,5 @@ func update_thirsty_bar():
 		thirstybar.visible = false
 	else:
 		thirstybar.visible = true
-		
+	
 		
