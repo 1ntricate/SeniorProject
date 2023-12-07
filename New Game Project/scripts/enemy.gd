@@ -13,7 +13,6 @@ var movement_direction = Vector2.RIGHT  # Initial direction
 func _physics_process(delta):
 	deal_dmg()
 	update_enemy_hp()
-
 	if auto_movement_enabled:
 		# Move automatically left or right
 		position += movement_direction * speed * delta
@@ -83,3 +82,4 @@ func update_enemy_hp():
 		enemybar.visible = false
 	else:
 		enemybar.visible = true
+

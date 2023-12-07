@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://bhtrn4v64iw5"]
+
+[ext_resource type="Script" path="res://scripts/tree.gd" id="1_tpmvr"]
+[ext_resource type="Texture2D" uid="uid://n8tojmwwt4mr" path="res://assets/Graphical Assets/environment/Props/tree.png" id="2_1irn8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yuhqy"]
+radius = 61.0663
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w4c5i"]
+radius = 106.252
+
+[node name="tree" type="CharacterBody2D"]
+scale = Vector2(0.313907, 0.38095)
+script = ExtResource("1_tpmvr")
+
+[node name="actual_collision" type="CollisionShape2D" parent="."]
+position = Vector2(79.6415, 49.8754)
+shape = SubResource("CircleShape2D_yuhqy")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(75.4545, 50)
+texture = ExtResource("2_1irn8")
+
+[node name="take_dmg_cooldown" type="Timer" parent="."]
+
+[node name="area_of_harvest" type="Area2D" parent="."]
+
+[node name="harvest_shape" type="CollisionShape2D" parent="area_of_harvest"]
+position = Vector2(75.4545, 50)
+shape = SubResource("CircleShape2D_w4c5i")
+
+[connection signal="timeout" from="take_dmg_cooldown" to="." method="_on_take_dmg_cooldown_timeout"]
+[connection signal="body_entered" from="area_of_harvest" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="area_of_harvest" to="." method="_on_area_2d_body_exited"]
