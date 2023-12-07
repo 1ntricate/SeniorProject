@@ -13,6 +13,7 @@ var cur_dir = "none"
 var is_attacking = false
 
 @onready var animation = $AnimatedSprite2D
+
 var speed = 100
 
 func _ready():
@@ -127,15 +128,18 @@ func _physics_process(delta):
 	update_hunger_bar()
 	update_thirsty_bar()
 	$GameOver.visible = false
+	$Replay.visible = false
 	if health <= 0:
 		alive = false 
 		health = 0
 		print("You are dead")
 		$GameOver.visible = true
-		# pause everything when dead	
+		$Replay.visible = true
+#		# pause everything when dead	
+#		get_tree().paused = true
+#		# reset scene
+		get_tree().reload_current_scene()
 		get_tree().paused = true
-		# reset scene
-		get_tree().reload_current_scene()	
 	
 func player():
 	pass
@@ -215,5 +219,6 @@ func update_thirsty_bar():
 		thirstybar.visible = false
 	else:
 		thirstybar.visible = true
-	
-		
+
+func _on_replay_pressed():
+	get_tree().paused = false

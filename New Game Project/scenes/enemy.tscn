@@ -144,6 +144,7 @@ radius = 3.16228
 radius = 7.0
 
 [node name="enemy" type="CharacterBody2D"]
+collision_mask = 3
 script = ExtResource("1_c0gl1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -154,7 +155,6 @@ frame_progress = 0.930397
 offset = Vector2(0, -6)
 
 [node name="detection_area" type="Area2D" parent="."]
-visible = false
 collision_layer = 2
 collision_mask = 2
 
@@ -162,7 +162,6 @@ collision_mask = 2
 shape = SubResource("CircleShape2D_hx4e5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(0, -1)
 shape = SubResource("CircleShape2D_eox7q")
 
