@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dcn6pet2pcfau"]
+[gd_scene load_steps=27 format=3 uid="uid://dcn6pet2pcfau"]
 
 [ext_resource type="Script" path="res://scripts/global.gd" id="1_h4s1e"]
 [ext_resource type="Texture2D" uid="uid://d3ksju6mjmhm8" path="res://assets/plains.png" id="2"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://n8tojmwwt4mr" path="res://assets/Graphical Assets/environment/Props/tree.png" id="7_58lxm"]
 [ext_resource type="Texture2D" uid="uid://cu6738p4o6i0s" path="res://images/GAMEOVER.png" id="7_bo3ou"]
 [ext_resource type="Texture2D" uid="uid://21uqkqp2sltf" path="res://images/Blue_circle.png" id="10_0rrlk"]
+[ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="15_50w18"]
+[ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="16_ct858"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xovyt"]
 texture = ExtResource("7_7q4a8")
@@ -763,7 +765,7 @@ layer_0/tile_data = PackedInt32Array(-1179683, 65537, 4, -1114147, 65537, 5, -10
 tile_set = SubResource("TileSet_qrt1u")
 collision_animatable = true
 format = 2
-layer_0/tile_data = PackedInt32Array(-327665, 0, 1, -262129, 0, 2, -393200, 65536, 0, -327664, 65536, 1, -262128, 65536, 2, -393199, 131072, 0, -327663, 131072, 1, -262127, 131072, 2, -786429, 0, 1, -720893, 0, 2, -851964, 65536, 0, -786428, 65536, 1, -720892, 65536, 2, -851963, 131072, 0, -786427, 131072, 1, -720891, 131072, 2, -786426, 0, 1, -720890, 0, 2, -851961, 65536, 0, -786425, 65536, 1, -720889, 65536, 2, -851960, 131072, 0, -786424, 131072, 1, -720888, 131072, 2, 262156, 0, 1, 327692, 0, 2, 196621, 65536, 0, 262157, 65536, 1, 327693, 65536, 2, 196622, 131072, 0, 262158, 131072, 1, 327694, 131072, 2, 262159, 0, 1, 327695, 0, 2, 196624, 65536, 0, 262160, 65536, 1, 327696, 65536, 2, 196625, 131072, 0, 262161, 131072, 1, 327697, 131072, 2, -524302, 0, 1, -458766, 0, 2, -589837, 65536, 0, -524301, 65536, 1, -458765, 65536, 2, -589836, 131072, 0, -524300, 131072, 1, -458764, 131072, 2, -720877, 65538, 0, -655341, 65538, 1, -589805, 65538, 2, -524269, 65538, 3, -720876, 131074, 0, -655340, 131074, 1, -589804, 131074, 2, -524268, 131074, 3, -458732, 131074, 4, -720875, 196610, 0, -655339, 196610, 1, -589803, 196610, 2, -524267, 196610, 3, -458731, 196610, 4, -393195, 196610, 5, -720874, 262146, 0, -655338, 262146, 1, -589802, 262146, 2, -524266, 262146, 3, -458730, 262146, 4, -393194, 262146, 5, -720873, 327682, 0, -655337, 327682, 1, -589801, 327682, 2, -524265, 327682, 3, -458729, 327682, 4, -720872, 393218, 0, -655336, 393218, 1, -589800, 393218, 2, -524264, 393218, 3, -458728, 393218, 4)
+layer_0/tile_data = PackedInt32Array(-327665, 0, 1, -262129, 0, 2, -393200, 65536, 0, -327664, 65536, 1, -262128, 65536, 2, -393199, 131072, 0, -327663, 131072, 1, -262127, 131072, 2, -786429, 0, 1, -720893, 0, 2, -851964, 65536, 0, -786428, 65536, 1, -720892, 65536, 2, -851963, 131072, 0, -786427, 131072, 1, -720891, 131072, 2, -786426, 0, 1, -720890, 0, 2, -851961, 65536, 0, -786425, 65536, 1, -720889, 65536, 2, -851960, 131072, 0, -786424, 131072, 1, -720888, 131072, 2, 262156, 0, 1, 327692, 0, 2, 196621, 65536, 0, 262157, 65536, 1, 327693, 65536, 2, 196622, 131072, 0, 262158, 131072, 1, 327694, 131072, 2, 262159, 0, 1, 327695, 0, 2, 196624, 65536, 0, 262160, 65536, 1, 327696, 65536, 2, 196625, 131072, 0, 262161, 131072, 1, 327697, 131072, 2, -524302, 0, 1, -458766, 0, 2, -589837, 65536, 0, -524301, 65536, 1, -458765, 65536, 2, -589836, 131072, 0, -524300, 131072, 1, -458764, 131072, 2)
 
 [node name="Player" parent="." instance=ExtResource("3")]
 visibility_layer = 3
@@ -859,5 +861,22 @@ offset_right = 90.0
 offset_bottom = 36.0
 metadata/_edit_use_anchors_ = true
 
+[node name="tree" parent="." instance=ExtResource("15_50w18")]
+position = Vector2(-81.8182, -178.182)
+
+[node name="Tree_Hp" parent="tree" instance=ExtResource("16_ct858")]
+offset_left = 8.68817
+offset_top = 124.092
+offset_right = 288.688
+offset_bottom = 158.092
+
+[node name="tree2" parent="." instance=ExtResource("15_50w18")]
+position = Vector2(-247.273, -58.1818)
+
+[node name="Tree_Hp" parent="tree2" instance=ExtResource("16_ct858")]
+offset_left = 8.68817
+offset_top = 124.092
+offset_right = 288.688
+offset_bottom = 158.092
+
 [connection signal="pressed" from="Player/Replay" to="Player" method="_on_replay_pressed"]
-[connection signal="visibility_changed" from="Player/Player_HP" to="." method="_on_hp_progress_bar_visibility_changed"]
