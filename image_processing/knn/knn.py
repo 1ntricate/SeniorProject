@@ -219,7 +219,7 @@ threshold = 2.2
 # Begin
 
 # load input image (image to identify)
-filename = 'backyard.jpg'
+filename = '6_landscape.jpg'
 print(f"Input image: {filename}\n")
 
 # Input image folder
@@ -276,11 +276,7 @@ for patch_data in patch_info_array:
     
     # Append the patch vector to the feature_vectors list
     feature_vectors.append(feature_vector)
-'''
-# Extract the first 4 values of each feature vector in both datasets (numerical values)
-feature_vectors_values = [feature_vector[:4] for feature_vector in feature_vectors]
-known_data_values = [data[0] for data in known_data]
-'''
+
 # Extract all values of each feature vector in both datasets (numerical values)
 feature_vectors_values = [feature_vector[:8] for feature_vector in feature_vectors]  # Exclude the label
 known_data_values = [data[0] for data in known_data]
@@ -294,23 +290,7 @@ print(f"known data len:{len(known_data_values[0])}")
 # Calculate mean and standard deviation separately for each feature
 mean = np.mean(combined_values, axis=0)
 std_dev = np.std(combined_values, axis=0)
-'''
-# Normalize each feature with its custom weight
-normalized_feature_vectors = [
-    [(feature_value * weight - feature_mean) / feature_std_dev for feature_value, weight, feature_mean, feature_std_dev in zip(feature_vector[:3], color_weights, mean[:3], std_dev[:3])] +
-    [(feature_vector[3] * edge_count_weight - mean[3]) / std_dev[3]]
-    for feature_vector in feature_vectors_values
-]
-normalized_known_data = [
-    [(data_value * weight - data_mean) / data_std_dev for data_value, weight, data_mean, data_std_dev in zip(data[:3], color_weights, mean[:3], std_dev[:3])] +
-    [(data[3] * edge_count_weight - mean[3]) / std_dev[3]]
-    for data in known_data_values
-]
 
-# re-add labels to the normalized lists
-normalized_input_features = [(normalized_feature_vector, feature_vector[4]) for normalized_feature_vector, feature_vector in zip(normalized_feature_vectors, feature_vectors)]
-normalized_known_features = [(normalized_data, data[1], data[2]) for normalized_data, data in zip(normalized_known_data, known_data)]
-'''
 
 normalized_feature_vectors = [
     [(feature_value * weight - feature_mean) / feature_std_dev
