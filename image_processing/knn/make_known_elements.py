@@ -14,7 +14,7 @@ from skimage.feature.texture import graycomatrix, graycoprops
 # then run this script followd by knn.py
 
 # load and resize images in the elemnts folder
-def load_elements(folder_path, target_size=(300, 300)):
+def load_elements(folder_path, target_size=(150, 150)):
     images = []  # List to store loaded and resized images
     image_names = []  # List to store image names
     

@@ -175,7 +175,7 @@ def get_patch_info(patch_info_array):
 def add_text_to_patches(resized_image, label,type, patch_num):
     border_color = (0, 255, 0) 
     # Add label text to the patch
-    text = f"{patch_num}: {type}, {label}"
+    text = f"{type}"
     text_position = (10, 30) 
     cv2.putText(patch_2, text, text_position, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
     # Calculate the x and y coordinates to place the patch in the result image
@@ -196,7 +196,7 @@ def add_text_to_patches(resized_image, label,type, patch_num):
 # Resize image (width, height) in pixels
 re_size = (1500, 900) 
 # Patch size (width, height) in pixels
-patch_size = (300, 300)
+patch_size = (150, 150)
 
 # canny edge detection thresholds
 low_threshold = 50 
