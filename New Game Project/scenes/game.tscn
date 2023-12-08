@@ -1,30 +1,31 @@
-[gd_scene load_steps=27 format=3 uid="uid://dcn6pet2pcfau"]
+[gd_scene load_steps=28 format=3 uid="uid://dcn6pet2pcfau"]
 
-[ext_resource type="Script" path="res://scripts/global.gd" id="1_h4s1e"]
-[ext_resource type="Texture2D" uid="uid://d3ksju6mjmhm8" path="res://assets/plains.png" id="2"]
-[ext_resource type="PackedScene" uid="uid://cxe851fhabkwf" path="res://scenes/player.tscn" id="3"]
-[ext_resource type="PackedScene" uid="uid://iykiddabirkb" path="res://scenes/HP ProgressBar.tscn" id="4"]
-[ext_resource type="Texture2D" uid="uid://cgg6a60ivovha" path="res://assets/Graphical Assets/environment/Props/pine.png" id="4_hksef"]
-[ext_resource type="Texture2D" uid="uid://bek70wqq0ehmu" path="res://assets/Graphical Assets/environment/Props/plant-house.png" id="5_o0nbq"]
-[ext_resource type="PackedScene" uid="uid://bnaq0ucejxfl7" path="res://scenes/enemy.tscn" id="5_vojjj"]
-[ext_resource type="Texture2D" uid="uid://cgvwuo4qf5j5v" path="res://assets/Graphical Assets/environment/Props/rock-1.png" id="6_5eswy"]
-[ext_resource type="Texture2D" uid="uid://ckc0501l3p57u" path="res://images/Green_circle.png" id="6_hgwuj"]
-[ext_resource type="Texture2D" uid="uid://8apkqf5mhynb" path="res://assets/grass.png" id="7_7q4a8"]
-[ext_resource type="PackedScene" uid="uid://c5fm3xokdbomq" path="res://scenes/EnemyHp.tscn" id="7_28w1e"]
-[ext_resource type="Texture2D" uid="uid://n8tojmwwt4mr" path="res://assets/Graphical Assets/environment/Props/tree.png" id="7_58lxm"]
-[ext_resource type="Texture2D" uid="uid://cu6738p4o6i0s" path="res://images/GAMEOVER.png" id="7_bo3ou"]
-[ext_resource type="Texture2D" uid="uid://21uqkqp2sltf" path="res://images/Blue_circle.png" id="10_0rrlk"]
-[ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="15_50w18"]
-[ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="16_ct858"]
+[ext_resource type="Script" path="res://scripts/Global.gd" id="1_wm34h"]
+[ext_resource type="Texture2D" uid="uid://8apkqf5mhynb" path="res://assets/grass.png" id="2_ohq8h"]
+[ext_resource type="Texture2D" uid="uid://d3ksju6mjmhm8" path="res://assets/plains.png" id="3_ro4ub"]
+[ext_resource type="Texture2D" uid="uid://cgg6a60ivovha" path="res://assets/Graphical Assets/environment/Props/pine.png" id="4_i5dcb"]
+[ext_resource type="Texture2D" uid="uid://bek70wqq0ehmu" path="res://assets/Graphical Assets/environment/Props/plant-house.png" id="5_m2jl5"]
+[ext_resource type="Texture2D" uid="uid://cgvwuo4qf5j5v" path="res://assets/Graphical Assets/environment/Props/rock-1.png" id="6_ipmgp"]
+[ext_resource type="Texture2D" uid="uid://n8tojmwwt4mr" path="res://assets/Graphical Assets/environment/Props/tree.png" id="7_ll67a"]
+[ext_resource type="PackedScene" uid="uid://cxe851fhabkwf" path="res://scenes/player.tscn" id="8_pfypu"]
+[ext_resource type="PackedScene" uid="uid://iykiddabirkb" path="res://scenes/HP ProgressBar.tscn" id="9_42w6u"]
+[ext_resource type="Texture2D" uid="uid://21uqkqp2sltf" path="res://images/Blue_circle.png" id="10_u8sw6"]
+[ext_resource type="Texture2D" uid="uid://ckc0501l3p57u" path="res://images/Green_circle.png" id="11_bcd8d"]
+[ext_resource type="Texture2D" uid="uid://cu6738p4o6i0s" path="res://images/GAMEOVER.png" id="12_1ac2n"]
+[ext_resource type="PackedScene" uid="uid://bnaq0ucejxfl7" path="res://scenes/enemy.tscn" id="13_qjdar"]
+[ext_resource type="PackedScene" uid="uid://c5fm3xokdbomq" path="res://scenes/EnemyHp.tscn" id="14_udybs"]
+[ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="15_3iv6o"]
+[ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="16_xynwb"]
+[ext_resource type="PackedScene" uid="uid://g7uu0doorq5l" path="res://scenes/pause_menu.tscn" id="17_rahrg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xovyt"]
-texture = ExtResource("7_7q4a8")
+texture = ExtResource("2_ohq8h")
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cedav"]
-texture = ExtResource("2")
+texture = ExtResource("3_ro4ub")
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
@@ -242,7 +243,7 @@ texture = ExtResource("2")
 5:11/0/physics_layer_0/angular_velocity = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eamns"]
-texture = ExtResource("4_hksef")
+texture = ExtResource("4_i5dcb")
 2:0/0 = 0
 2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 2:0/0/physics_layer_0/angular_velocity = 0.0
@@ -344,7 +345,7 @@ texture = ExtResource("4_hksef")
 3:7/0/physics_layer_0/angular_velocity = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jd5sv"]
-texture = ExtResource("5_o0nbq")
+texture = ExtResource("5_m2jl5")
 4:0/0 = 0
 4:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 4:0/0/physics_layer_0/angular_velocity = 0.0
@@ -528,7 +529,7 @@ tile_data = PackedInt32Array(65536, 0, 1, 131072, 0, 2, 1, 65536, 0, 65537, 6553
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_knfwd"]
 resource_name = "Rock"
-texture = ExtResource("6_5eswy")
+texture = ExtResource("6_ipmgp")
 1:0/0 = 0
 1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:0/0/physics_layer_0/angular_velocity = 0.0
@@ -564,7 +565,7 @@ texture = ExtResource("6_5eswy")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_de72w"]
 resource_name = "Tree"
-texture = ExtResource("7_58lxm")
+texture = ExtResource("7_ll67a")
 1:0/0 = 0
 1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:0/0/physics_layer_0/angular_velocity = 0.0
@@ -753,7 +754,7 @@ func _on_quit_pressed():
 [node name="Game" type="Node2D"]
 position = Vector2(1, 0)
 scale = Vector2(1.1, 1.1)
-script = ExtResource("1_h4s1e")
+script = ExtResource("1_wm34h")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_rp64u")
@@ -767,7 +768,7 @@ collision_animatable = true
 format = 2
 layer_0/tile_data = PackedInt32Array(-327665, 0, 1, -262129, 0, 2, -393200, 65536, 0, -327664, 65536, 1, -262128, 65536, 2, -393199, 131072, 0, -327663, 131072, 1, -262127, 131072, 2, -786429, 0, 1, -720893, 0, 2, -851964, 65536, 0, -786428, 65536, 1, -720892, 65536, 2, -851963, 131072, 0, -786427, 131072, 1, -720891, 131072, 2, -786426, 0, 1, -720890, 0, 2, -851961, 65536, 0, -786425, 65536, 1, -720889, 65536, 2, -851960, 131072, 0, -786424, 131072, 1, -720888, 131072, 2, 262156, 0, 1, 327692, 0, 2, 196621, 65536, 0, 262157, 65536, 1, 327693, 65536, 2, 196622, 131072, 0, 262158, 131072, 1, 327694, 131072, 2, 262159, 0, 1, 327695, 0, 2, 196624, 65536, 0, 262160, 65536, 1, 327696, 65536, 2, 196625, 131072, 0, 262161, 131072, 1, 327697, 131072, 2, -524302, 0, 1, -458766, 0, 2, -589837, 65536, 0, -524301, 65536, 1, -458765, 65536, 2, -589836, 131072, 0, -524300, 131072, 1, -458764, 131072, 2)
 
-[node name="Player" parent="." instance=ExtResource("3")]
+[node name="Player" parent="." instance=ExtResource("8_pfypu")]
 visibility_layer = 3
 collision_mask = 3
 slide_on_ceiling = false
@@ -785,12 +786,27 @@ script = SubResource("GDScript_u4ocl")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(5, 3)
+zoom = Vector2(1.5, 1.5)
 
-[node name="Player_HP" parent="Player" instance=ExtResource("4")]
-offset_left = -510.0
-offset_top = -255.0
-offset_right = 481.0
-offset_bottom = -228.0
+[node name="PauseMenu" parent="Player/Camera2D" instance=ExtResource("17_rahrg")]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -5.0
+offset_top = -3.0
+offset_right = 45.0
+offset_bottom = 47.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="Player_HP" parent="Player" instance=ExtResource("9_42w6u")]
+visibility_layer = 512
+offset_left = -244.545
+offset_top = -180.0
+offset_right = 155.455
+offset_bottom = -153.0
 scale = Vector2(0.495537, 0.633098)
 metadata/_edit_use_anchors_ = true
 
@@ -799,17 +815,17 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -511.0
-offset_top = -241.0
-offset_right = -309.0
-offset_bottom = -68.0
+offset_left = -338.182
+offset_top = -187.273
+offset_right = -279.182
+offset_bottom = -136.273
 grow_horizontal = 0
 grow_vertical = 2
 value = 100.0
 fill_mode = 4
 nine_patch_stretch = true
-texture_under = ExtResource("10_0rrlk")
-texture_progress = ExtResource("10_0rrlk")
+texture_under = ExtResource("10_u8sw6")
+texture_progress = ExtResource("10_u8sw6")
 tint_under = Color(1, 0.647059, 0, 1)
 
 [node name="HungerBar" type="TextureProgressBar" parent="Player"]
@@ -817,18 +833,18 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -480.0
-offset_top = -217.273
-offset_right = -298.0
-offset_bottom = -61.2727
+offset_left = -330.0
+offset_top = -180.0
+offset_right = -277.0
+offset_bottom = -136.0
 grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(0.769937, 0.79704)
 value = 100.0
 fill_mode = 4
 nine_patch_stretch = true
-texture_under = ExtResource("6_hgwuj")
-texture_progress = ExtResource("6_hgwuj")
+texture_under = ExtResource("11_bcd8d")
+texture_progress = ExtResource("11_bcd8d")
 tint_under = Color(1, 0, 0, 1)
 
 [node name="GameOver" type="TextureProgressBar" parent="Player"]
@@ -837,43 +853,43 @@ offset_top = -111.818
 offset_right = 165.182
 offset_bottom = 0.181816
 nine_patch_stretch = true
-texture_under = ExtResource("7_bo3ou")
-texture_progress = ExtResource("7_bo3ou")
+texture_under = ExtResource("12_1ac2n")
+texture_progress = ExtResource("12_1ac2n")
 tint_under = Color(1, 1, 0.415686, 1)
 
-[node name="enemy" parent="." instance=ExtResource("5_vojjj")]
+[node name="enemy" parent="." instance=ExtResource("13_qjdar")]
 position = Vector2(164, -66)
 
-[node name="Enemy_Hp" parent="enemy" instance=ExtResource("7_28w1e")]
+[node name="Enemy_Hp" parent="enemy" instance=ExtResource("14_udybs")]
 offset_left = -29.0
 offset_top = 9.0
 offset_right = 90.0
 offset_bottom = 36.0
 metadata/_edit_use_anchors_ = true
 
-[node name="enemy2" parent="." instance=ExtResource("5_vojjj")]
+[node name="enemy2" parent="." instance=ExtResource("13_qjdar")]
 position = Vector2(-342, 120)
 
-[node name="Enemy_Hp" parent="enemy2" instance=ExtResource("7_28w1e")]
+[node name="Enemy_Hp" parent="enemy2" instance=ExtResource("14_udybs")]
 offset_left = -29.0
 offset_top = 9.0
 offset_right = 90.0
 offset_bottom = 36.0
 metadata/_edit_use_anchors_ = true
 
-[node name="tree" parent="." instance=ExtResource("15_50w18")]
+[node name="tree" parent="." instance=ExtResource("15_3iv6o")]
 position = Vector2(-81.8182, -178.182)
 
-[node name="Tree_Hp" parent="tree" instance=ExtResource("16_ct858")]
+[node name="Tree_Hp" parent="tree" instance=ExtResource("16_xynwb")]
 offset_left = 8.68817
 offset_top = 124.092
 offset_right = 288.688
 offset_bottom = 158.092
 
-[node name="tree2" parent="." instance=ExtResource("15_50w18")]
+[node name="tree2" parent="." instance=ExtResource("15_3iv6o")]
 position = Vector2(-247.273, -58.1818)
 
-[node name="Tree_Hp" parent="tree2" instance=ExtResource("16_ct858")]
+[node name="Tree_Hp" parent="tree2" instance=ExtResource("16_xynwb")]
 offset_left = 8.68817
 offset_top = 124.092
 offset_right = 288.688

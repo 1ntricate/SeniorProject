@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bui3n11mxchgr"]
+[gd_scene load_steps=2 format=3 uid="uid://csmiwci577y2x"]
 
-[ext_resource type="Script" path="res://scripts/Netwock.gd" id="1"]
+[ext_resource type="Script" path="res://Netwock.gd" id="1_1msh4"]
 
 [node name="Netwock" type="Control"]
 layout_mode = 3
@@ -9,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1")
+script = ExtResource("1_1msh4")
 
 [node name="AddScore" type="Button" parent="."]
 layout_mode = 0

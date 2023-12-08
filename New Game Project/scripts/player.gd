@@ -13,13 +13,15 @@ var cur_dir = "none"
 var is_attacking = false
 
 @onready var animation = $AnimatedSprite2D
-
+#@onready var pause_menu = $PauseMenu
+var isPaused = false
 var speed = 100
-
 func _ready():
+	Engine.time_scale = 1
 	animation.play("front_idle")
 	$hunger_timer.start()
 	$thirsty_timer.start()
+	#%PauseContainer.visible = false
 
 func read_input():
 	velocity = Vector2()
@@ -62,6 +64,7 @@ func read_input():
 			velocity.x += 1
 			direction = Vector2(1, 0)
 			movement = 1
+		
 
 	if new_direction != cur_dir:
 		cur_dir = new_direction
@@ -73,6 +76,7 @@ func read_input():
 	set_velocity(velocity * 200)
 	move_and_slide()
 	velocity = velocity
+	
 
 func play_animation(movement):
 	match cur_dir:
@@ -138,12 +142,24 @@ func _physics_process(delta):
 #		# pause everything when dead	
 #		get_tree().paused = true
 #		# reset scene
-		get_tree().reload_current_scene()
-		get_tree().paused = true
-	
+		#get_tree().reload_current_scene()
+		get_tree().change_scene_to_file("res://scenes/Gameover.tscn")
+	if Input.is_action_just_pressed("escape"):
+		pauseMenu()
+		
 func player():
 	pass
 
+func pauseMenu():
+	if isPaused:
+		%PauseMenu.hide()
+		Engine.time_scale = 1
+	else:
+		%PauseMenu.show()
+		Engine.time_scale = 0
+		
+	isPaused = !isPaused
+	
 func _on_playerhitbox_body_entered(body):
 	if body.has_method("enemy"):
 		enemy_in_range = true

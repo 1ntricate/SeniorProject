@@ -1,12 +1,46 @@
-[gd_scene load_steps=2 format=3 uid="uid://c53yo0rg5us25"]
+[gd_scene load_steps=3 format=3 uid="uid://c53yo0rg5us25"]
 
-[ext_resource type="Texture2D" uid="uid://cu6738p4o6i0s" path="res://images/GAMEOVER.png" id="1_24432"]
+[ext_resource type="Texture2D" uid="uid://dsvgixj5433ux" path="res://images/game_over.png" id="1_7w8vn"]
+[ext_resource type="Script" path="res://scripts/Gameover.gd" id="1_g160c"]
 
 [node name="Gameover" type="Node2D"]
+script = ExtResource("1_g160c")
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(574.75, 326.5)
+scale = Vector2(0.64202, 0.631836)
+texture = ExtResource("1_7w8vn")
+
+[node name="Label" type="Label" parent="Sprite2D"]
 offset_right = 40.0
-offset_bottom = 40.0
-texture_under = ExtResource("1_24432")
-texture_progress = ExtResource("1_24432")
-tint_under = Color(1, 1, 0.407843, 1)
+offset_bottom = 23.0
+
+[node name="Label2" type="Label" parent="Sprite2D"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="MainContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+offset_left = 443.0
+offset_top = 455.0
+offset_right = 701.0
+offset_bottom = 548.0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
+[node name="play_button" type="Button" parent="MainContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
+text = "Play"
+
+[node name="Exit_button" type="Button" parent="MainContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 0.984314, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0, 0, 1)
+text = "Quit"
+
+[connection signal="pressed" from="MainContainer/play_button" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MainContainer/Exit_button" to="." method="_on_exit_button_pressed"]

@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://drhh02id1ep4u"]
+
+[ext_resource type="Script" path="res://scripts/ManageImages.gd" id="1_6c7kp"]
+[ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_dtsyg"]
+
+[node name="ManageImages" type="Node2D"]
+position = Vector2(540, 287)
+scale = Vector2(5, 5)
+script = ExtResource("1_6c7kp")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Select an Image"
+initial_position = 2
+size = Vector2i(1000, 600)
+max_size = Vector2i(1000, 800)
+ok_button_text = "Select"
+file_mode = 3
+access = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(6, 7.8)
+scale = Vector2(0.14, 0.14)
+texture = ExtResource("2_dtsyg")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.445
+
+[connection signal="canceled" from="FileDialog" to="." method="_on_file_dialog_canceled"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

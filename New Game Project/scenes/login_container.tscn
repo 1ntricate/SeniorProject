@@ -1,0 +1,171 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc40sj67bs0g4"]
+
+[ext_resource type="LabelSettings" uid="uid://1oyxx8ys1m6d" path="res://font.res" id="1_n3agi"]
+[ext_resource type="Script" path="res://src/Scroll_Label.gd" id="2_i38oc"]
+
+[node name="LoginContainer" type="VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(500, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -267.5
+offset_right = 250.0
+offset_bottom = 267.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TabContainer" type="TabContainer" parent="."]
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+tab_alignment = 1
+
+[node name="Login" type="TabBar" parent="TabContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="General_Label" type="Label" parent="TabContainer/Login"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 2.0
+offset_right = 95.0
+offset_bottom = 31.0
+text = "General"
+label_settings = ExtResource("1_n3agi")
+
+[node name="Username_Label" type="Label" parent="TabContainer/Login"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 2.0
+offset_right = 95.0
+offset_bottom = 31.0
+text = "Username"
+label_settings = ExtResource("1_n3agi")
+
+[node name="Username" type="LineEdit" parent="TabContainer/Login"]
+visible = false
+layout_mode = 0
+offset_right = 67.0625
+offset_bottom = 31.0
+
+[node name="Password_Label" type="Label" parent="TabContainer/Login"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 2.0
+offset_right = 116.0
+offset_bottom = 31.0
+text = "Password"
+label_settings = ExtResource("1_n3agi")
+
+[node name="Password" type="LineEdit" parent="TabContainer/Login"]
+visible = false
+layout_mode = 0
+offset_right = 67.0625
+offset_bottom = 31.0
+
+[node name="Create Account" type="TabBar" parent="TabContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="General_Label" type="Label" parent="TabContainer/Create Account"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 46.0
+offset_right = 48.0
+offset_bottom = 69.0
+text = "General volume :"
+
+[node name="General_HScrollBar" type="HScrollBar" parent="TabContainer/Create Account"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 78.0
+offset_right = 458.0
+offset_bottom = 94.0
+value = 70.0
+rounded = true
+
+[node name="Scroll_Label" type="Label" parent="TabContainer/Create Account/General_HScrollBar"]
+layout_mode = 0
+offset_left = 456.0
+offset_top = -5.0
+offset_right = 489.0
+offset_bottom = 21.0
+text = "70%"
+script = ExtResource("2_i38oc")
+
+[node name="Music_Label" type="Label" parent="TabContainer/Create Account"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 99.0
+offset_right = 142.0
+offset_bottom = 125.0
+text = "Music volume :"
+
+[node name="Music_HScrollBar" type="HScrollBar" parent="TabContainer/Create Account"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 124.0
+offset_right = 458.0
+offset_bottom = 140.0
+value = 67.0
+rounded = true
+
+[node name="Scroll_Label" type="Label" parent="TabContainer/Create Account/Music_HScrollBar"]
+layout_mode = 0
+offset_left = 456.0
+offset_top = -5.0
+offset_right = 489.0
+offset_bottom = 21.0
+text = "67%"
+script = ExtResource("2_i38oc")
+
+[node name="SFX_Label" type="Label" parent="TabContainer/Create Account"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 146.0
+offset_right = 142.0
+offset_bottom = 172.0
+text = "SFX volume :"
+
+[node name="SFX_HScrollBar" type="HScrollBar" parent="TabContainer/Create Account"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 171.0
+offset_right = 458.0
+offset_bottom = 187.0
+value = 67.0
+rounded = true
+
+[node name="Scroll_Label" type="Label" parent="TabContainer/Create Account/SFX_HScrollBar"]
+layout_mode = 0
+offset_left = 456.0
+offset_top = -5.0
+offset_right = 489.0
+offset_bottom = 21.0
+text = "67%"
+script = ExtResource("2_i38oc")
+
+[node name="Container" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Apply_button" type="Button" parent="Container"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+text = "Apply
+"
+
+[node name="Return_button" type="Button" parent="Container"]
+layout_mode = 2
+text = "Return
+"
+
+[connection signal="value_changed" from="TabContainer/Create Account/General_HScrollBar" to="TabContainer/Create Account/General_HScrollBar/Scroll_Label" method="_on_h_scroll_bar_value_changed"]
+[connection signal="value_changed" from="TabContainer/Create Account/Music_HScrollBar" to="TabContainer/Create Account/Music_HScrollBar/Scroll_Label" method="_on_h_scroll_bar_value_changed"]
+[connection signal="value_changed" from="TabContainer/Create Account/SFX_HScrollBar" to="TabContainer/Create Account/SFX_HScrollBar/Scroll_Label" method="_on_h_scroll_bar_value_changed"]

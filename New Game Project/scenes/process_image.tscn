@@ -1,0 +1,94 @@
+[gd_scene load_steps=4 format=3 uid="uid://ml3liw5gq653"]
+
+[ext_resource type="Script" path="res://scripts/process_image.gd" id="1_tixp6"]
+[ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_t0hof"]
+
+[sub_resource type="GDScript" id="GDScript_cdd0c"]
+script/source = "extends Button
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
+
+[node name="ProcessImage" type="Node2D"]
+script = ExtResource("1_tixp6")
+
+[node name="HScrollBar" type="HScrollBar" parent="."]
+offset_left = 255.0
+offset_top = 254.0
+offset_right = 847.0
+offset_bottom = 291.0
+step = 25.0
+value = 50.0
+
+[node name="Label" type="Label" parent="HScrollBar"]
+layout_mode = 0
+offset_left = 242.0
+offset_top = -59.0
+offset_right = 350.0
+offset_bottom = -36.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Adjust Weight"
+
+[node name="Label2" type="Label" parent="HScrollBar"]
+layout_mode = 0
+offset_left = 539.0
+offset_top = -41.0
+offset_right = 647.0
+offset_bottom = -18.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Edges"
+
+[node name="Label3" type="Label" parent="HScrollBar"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = -47.0
+offset_right = 112.0
+offset_bottom = -24.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Color"
+
+[node name="Label4" type="Label" parent="HScrollBar"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 54.0
+offset_right = 593.0
+offset_bottom = 77.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "+50%                      +25%                      Balanced                     +25%                         +50%"
+
+[node name="ProcessButton" type="Button" parent="."]
+offset_left = 493.0
+offset_top = 422.0
+offset_right = 613.0
+offset_bottom = 453.0
+text = "Process Image"
+
+[node name="Back Button" type="Button" parent="."]
+offset_left = 497.0
+offset_top = 490.0
+offset_right = 616.0
+offset_bottom = 521.0
+text = "Back"
+script = SubResource("GDScript_cdd0c")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+show_behind_parent = true
+position = Vector2(596, 308)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_t0hof")
+
+[connection signal="pressed" from="ProcessButton" to="." method="_on_process_button_pressed"]
+[connection signal="pressed" from="Back Button" to="." method="_on_back_button_pressed"]
