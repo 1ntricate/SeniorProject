@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://dj37ri57e1q1q"]
+
+[ext_resource type="Texture2D" uid="uid://cgvwuo4qf5j5v" path="res://assets/Graphical Assets/environment/Props/rock-1.png" id="1_1mepv"]
+[ext_resource type="Script" path="res://scripts/rock.gd" id="1_ojsve"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pbcxa"]
+radius = 65.0308
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i8271"]
+radius = 23.1948
+
+[node name="rock" type="CharacterBody2D"]
+script = ExtResource("1_ojsve")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_pbcxa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_i8271")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_1mepv")
+
+[node name="take_dmg_cooldown" type="Timer" parent="."]
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="timeout" from="take_dmg_cooldown" to="." method="_on_take_dmg_cooldown_timeout"]

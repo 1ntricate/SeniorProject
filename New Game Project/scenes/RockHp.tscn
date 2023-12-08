@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://dajqccjbquwo"]
+[gd_scene format=3 uid="uid://o4kn4ounrgsr"]
 
-[node name="Tree Hp" type="ProgressBar"]
+[node name="RockHp" type="ProgressBar"]
 modulate = Color(0.0235294, 1, 1, 1)
 self_modulate = Color(1, 0.54902, 1, 1)
 offset_left = 13.0

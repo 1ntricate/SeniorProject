@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dcn6pet2pcfau"]
+[gd_scene load_steps=25 format=3 uid="uid://dcn6pet2pcfau"]
 
 [ext_resource type="Script" path="res://scripts/Global.gd" id="1_wm34h"]
 [ext_resource type="Texture2D" uid="uid://8apkqf5mhynb" path="res://assets/grass.png" id="2_ohq8h"]
@@ -17,8 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="16_xynwb"]
 [ext_resource type="PackedScene" uid="uid://o4kn4ounrgsr" path="res://scenes/RockHp.tscn" id="17_asqd4"]
 [ext_resource type="PackedScene" uid="uid://g7uu0doorq5l" path="res://scenes/pause_menu.tscn" id="17_rahrg"]
-[ext_resource type="PackedScene" uid="uid://8kuxoo6lla18" path="res://scenes/water.tscn" id="18_hhh5v"]
-[ext_resource type="Script" path="res://scripts/water.gd" id="19_8yekj"]
+[ext_resource type="Script" path="res://scripts/rock.gd" id="18_3mr8e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xovyt"]
 texture = ExtResource("2_ohq8h")
@@ -636,7 +635,7 @@ texture_progress = ExtResource("12_1ac2n")
 tint_under = Color(1, 1, 0.415686, 1)
 
 [node name="enemy" parent="." instance=ExtResource("13_qjdar")]
-position = Vector2(221.818, -87.2727)
+position = Vector2(164, -66)
 
 [node name="Enemy_Hp" parent="enemy" instance=ExtResource("14_udybs")]
 offset_left = -29.0
@@ -675,6 +674,7 @@ offset_bottom = 158.092
 
 [node name="rock2" parent="." instance=ExtResource("16_u4a32")]
 position = Vector2(291.818, 121.818)
+script = ExtResource("18_3mr8e")
 
 [node name="RockHp" parent="rock2" instance=ExtResource("17_asqd4")]
 offset_left = -21.8185
@@ -684,7 +684,8 @@ offset_bottom = 45.8182
 scale = Vector2(0.131905, 0.713098)
 
 [node name="rock" parent="." instance=ExtResource("16_u4a32")]
-position = Vector2(39.0909, 118.182)
+position = Vector2(291.818, 121.818)
+script = ExtResource("18_3mr8e")
 
 [node name="RockHp" parent="rock" instance=ExtResource("17_asqd4")]
 offset_left = -21.8185
@@ -692,10 +693,5 @@ offset_top = 31.8182
 offset_right = 309.182
 offset_bottom = 45.8182
 scale = Vector2(0.131905, 0.713098)
-
-[node name="water" parent="." instance=ExtResource("18_hhh5v")]
-position = Vector2(-437.273, -32.7273)
-scale = Vector2(2.70909, 2.81818)
-script = ExtResource("19_8yekj")
 
 [connection signal="pressed" from="Player/Replay" to="Player" method="_on_replay_pressed"]

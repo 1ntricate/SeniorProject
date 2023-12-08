@@ -163,6 +163,9 @@ func pauseMenu():
 func _on_playerhitbox_body_entered(body):
 	if body.has_method("enemy"):
 		enemy_in_range = true
+	if body.has_method("water"):
+		if is_attacking == true:
+			thirsty += 5
 
 func _on_playerhitbox_body_exited(body):
 	if body.has_method("enemy"):
@@ -211,9 +214,7 @@ func update_hunger_bar():
 	var hungerbar = $HungerBar
 	hungerbar.value = hunger
 	if hunger > 100:
-		hungerbar.visible = false
-	else:
-		hungerbar.visible = true
+		hunger = 100
 
 
 func _on_thirsty_timer_timeout():
@@ -232,9 +233,7 @@ func update_thirsty_bar():
 	var thirstybar = $ThirstyBar
 	thirstybar.value = thirsty
 	if thirsty > 100:
-		thirstybar.visible = false
-	else:
-		thirstybar.visible = true
+		thirsty = 100
 
 func _on_replay_pressed():
 	get_tree().paused = false
