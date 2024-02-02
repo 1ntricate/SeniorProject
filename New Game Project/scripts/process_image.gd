@@ -30,9 +30,21 @@ func _on_process_button_pressed():
 	
 #######################################################################################################	
 	# Run the Python script and redirect output to files
-	var result2 = OS.execute(script_path,arguments, output,true)
-	#var exit_code = OS.execute("ls", [], output)
-	print("Error executing Python script (Exit Code: ", result2, ")")
+	var result = OS.execute(script_path,arguments, output,true)
+	# Check if the script execution was successful
+	if result == OK:
+		var file_path = "res://identified_elements.txt"  # Update the path as needed
+		var file = FileAccess.open(file_path, FileAccess.READ)
+		if file != null:
+			var file_contents = file.get_as_text()
+			file.close()
+			print("File Contents:")
+			print(file_contents)
+		else:
+			print("Failed to open the output file:", file_path)
+	else:
+		# Handle the case where the script execution failed
+		print("Script execution failed with error code:", result)
 
 
 

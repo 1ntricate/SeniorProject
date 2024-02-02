@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://bnaq0ucejxfl7"]
+[gd_scene load_steps=24 format=3 uid="uid://bnaq0ucejxfl7"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_c0gl1"]
 [ext_resource type="Texture2D" uid="uid://b3rl7sdbf8wge" path="res://assets/slime.png" id="1_u0ahw"]
+[ext_resource type="PackedScene" uid="uid://c5fm3xokdbomq" path="res://scenes/EnemyHp.tscn" id="3_t2ruj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_il1ej"]
 atlas = ExtResource("1_u0ahw")
@@ -172,6 +173,13 @@ position = Vector2(0, -4)
 shape = SubResource("CircleShape2D_8fct8")
 
 [node name="take_dmg_cooldown" type="Timer" parent="."]
+
+[node name="Enemy_Hp" parent="." instance=ExtResource("3_t2ruj")]
+offset_left = -29.0
+offset_top = 9.0
+offset_right = 90.0
+offset_bottom = 36.0
+metadata/_edit_use_anchors_ = true
 
 [connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]

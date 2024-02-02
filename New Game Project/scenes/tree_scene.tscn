@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6vbn150gmyhn"]
+
+[ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="14_kfkwy"]
+[ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="15_ovk2b"]
+
+[node name="Game" type="Node2D"]
+position = Vector2(1, 0)
+scale = Vector2(1.1, 1.1)
+
+[node name="tree" parent="." instance=ExtResource("14_kfkwy")]
+position = Vector2(-81.8182, -178.182)
+
+[node name="Tree_Hp" parent="tree" instance=ExtResource("15_ovk2b")]
+offset_left = 8.68817
+offset_top = 124.092
+offset_right = 288.688
+offset_bottom = 158.092

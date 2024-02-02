@@ -9,11 +9,11 @@ scale = Vector2(5, 5)
 script = ExtResource("1_6c7kp")
 
 [node name="FileDialog" type="FileDialog" parent="."]
-title = "Select an Image"
+title = "Open a File or Directory"
 initial_position = 2
 size = Vector2i(1000, 600)
 max_size = Vector2i(1000, 800)
-ok_button_text = "Select"
+ok_button_text = "Open"
 file_mode = 3
 access = 2
 

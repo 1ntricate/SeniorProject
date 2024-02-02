@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://4plvd2snfc3j"]
+
+[ext_resource type="PackedScene" uid="uid://dj37ri57e1q1q" path="res://scenes/rock.tscn" id="16_ynds6"]
+[ext_resource type="PackedScene" uid="uid://o4kn4ounrgsr" path="res://scenes/RockHp.tscn" id="17_hprnx"]
+
+[node name="Game" type="Node2D"]
+position = Vector2(1, 0)
+scale = Vector2(1.1, 1.1)
+
+[node name="rock" parent="." instance=ExtResource("16_ynds6")]
+position = Vector2(39.0909, 118.182)
+
+[node name="RockHp" parent="rock" instance=ExtResource("17_hprnx")]
+offset_left = -21.8185
+offset_top = 31.8182
+offset_right = 309.182
+offset_bottom = 45.8182
+scale = Vector2(0.131905, 0.713098)

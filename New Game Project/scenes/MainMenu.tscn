@@ -53,9 +53,9 @@ text = "Login"
 layout_mode = 2
 text = "Process Image"
 
-[node name="Maps_button" type="Button" parent="MainMenu/MainContainer"]
+[node name="manage_img_button" type="Button" parent="MainMenu/MainContainer"]
 layout_mode = 2
-text = "Browse Maps"
+text = "Manage Images"
 
 [node name="Option_button" type="Button" parent="MainMenu/MainContainer"]
 layout_mode = 2
@@ -143,21 +143,6 @@ popup/item_8/id = 8
 popup/item_9/text = "7680x4320"
 popup/item_9/id = 9
 
-[node name="WindowMode_Label" type="Label" parent="MainMenu/OptionContainer/TabContainer/Video"]
-layout_mode = 0
-offset_left = 314.0
-offset_top = 42.0
-offset_right = 434.0
-offset_bottom = 68.0
-text = "Window Mode :"
-
-[node name="WindowMode_Optionbutton" type="OptionButton" parent="MainMenu/OptionContainer/TabContainer/Video"]
-layout_mode = 0
-offset_left = 298.0
-offset_top = 73.0
-offset_right = 474.0
-offset_bottom = 105.0
-
 [node name="Vsync_Label" type="Label" parent="MainMenu/OptionContainer/TabContainer/Video"]
 layout_mode = 0
 offset_left = 100.0
@@ -181,57 +166,6 @@ popup/item_2/text = "Adaptative"
 popup/item_2/id = 2
 popup/item_3/text = "MailBox"
 popup/item_3/id = 3
-
-[node name="Color_blind" type="Label" parent="MainMenu/OptionContainer/TabContainer/Video"]
-layout_mode = 0
-offset_left = 318.0
-offset_top = 131.0
-offset_right = 451.0
-offset_bottom = 157.0
-text = "Color blind mode"
-
-[node name="ColorBlind_OptionButton" type="OptionButton" parent="MainMenu/OptionContainer/TabContainer/Video"]
-layout_mode = 0
-offset_left = 298.0
-offset_top = 169.0
-offset_right = 474.0
-offset_bottom = 200.0
-item_count = 4
-selected = 0
-popup/item_0/text = "OFF"
-popup/item_0/id = 0
-popup/item_1/text = "Protanopia"
-popup/item_1/id = 1
-popup/item_2/text = "Deuteranopia"
-popup/item_2/id = 2
-popup/item_3/text = "Tritanopia"
-popup/item_3/id = 3
-
-[node name="Graphics_Label" type="Label" parent="MainMenu/OptionContainer/TabContainer/Video"]
-layout_mode = 0
-offset_left = 26.0
-offset_top = 256.0
-offset_right = 103.0
-offset_bottom = 285.0
-text = "Graphics"
-label_settings = ExtResource("3_pcog5")
-
-[node name="Preset_HSlider" type="HSlider" parent="MainMenu/OptionContainer/TabContainer/Video"]
-layout_mode = 0
-offset_left = 26.0
-offset_top = 342.0
-offset_right = 378.0
-offset_bottom = 358.0
-max_value = 20.0
-step = 5.0
-value = 5.0
-
-[node name="Preset_Label" type="Label" parent="MainMenu/OptionContainer/TabContainer/Video/Preset_HSlider"]
-layout_mode = 0
-offset_top = -24.0
-offset_right = 352.0
-offset_bottom = -1.0
-text = " Low  	   medium          high 	    very high      ultra"
 
 [node name="Sound" type="TabBar" parent="MainMenu/OptionContainer/TabContainer"]
 visible = false
@@ -322,6 +256,7 @@ size_flags_horizontal = 4
 alignment = 1
 
 [node name="Apply_button" type="Button" parent="MainMenu/OptionContainer/Container"]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
@@ -474,15 +409,57 @@ layout_mode = 2
 text = "Return
 "
 
+[node name="PlayContainer" type="VBoxContainer" parent="MainMenu"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -267.5
+offset_right = 250.0
+offset_bottom = 267.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MapContainer" type="TabContainer" parent="MainMenu/PlayContainer"]
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+tab_alignment = 1
+
+[node name="Button" type="Button" parent="MainMenu/PlayContainer/MapContainer"]
+layout_mode = 2
+text = "Default Map"
+
+[node name="Container" type="HBoxContainer" parent="MainMenu/PlayContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Play_button" type="Button" parent="MainMenu/PlayContainer/Container"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+text = "Play
+"
+
+[node name="Return_button" type="Button" parent="MainMenu/PlayContainer/Container"]
+layout_mode = 2
+text = "Return
+"
+
 [connection signal="pressed" from="MainMenu/MainContainer/Start_button" to="MainMenu" method="_on_start_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Login_button" to="MainMenu" method="_on_login_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Process_button" to="MainMenu" method="_on_process_button_pressed"]
+[connection signal="pressed" from="MainMenu/MainContainer/manage_img_button" to="MainMenu" method="_on_manage_img_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Option_button" to="MainMenu" method="_on_option_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Exit_button" to="MainMenu" method="_on_exit_button_pressed"]
 [connection signal="item_selected" from="MainMenu/OptionContainer/TabContainer/Video/Resolution_Optionbutton" to="MainMenu" method="_on_resolution_optionbutton_item_selected"]
-[connection signal="item_selected" from="MainMenu/OptionContainer/TabContainer/Video/WindowMode_Optionbutton" to="MainMenu" method="_on_window_mode_optionbutton_item_selected"]
 [connection signal="item_selected" from="MainMenu/OptionContainer/TabContainer/Video/Vsync_OptionButton" to="MainMenu" method="_on_vsync_option_button_item_selected"]
-[connection signal="value_changed" from="MainMenu/OptionContainer/TabContainer/Video/Preset_HSlider" to="MainMenu" method="_on_preset_h_slider_value_changed"]
 [connection signal="value_changed" from="MainMenu/OptionContainer/TabContainer/Sound/General_HScrollBar" to="MainMenu" method="_on_general_h_scroll_bar_value_changed"]
 [connection signal="value_changed" from="MainMenu/OptionContainer/TabContainer/Sound/General_HScrollBar" to="MainMenu/OptionContainer/TabContainer/Sound/General_HScrollBar/Scroll_Label" method="_on_h_scroll_bar_value_changed"]
 [connection signal="value_changed" from="MainMenu/OptionContainer/TabContainer/Sound/Music_HScrollBar" to="MainMenu" method="_on_music_h_scroll_bar_value_changed"]
@@ -494,3 +471,5 @@ text = "Return
 [connection signal="pressed" from="MainMenu/LoginContainer/TabContainer/Login/Login_button2" to="MainMenu" method="_on_login_button_2_pressed"]
 [connection signal="pressed" from="MainMenu/LoginContainer/Container/Apply_button" to="MainMenu" method="_on_apply_button_pressed"]
 [connection signal="pressed" from="MainMenu/LoginContainer/Container/Return_button" to="MainMenu" method="_on_return_button_pressed"]
+[connection signal="pressed" from="MainMenu/PlayContainer/Container/Play_button" to="MainMenu" method="_on_play_button_pressed"]
+[connection signal="pressed" from="MainMenu/PlayContainer/Container/Return_button" to="MainMenu" method="_on_return_button_pressed"]

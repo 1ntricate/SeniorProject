@@ -1,0 +1,4 @@
+sky: 24
+sand: 2
+mountain: 3
+tree: 31

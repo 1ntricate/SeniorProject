@@ -3,17 +3,13 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
 	$FileDialog.popup()
-	#load_images_from_directory("res://images/")
-	#create_image_elements()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 	
 	
-
 func _on_file_dialog_file_selected(path):
 		
 	Global.selected_image_path = path
@@ -55,15 +51,7 @@ func load_texture(path):
 	if resource != null and resource is Texture:
 		return resource
 	return null
-	
-func create_image_elements():
-	print("create element called")
-	for path in image_paths:
-		var texture = load_texture(path)
-		var texture_rect = TextureRect.new()
-		texture_rect.texture = texture
-		texture_rect.rect_size = Vector2(100, 100)  # Set the size of each image element
-		add_child(texture_rect)  # Add the image element to your scene
+
 
 func _on_timer_timeout():
 	$Sprite2D.texture = null

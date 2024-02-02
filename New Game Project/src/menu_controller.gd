@@ -6,19 +6,20 @@ extends Control
 # Check out Colorblind addon for godot : https://github.com/paulloz/godot-colorblindness
 #--
 var http_request : HTTPRequest = HTTPRequest.new()
-const SERVER_URL = "http://174.134.25.64:5444/test.php"
-#const SERVER_URL = "http://192.168.1.229/test.php"
+#const SERVER_URL = "http://174.134.25.64:5444/test.php"
+const SERVER_URL = "http://192.168.1.229/godot.php"
 const SERVER_HEADERS = ["Content-Type: application/x-www-form-urlencoded", "Cache-Control: max-age=0"]
 const SECRET_KEY = "1234567890"
 var nonce = null
 var request_queue : Array = []
 var is_requesting : bool = false
 
-
+var map_options = ['Default Map', 'Randomized Map', 'Create new Map']
 @onready var Resolution_ob = get_node("%Resolution_Optionbutton")
 @onready var OptionContainer = get_node("%OptionContainer")
 @onready var MainContainer = get_node("%MainContainer")
 @onready var LoginContainer = get_node("%LoginContainer")
+@onready var PlayContainer = get_node("%PlayContainer")
 @onready var login_button2 = get_node("%Login_button2")
 @onready var username_input = get_node("%Username")
 @onready var password_input = get_node("%Password")
@@ -213,9 +214,15 @@ func _get_scores():
 	var data = {"score_offset" : 0, "score_number" : 10}
 	request_queue.push_back({"command" : command, "data" : data});
 
+func _get_images(player_id):
+	var command = "get_images"
+	var data = {"PlayerID" : player_id}
+	request_queue.push_back({"command" : command, "data" : data})
 
 func _on_start_button_pressed():
-	get_tree().change_scene_to_file("res://scenes/game.tscn")
+	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
+	PlayContainer.visible = true
+	MainContainer.visible = false
 
 
 
@@ -269,11 +276,13 @@ func _on_return_button_pressed():
 	MainContainer.visible = true
 	OptionContainer.visible = false
 	LoginContainer.visible = false
+	PlayContainer.visible = false
 
 
 func _on_apply_button_pressed():
 	MainContainer.visible = true
 	OptionContainer.visible = false
+	PlayContainer.visible = false
 	_save_settings()
 
 
@@ -297,12 +306,32 @@ func _on_login_button_2_pressed():
 		var password = password_input.get_text()
 		print("Attempting to login...")
 		_login(username,password)
+		_get_images(3)
 	
 
 
 func _on_process_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/manage_images.tscn")
+	#get_tree().change_scene_to_file("res://gallery.tscn")
 
 
 
 
+
+
+func _on_play_button_pressed():
+	get_tree().change_scene_to_file("res://scenes/game.tscn")
+
+
+func _on_map_list_pressed():
+	print("Pressed")
+
+
+func _on_manage_img_button_pressed():
+	#get_tree().change_scene_to_file("res://gallery.tscn")
+	get_tree().change_scene_to_file("res://image_list.tscn")
+
+
+func _on_browse_maps_button_pressed():
+	get_tree().change_scene_to_file("res://image_list.tscn")
+	pass # Replace with function body.
