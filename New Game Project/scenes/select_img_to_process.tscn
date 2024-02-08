@@ -1,0 +1,76 @@
+[gd_scene load_steps=3 format=3 uid="uid://hg31dcxxa3op"]
+
+[ext_resource type="Script" path="res://scripts/ImageList.gd" id="1_0r7b4"]
+[ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_y2pdh"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_0r7b4")
+
+[node name="Bg" type="Sprite2D" parent="."]
+position = Vector2(576.5, 324)
+scale = Vector2(0.645938, 0.696774)
+texture = ExtResource("2_y2pdh")
+
+[node name="ItemList" type="ItemList" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 213.0
+offset_top = 173.0
+offset_right = 987.0
+offset_bottom = 504.0
+allow_reselect = true
+item_count = 1
+item_0/text = ""
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+initial_position = 4
+visible = true
+
+[node name="return_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 448.0
+offset_top = 520.0
+offset_right = 571.0
+offset_bottom = 551.0
+text = "Return"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 536.0
+offset_top = 135.0
+offset_right = 576.0
+offset_bottom = 158.0
+theme_override_colors/font_color = Color(0.968627, 0.647059, 0.0941176, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Images on Server"
+
+[node name="new_image_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 590.0
+offset_top = 520.0
+offset_right = 693.0
+offset_bottom = 551.0
+text = "New Image"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+use_taa = true
+title = "Open a File"
+initial_position = 2
+size = Vector2i(1000, 550)
+max_size = Vector2i(1000, 600)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
+[connection signal="item_selected" from="ItemList" to="." method="_on_item_list_item_selected"]
+[connection signal="id_pressed" from="PopupMenu" to="." method="_on_popup_menu_id_pressed"]
+[connection signal="pressed" from="return_button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="new_image_button" to="." method="_on_new_image_button_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

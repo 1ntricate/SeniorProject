@@ -22,9 +22,7 @@ func _on_random_map_pressed():
 
 
 func _on_new_map_button_pressed():
-	get_tree().change_scene_to_file("res://scenes/manage_imagesw.tscn")
-	
-	pass # Replace with function body.
+	get_tree().change_scene_to_file("res://scenes/select_img_to_process.tscn")
 
 
 func _on_maps_button_pressed():

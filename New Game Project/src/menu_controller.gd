@@ -329,7 +329,7 @@ func _on_map_list_pressed():
 
 func _on_manage_img_button_pressed():
 	#get_tree().change_scene_to_file("res://gallery.tscn")
-	get_tree().change_scene_to_file("res://image_list.tscn")
+	get_tree().change_scene_to_file("res://scenes/image_list.tscn")
 
 
 func _on_browse_maps_button_pressed():

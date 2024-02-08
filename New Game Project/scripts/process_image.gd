@@ -5,8 +5,6 @@ var slider
 func _ready():
 	slider = $HScrollBar
 	
-
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
@@ -19,34 +17,34 @@ func _on_process_button_pressed():
 	var weightValueStr = str(weightValue)
 	var output = []
 	print("Weight ration set to: ", weightValue) 
-	# Executable path
+	# selected image path
 	var image_path = Global.selected_image_path
-#######################################################################################################	
 	# MAY NEED TO CHANGE PYTHON3 EXECUTABLE LOCATION
-	var script_path = "/usr/bin/python3"  # Python executable
-
-	#  CHANGE PATH TO SCRIPT HERE
-	var arguments = ["/home/beto/Documents/GitHub/SeniorProject/image_processing/knn/knn_v2.py", weightValueStr, image_path]
-	
-#######################################################################################################	
+	var script_path = "/usr/bin/python3" # Python executable
+	var absolute_path = ProjectSettings.globalize_path("res://")
+	var knn_path = absolute_path.replace("New Game Project/", "image_processing/knn/knn_v2.py")
+	var arguments = [knn_path, weightValueStr, image_path]
 	# Run the Python script and redirect output to files
 	var result = OS.execute(script_path,arguments, output,true)
 	# Check if the script execution was successful
 	if result == OK:
-		var file_path = "res://identified_elements.txt"  # Update the path as needed
-		var file = FileAccess.open(file_path, FileAccess.READ)
+		# Read what elements were identfied in the knn scipt
+		var elements_path = absolute_path.replace("New Game Project/", "image_processing/knn/identified_elements.txt")
+		var file = FileAccess.open(elements_path, FileAccess.READ)
 		if file != null:
 			var file_contents = file.get_as_text()
+			Global.elements_identfied = file_contents
 			file.close()
-			print("File Contents:")
+			print("Elements Identfied:")
 			print(file_contents)
+			get_tree().change_scene_to_file("res://scenes/Map_Creator.tscn")
+			
+			
 		else:
-			print("Failed to open the output file:", file_path)
+			print("Failed to open the output file:", elements_path)
 	else:
 		# Handle the case where the script execution failed
 		print("Script execution failed with error code:", result)
-
-
 
 func _on_back_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/manage_images.tscn")

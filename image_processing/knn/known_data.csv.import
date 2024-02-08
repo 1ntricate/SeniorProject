@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://drvkuhji67101"
+
+[deps]
+
+files=["res://knn/known_data.Green.translation", "res://knn/known_data.Red.translation", "res://knn/known_data.Edge Count.translation", "res://knn/known_data.Contrast.translation", "res://knn/known_data.Dissimilarity.translation", "res://knn/known_data.Homogeneity.translation", "res://knn/known_data.Energy.translation", "res://knn/known_data.Label.translation", "res://knn/known_data.Type.translation"]
+
+source_file="res://knn/known_data.csv"
+dest_files=["res://knn/known_data.Green.translation", "res://knn/known_data.Red.translation", "res://knn/known_data.Edge Count.translation", "res://knn/known_data.Contrast.translation", "res://knn/known_data.Dissimilarity.translation", "res://knn/known_data.Homogeneity.translation", "res://knn/known_data.Energy.translation", "res://knn/known_data.Label.translation", "res://knn/known_data.Type.translation"]
+
+[params]
+
+compress=true
+delimiter=0

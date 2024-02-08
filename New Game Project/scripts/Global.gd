@@ -3,6 +3,7 @@ extends Node
 var drink = 0
 var player_current_atk = false
 var selected_image_path = ""
+var elements_identfied = ""
 var auto_movement_enabled = true
 
 func _process(delta):
