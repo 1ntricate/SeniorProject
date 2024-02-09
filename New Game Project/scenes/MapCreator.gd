@@ -3,6 +3,7 @@ extends Control
 @onready var map_name = get_node("%MapName")
 @onready var map_dsc = get_node("%MapDescription")
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var text_box = $TextEdit
@@ -18,7 +19,12 @@ func _process(delta):
 
 
 func _on_save_button_pressed():
-	var name = map_name.get_text()
+	Global.map_name = map_name.get_text()
 	var dsc = map_dsc.get_text()
 	get_tree().change_scene_to_file("res://scenes/processed_game_map.tscn")
 
+
+
+func _on_return_button_pressed():
+	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
+	

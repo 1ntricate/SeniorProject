@@ -99,3 +99,4 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "Elements Identfied "
 
 [connection signal="pressed" from="MapMenu/SaveButton" to="MapMenu" method="_on_save_button_pressed"]
+[connection signal="pressed" from="MapMenu/ReturnButton" to="MapMenu" method="_on_return_button_pressed"]

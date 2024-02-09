@@ -2,6 +2,7 @@ extends Control
 
 @onready var MainMapContainer = get_node("%MainMapContainer")
 # Called when the node enters the scene tree for the first time.
+
 func _ready():
 	pass # Replace with function body.
 
@@ -35,3 +36,8 @@ func _on_back_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 	
 
+
+
+func _on_browse_maps_button_pressed():
+	get_tree().change_scene_to_file("res://player_maps/Trees.tscn")
+	

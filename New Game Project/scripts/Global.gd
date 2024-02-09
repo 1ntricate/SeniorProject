@@ -5,6 +5,7 @@ var player_current_atk = false
 var selected_image_path = ""
 var elements_identfied = ""
 var auto_movement_enabled = true
+var map_name = ""
 
 func _process(delta):
 	pass

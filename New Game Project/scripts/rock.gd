@@ -46,6 +46,11 @@ func update_rock_hp():
 	else:
 		rockbar.visible = true
 
+func get_save_data():
+	return {
+		"type": "rock",
+	"position": position
+	}
 
 
 

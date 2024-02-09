@@ -46,3 +46,9 @@ func update_tree_hp():
 	else:
 		treebar.visible = true
 
+func get_save_data():
+	return {
+		"type": "tree",
+	"position": position
+	}
+
