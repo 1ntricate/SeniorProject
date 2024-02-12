@@ -31,12 +31,14 @@ func load_images_into_gallery(path):
 					print("No texture")
 					
 func load_image_as_thumbnail(path):
-	var image = Image.load_from_file(path) 
-	var texture = ImageTexture.create_from_image(image)
-	var myVector2i = Vector2i(100, 100)
-	texture.set_size_override(myVector2i)
-	return texture
-	
+	if path != "":
+		var image = Image.load_from_file(path) 
+		var texture = ImageTexture.create_from_image(image)
+		var myVector2i = Vector2i(100, 100)
+		if texture != null:
+			texture.set_size_override(myVector2i)
+		return texture
+	return null
 var image_paths = []
 
 func load_images_from_directory(path):

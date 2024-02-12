@@ -137,7 +137,7 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 		
 	# If not requesting a nonce, we handle all other requests here:
 	print("Response Body:\n" + response_body)
-
+	print("PAst ")
 	# Check if the response contains a 'greeting' field and extract the username:
 	if 'greeting' in response['response']:
 		var greeting_message = response['response']['greeting']
@@ -309,15 +309,9 @@ func _on_login_button_2_pressed():
 		_get_images(3)
 	
 
-
 func _on_process_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/manage_images.tscn")
 	#get_tree().change_scene_to_file("res://gallery.tscn")
-
-
-
-
-
 
 func _on_play_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/game.tscn")

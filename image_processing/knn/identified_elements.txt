@@ -1,5 +1,5 @@
-tree: 37
-stone: 6
-sand: 5
-grass: 11
-water: 1
+sky: 27
+tree: 12
+stone: 4
+sand: 14
+water: 3

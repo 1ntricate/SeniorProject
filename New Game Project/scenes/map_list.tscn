@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://dcjdad3iam3nk"]
+
+[ext_resource type="Script" path="res://scripts/MapList.gd" id="1_5lhgx"]
+[ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_sppov"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_5lhgx")
+
+[node name="Bg" type="Sprite2D" parent="."]
+position = Vector2(576.5, 324)
+scale = Vector2(0.645938, 0.696774)
+texture = ExtResource("2_sppov")
+
+[node name="ItemList" type="ItemList" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 213.0
+offset_top = 173.0
+offset_right = 987.0
+offset_bottom = 504.0
+allow_reselect = true
+item_count = 1
+item_0/text = ""
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+initial_position = 4
+visible = true
+
+[node name="return_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 507.0
+offset_top = 521.0
+offset_right = 630.0
+offset_bottom = 552.0
+text = "Return"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 554.0
+offset_top = 137.0
+offset_right = 596.0
+offset_bottom = 160.0
+theme_override_colors/font_color = Color(0.968627, 0.647059, 0.0941176, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Maps"
+
+[connection signal="item_selected" from="ItemList" to="." method="_on_item_list_item_selected"]
+[connection signal="id_pressed" from="PopupMenu" to="." method="_on_popup_menu_id_pressed"]
+[connection signal="pressed" from="return_button" to="." method="_on_button_pressed"]

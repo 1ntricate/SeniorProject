@@ -41,14 +41,14 @@ text = "Return"
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 536.0
-offset_top = 135.0
-offset_right = 576.0
-offset_bottom = 158.0
+offset_left = 512.0
+offset_top = 136.0
+offset_right = 697.0
+offset_bottom = 159.0
 theme_override_colors/font_color = Color(0.968627, 0.647059, 0.0941176, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-text = "Images on Server"
+text = "Select Image To Analyze"
 
 [node name="new_image_button" type="Button" parent="."]
 layout_mode = 0

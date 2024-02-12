@@ -26,10 +26,6 @@ func _on_new_map_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/select_img_to_process.tscn")
 
 
-func _on_maps_button_pressed():
-	get_tree().change_scene_to_file("res://image_list.tscn")
-	#pass # Replace with function body.
-
 
 func _on_back_button_pressed():
 	MainMapContainer.visible = false
@@ -39,5 +35,5 @@ func _on_back_button_pressed():
 
 
 func _on_browse_maps_button_pressed():
-	get_tree().change_scene_to_file("res://player_maps/Trees.tscn")
+	get_tree().change_scene_to_file("res://scenes/map_list.tscn")
 	
