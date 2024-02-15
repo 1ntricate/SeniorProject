@@ -19,6 +19,9 @@ func _on_process_button_pressed():
 	print("Weight ration set to: ", weightValue) 
 	# selected image path
 	var image_path = Global.selected_image_path
+	#var image_path = "6_landscape.jpg"
+	#Network._process_image(weightValueStr,image_path)
+	
 	# MAY NEED TO CHANGE PYTHON3 EXECUTABLE LOCATION
 	var script_path = "/usr/bin/python3" # Python executable
 	var absolute_path = ProjectSettings.globalize_path("res://")
@@ -26,6 +29,7 @@ func _on_process_button_pressed():
 	var arguments = [knn_path, weightValueStr, image_path]
 	# Run the Python script and redirect output to files
 	var result = OS.execute(script_path,arguments, output,true)
+	
 	# Check if the script execution was successful
 	if result == OK:
 		# Read what elements were identfied in the knn scipt

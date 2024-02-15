@@ -37,8 +37,9 @@ func _ready():
 		temperature.seed = randi()
 		altitude.seed = randi()
 		altitude.frequency = 0.005
-		generate_chunk(player.position)
+		
 		var elements = Global.elements_identfied
+		generate_chunk(player.position, elements)
 		# spawn enemies
 		
 		# spawn elements as objects 
@@ -70,8 +71,16 @@ func _ready():
 		var json_path = scene_path.replace(".tscn", ".json")
 		print("Json path is ", scene_path)
 		load_scene_from_file(json_path)
-	
-func generate_chunk(position):
+		
+var water_tile_1 = Vector2(3,0)
+var water_tile_2 = Vector2(3,1)
+var grass_tile_1 = Vector2(1,1)
+var grass_tile_2 = Vector2(1,2)
+var grass_tile_3 = Vector2(2,3)
+var sand_tile_1 = Vector2(0,2)
+var sand_tile_2 = Vector2(0,3)
+
+func generate_chunk(position,elements):
 	var tile_pos = local_to_map(position)
 	print(player.position)
 
@@ -80,7 +89,12 @@ func generate_chunk(position):
 			var moist = moisture.get_noise_2d(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y)*10
 			var temp = temperature.get_noise_2d(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y)*10
 			var alt = altitude.get_noise_2d(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y)*10
+			var random = Vector2(round((moist+10)/5),(round((temp+10)/5)))
+			#if "tree" in elements:
 			set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, Vector2(round((moist+10)/5),(round((temp+10)/5))))
+			#elif "stone" in elements:
+			#	set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, Vector2(round((moist+10)/5),(round((temp+10)/5))))
+			#set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, Vector2(round((moist+10)/5),(round((temp+10)/5))))
 			
 			#if alt < 2:
 			#	set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, Vector2(3, round((temp+10)/5)))

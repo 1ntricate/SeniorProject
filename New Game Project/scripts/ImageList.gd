@@ -3,12 +3,52 @@ extends Control
 var image_folder_path = "res://player_images/"
 var popup_options = ["Process Image"] # Define your options here
 
+var request_to_filename = {}
+
+var file_name = ""
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$ItemList.icon_mode = ItemList.ICON_MODE_TOP # Ensure this is set
 	load_images_into_gallery(image_folder_path)
-	
+	Network.connect("images_received", Callable(self, "_on_images_received"))
+	Network._get_images(3)
 
+func _on_images_received():
+	_setup_requests(Global.image_urls)
+
+func _setup_requests(urls):
+	print(urls)
+	for link in urls:
+		var image_url = link["url"]
+		#var filename = url["filename"]
+		file_name = link["filename"]
+		var http_request = HTTPRequest.new()
+		add_child(http_request)
+		http_request.request_completed.connect(self._http_request_completed)
+		#request_to_filename[http_request] = filename 
+		var error = http_request.request(image_url)
+		
+			
+func _http_request_completed(result, response_code, headers, body):
+	var save_path = "res://player_images/"
+	if result == HTTPRequest.RESULT_SUCCESS:
+		#var filer_namme = 
+		var image_name =  _generate_random_string(6) + ".png"
+		var full_save_path = save_path + image_name
+		var out_file = FileAccess.open(full_save_path, FileAccess.WRITE)
+		#var filer_name = request_to_filename[http_request]
+		if out_file:
+			out_file.store_buffer(body)
+			out_file.close()
+			print("Image added to directory")	
+	
+func _generate_random_string(length: int) -> String:
+	var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	var random_string = ""
+	for i in length: # Note: In Godot 4.2, use '..' for inclusive range
+		var index = randi() % characters.length()
+		random_string += characters[index]
+	return random_string	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -95,6 +135,7 @@ func _on_file_dialog_file_selected(path):
 		if out_file:
 			out_file.store_buffer(data)
 		print("Image added to directory")
+		Network._upload_image(Global.player_id,path.get_file(),data)
 		
 	var scene_tree = get_tree()
 	if scene_tree:

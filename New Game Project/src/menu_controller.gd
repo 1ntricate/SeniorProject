@@ -27,6 +27,8 @@ var map_options = ['Default Map', 'Randomized Map', 'Create new Map']
 var isUserLoggedIn = false
 var loggedusername
 
+signal images_received
+
 # Config file
 # Move it into a singleton 
 var SettingsFile = ConfigFile.new()
@@ -115,19 +117,31 @@ func _process(_delta):
 		
 	
 func _http_request_completed(_result, _response_code, _headers, _body):
+	var image_urls = []
 	is_requesting = false
 	if _result != HTTPRequest.RESULT_SUCCESS:
 		printerr("Error w/ connection: " + String(_result))
 		return
 		
 	var response_body = _body.get_string_from_utf8()
+	
+	print("Response Body:\n%s" % response_body)
 	# Grab our JSON and handle any errors reported by our PHP code:
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(response_body)
+	
 	var response = test_json_conv.get_data()
-	if response['error'] != "none":
-		printerr("We returned error: " + response['error'])
-		return
+	if response['command'] == 'get_images':
+		print("get images requested")
+		if response.has("response") and response["response"] is Array:
+			# Store the URLs in array
+			image_urls = response["response"]
+			Global.image_urls = image_urls
+			emit_signal("images_received")
+
+	#if response['error'] != "none":
+	#	printerr("returned error: " + response['error'])
+	#	return
 	
 	# Check if we were requesting a nonce:
 	if response['command'] == 'get_nonce':
@@ -136,8 +150,6 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 		return
 		
 	# If not requesting a nonce, we handle all other requests here:
-	print("Response Body:\n" + response_body)
-	print("PAst ")
 	# Check if the response contains a 'greeting' field and extract the username:
 	if 'greeting' in response['response']:
 		var greeting_message = response['response']['greeting']
@@ -151,10 +163,7 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 			#var welcomeLabel = $Welcome
 			$MainContainer/Welcome.text = "Welcome, " + username
 			#welcomeLabel.text = "Welcome, " + username
-	else:
-		print("Invalid Credentials")
-
-
+	
 
 func request_nonce():
 	var client = HTTPClient.new()
@@ -201,7 +210,7 @@ func _send_request(request: Dictionary):
 		return
 	
 	# Print out request for debugging:
-	print("Requesting...\n\tCommand: " + request['command'] + "\n\tBody: " + body)
+	#print("Requesting...\n\tCommand: " + request['command'] + "\n\tBody: " + body)
 
 
 func _login(email,password):
@@ -209,16 +218,28 @@ func _login(email,password):
 	var data = {"email" : email, "password" : password}
 	request_queue.push_back({"command" : command, "data" : data})
 	
-func _get_scores():
-	var command = "get_users"
-	var data = {"score_offset" : 0, "score_number" : 10}
-	request_queue.push_back({"command" : command, "data" : data});
-
 func _get_images(player_id):
 	var command = "get_images"
 	var data = {"PlayerID" : player_id}
 	request_queue.push_back({"command" : command, "data" : data})
-
+	
+func _upload_image(player_id,file_name,image):
+	var command = "upload_image"
+	var data = {"PlayerID" : player_id, "file_name": file_name, "image": image}
+	request_queue.push_back({"command" : command, "data" : data})
+	
+func _process_image(weight,image):
+	print("process image called")
+	var command = "knn"
+	var data = {"weight" : weight, "image_path":image}
+	request_queue.push_back({"command" : command, "data" : data})
+	
+func _get_maps(PlayerID):
+	print("get maps called")
+	var command = "get_maps"
+	var data = {"PlayerID" : PlayerID}
+	request_queue.push_back({"command" : command, "data" : data})
+	
 func _on_start_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 	PlayContainer.visible = true
@@ -306,7 +327,7 @@ func _on_login_button_2_pressed():
 		var password = password_input.get_text()
 		print("Attempting to login...")
 		_login(username,password)
-		_get_images(3)
+		
 	
 
 func _on_process_button_pressed():

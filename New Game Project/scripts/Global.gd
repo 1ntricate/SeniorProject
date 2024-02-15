@@ -8,6 +8,8 @@ var auto_movement_enabled = true
 var map_name = ""
 var loaded_map = ""
 var new_map = false
+var image_urls = []
+var player_id = 3
 
 func _process(delta):
 	pass
