@@ -350,6 +350,6 @@ with open("identified_elements.txt", "w") as file:
 
 print("Press q to close displayed image")
 # Display the result image with labeled patches and borders
-cv2.imshow("Result Image with Labeled Patches", result_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+#cv2.imshow("Result Image with Labeled Patches", result_image)
+#cv2.waitKey(0)
+#cv2.destroyAllWindows()
