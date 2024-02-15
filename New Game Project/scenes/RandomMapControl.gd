@@ -6,7 +6,7 @@ var altitude= FastNoiseLite.new()
 var width = 500
 var height = 500
 @onready var player = get_parent().get_child(2)
-var offset_range = 1000
+var offset_range = 800
 var spawn_pos = Vector2(221.818, -87.2727)
 
 func _ready():

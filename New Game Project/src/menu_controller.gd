@@ -6,8 +6,8 @@ extends Control
 # Check out Colorblind addon for godot : https://github.com/paulloz/godot-colorblindness
 #--
 var http_request : HTTPRequest = HTTPRequest.new()
-#const SERVER_URL = "http://174.134.25.64:5444/test.php"
-const SERVER_URL = "http://192.168.1.229/godot.php"
+const SERVER_URL = "http://174.134.25.64:5444/godot.php"
+#const SERVER_URL = "http://192.168.1.229/godot.php"
 const SERVER_HEADERS = ["Content-Type: application/x-www-form-urlencoded", "Cache-Control: max-age=0"]
 const SECRET_KEY = "1234567890"
 var nonce = null

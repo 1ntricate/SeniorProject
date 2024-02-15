@@ -33,7 +33,7 @@ func _http_request_completed(result, response_code, headers, body):
 	var save_path = "res://player_images/"
 	if result == HTTPRequest.RESULT_SUCCESS:
 		#var filer_namme = 
-		var image_name =  _generate_random_string(6) + ".png"
+		var image_name =  file_name  + ".png"
 		var full_save_path = save_path + image_name
 		var out_file = FileAccess.open(full_save_path, FileAccess.WRITE)
 		#var filer_name = request_to_filename[http_request]
