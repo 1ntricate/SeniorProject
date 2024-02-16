@@ -130,15 +130,20 @@ func save_game():
 	if out_file:
 		out_file.store_line(json_data)
 		
-	var file_path = "res://player_maps/" +  Global.map_name+ ".tscn"	
+	var scene_path = "res://player_maps/" +  Global.map_name+ ".tscn"
 	var current_scene = get_tree().current_scene
 	var packed_scene = PackedScene.new()
 	var result = packed_scene.pack(current_scene)
 	if result == OK:
-		var error = ResourceSaver.save(packed_scene, file_path)  # Or "user://..."
+		var error = ResourceSaver.save(packed_scene, scene_path)  # Or "user://..."
 		if error != OK:
 			push_error("An error occurred while saving the scene to disk.")
-	
+	var in_file = FileAccess.open(scene_path, FileAccess.READ)
+	if in_file:
+		var scene_data = in_file.get_as_text()
+		in_file.close()
+		if Global.player_id != 99999:
+			Network._upload_map(Global.player_id, scene_data,json_data, Global.map_name)
 
 	
 func load_scene_from_file(file_path):

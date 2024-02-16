@@ -24,7 +24,7 @@ var map_options = ['Default Map', 'Randomized Map', 'Create new Map']
 @onready var username_input = get_node("%Username")
 @onready var password_input = get_node("%Password")
 
-var isUserLoggedIn = false
+
 var loggedusername
 
 signal images_received
@@ -87,17 +87,12 @@ func _save_settings() -> void:
 	SettingsFile.save("res://settings.cfg")
 
 
-
 func _ready():
 	_load_settings()
 	#Resolution_ob.select(_check_resolution(DisplayServer.screen_get_size()))
 	# Connect our request handler:
 	add_child(http_request)
 	http_request.connect("request_completed", Callable(self, "_http_request_completed"))
-	
-	# Connect our buttons:
-	#$AddScore.connect("pressed", Callable(self, "_submit_score()"))
-	#$GetScores.connect("pressed", Callable(self, "_get_scores"))
 
 	
 func _process(_delta):
@@ -131,13 +126,7 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 	test_json_conv.parse(response_body)
 	
 	var response = test_json_conv.get_data()
-	if response['command'] == 'get_images':
-		print("get images requested")
-		if response.has("response") and response["response"] is Array:
-			# Store the URLs in array
-			image_urls = response["response"]
-			Global.image_urls = image_urls
-			emit_signal("images_received")
+	
 
 	#if response['error'] != "none":
 	#	printerr("returned error: " + response['error'])
@@ -148,20 +137,32 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 		nonce = response['response']['nonce']
 		print("Got nonce: " + response['response']['nonce'])
 		return
+	if response['command'] == 'get_images':
+		print("get images requested")
+		if response.has("response") and response["response"] is Array:
+			# Store the URLs in array
+			image_urls = response["response"]
+			Global.image_urls = image_urls
+			emit_signal("images_received")
 		
 	# If not requesting a nonce, we handle all other requests here:
 	# Check if the response contains a 'greeting' field and extract the username:
-	if 'greeting' in response['response']:
+	if 'greeting' in response['response'] and 'player_id' in response['response']:
+		Global.player_id = response['response']['player_id']
+		print("Player ID: %s" % Global.player_id)
 		var greeting_message = response['response']['greeting']
 		var username_start = greeting_message.find("Hello, ") + 7
 		var username = greeting_message.substr(username_start)
 		print("\nUsername: " + username)
-		isUserLoggedIn = true
-		if isUserLoggedIn == true:
+		Global.isUserLoggedIn = true
+		if Global.isUserLoggedIn == true:
 			LoginContainer.visible = false
 			MainContainer.visible = true
 			#var welcomeLabel = $Welcome
 			$MainContainer/Welcome.text = "Welcome, " + username
+			Network.connect("images_received", Callable(self, "_on_images_received"))
+			Network._get_images(Global.player_id)
+			
 			#welcomeLabel.text = "Welcome, " + username
 	
 
@@ -211,12 +212,55 @@ func _send_request(request: Dictionary):
 	
 	# Print out request for debugging:
 	#print("Requesting...\n\tCommand: " + request['command'] + "\n\tBody: " + body)
+func _on_images_received():
+	_setup_requests(Global.image_urls)
 
+func _setup_requests(urls):
+	print(urls)
+	for link in urls:
+		var image_url = link["url"]
+		var file_name = link["filename"]
+		print("filename is ", file_name)
+		if not file_name in Global.image_list:
+			Global.image_list.append(file_name)
+			var http_request = HTTPRequest.new()
+			add_child(http_request)
+			http_request.request_completed.connect(self._http_request_completed2)
+			Global.active_requests +=1
+			#request_to_filename[http_request] = filename 
+			var error = http_request.request(image_url)
+		else:
+			print("Image already downloaded")
+		
+			
+func _http_request_completed2(result, response_code, headers, body):
+	var save_path = "res://player_images/"
+	if result == HTTPRequest.RESULT_SUCCESS:
+		#var filer_namme = 
+		var image_name =  _generate_random_string(6) + ".png"
+		# overwriting all images to .png, if the image was not orginally png GODOT will not import it into the game
+		var full_save_path = save_path + image_name
+		var out_file = FileAccess.open(full_save_path, FileAccess.WRITE)
+		#var filer_name = request_to_filename[http_request]
+		if out_file:
+			out_file.store_buffer(body)
+			out_file.close()
+			print("Image added to directory")
+			
+	
+func _generate_random_string(length: int) -> String:
+	var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	var random_string = ""
+	for i in length: # Note: In Godot 4.2, use '..' for inclusive range
+		var index = randi() % characters.length()
+		random_string += characters[index]
+	return random_string	
 
 func _login(email,password):
 	var command = "login"
 	var data = {"email" : email, "password" : password}
 	request_queue.push_back({"command" : command, "data" : data})
+	
 	
 func _get_images(player_id):
 	var command = "get_images"
@@ -238,6 +282,12 @@ func _get_maps(PlayerID):
 	print("get maps called")
 	var command = "get_maps"
 	var data = {"PlayerID" : PlayerID}
+	request_queue.push_back({"command" : command, "data" : data})
+	
+func _upload_map(PlayerID, scene,position_data, file_name):
+	print("upload map called")
+	var command = "upload_map"
+	var data = {"PlayerID" : PlayerID, "scene": scene, "pos_data": position_data, "file_name": file_name}
 	request_queue.push_back({"command" : command, "data" : data})
 	
 func _on_start_button_pressed():

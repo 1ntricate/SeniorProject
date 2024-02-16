@@ -9,8 +9,10 @@ var map_name = ""
 var loaded_map = ""
 var new_map = false
 var image_urls = []
-var player_id = 3
-
+var player_id = 99999
+var isUserLoggedIn = false
+var image_list = []
+var active_requests = 0
 func _process(delta):
 	pass
 
