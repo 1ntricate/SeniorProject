@@ -1,7 +1,13 @@
 extends CharacterBody2D
 
 var enemy_in_range = false
+var goblin_in_range = false
+var skeleton_in_range = false
+var spider_in_range = false
 var enemy_atk_cooldown = true
+var goblin_atk_cooldown = true
+var skeleton_atk_cooldown = true
+var spider_atk_cooldown = true
 var health = 100
 var hunger = 100
 var thirsty = 100
@@ -16,6 +22,7 @@ var is_attacking = false
 #@onready var pause_menu = $PauseMenu
 var isPaused = false
 var speed = 100
+
 func _ready():
 	Engine.time_scale = 1
 	animation.play("front_idle")
@@ -27,20 +34,23 @@ func read_input():
 	velocity = Vector2()
 	var new_direction = "none"
 	var movement = 0
-
-#	move character by mouse:
-#	var target_position = (click_position - position).normalized()
-#
-#	if Input.is_action_just_pressed("left_mouse"):
-#		click_position = get_global_mouse_position()
-#	if position.distance_to(click_position) > 3:
-#		move_and_slide(target_position * speed)
-#		look_at(click_position)
 	
+	# press 'spacebar' to shoot laser
+#	if Input.is_action_just_pressed("laser"):
+#		Global.is_laser = true
+#		Global.shoot_laser = true
+#		Global.player_cur_dir = cur_dir
+#		Global.player_current_atk = true
+#	elif Input.is_action_just_released("laser"):
+#		Global.is_laser = false
+#		Global.shoot_laser = false
+
 #	press 'k' to attack	
 	if Input.is_action_pressed("attack"):
 		is_attacking = true
 		play_attack_animation()
+	elif Input.is_action_just_released("attack"):
+		is_attacking = false
 #	moving with 'WASD'
 	else:
 		if Input.is_action_pressed("up"):
@@ -65,7 +75,6 @@ func read_input():
 			direction = Vector2(1, 0)
 			movement = 1
 		
-
 	if new_direction != cur_dir:
 		cur_dir = new_direction
 		play_animation(movement)
@@ -77,7 +86,6 @@ func read_input():
 	move_and_slide()
 	velocity = velocity
 	
-
 func play_animation(movement):
 	match cur_dir:
 		"right":
@@ -125,24 +133,28 @@ func play_attack_animation():
 			animation.play("attack_up")
 			$deal_dmg_cooldown.start()
 
+func health_condition():	
+	if health <= 0:
+		health = 0
+	if health > 100:
+		health = 100
+		
 func _physics_process(delta):
 	read_input()
 	enemy_atk()
+	goblin_atk()
+	skeleton_atk()
+	spider_atk()
 	update_hp()
 	update_hunger_bar()
 	update_thirsty_bar()
-	$GameOver.visible = false
-	$Replay.visible = false
+	if Global.shoot_laser == true:
+#		Global.player_current_atk = true
+		print("shoottt")
 	if health <= 0:
 		alive = false 
 		health = 0
 		print("You are dead")
-		$GameOver.visible = true
-		$Replay.visible = true
-#		# pause everything when dead	
-#		get_tree().paused = true
-#		# reset scene
-		#get_tree().reload_current_scene()
 		get_tree().change_scene_to_file("res://scenes/Gameover.tscn")
 	if Input.is_action_just_pressed("escape"):
 		pauseMenu()
@@ -163,28 +175,75 @@ func pauseMenu():
 func _on_playerhitbox_body_entered(body):
 	if body.has_method("enemy"):
 		enemy_in_range = true
+	if body.has_method("goblin"):
+		goblin_in_range = true
+	if body.has_method("skeleton"):
+		skeleton_in_range = true
+	if body.has_method("spider"):
+		spider_in_range = true
 	if body.has_method("water"):
 		if is_attacking == true:
 			thirsty += 5
+	if body.has_method("gem"):
+		health += 10
 
 func _on_playerhitbox_body_exited(body):
 	if body.has_method("enemy"):
 		enemy_in_range = false
+	if body.has_method("goblin"):
+		goblin_in_range = false
+	if body.has_method("skeleton"):
+		skeleton_in_range = false
+	if body.has_method("spider"):
+		spider_in_range = false
 
 func enemy_atk():
+	#slime attack dmg
 	if enemy_in_range and enemy_atk_cooldown == true:
 		health -= 20
 		enemy_atk_cooldown = false
 		$atk_cooldown.start()
 		print(health)
 
+func goblin_atk():	
+	#goblin attack dmg
+	if goblin_in_range and goblin_atk_cooldown == true:
+		health -= 15
+		goblin_atk_cooldown = false
+		$goblin_atk_cooldown.start()
+		print(health)		
+		
+func skeleton_atk():	
+	#goblin attack dmg
+	if skeleton_in_range and skeleton_atk_cooldown == true:
+		health -= 25
+		skeleton_atk_cooldown = false
+		$skeleton_atk_cooldown.start()
+		print(health)	
+
+func spider_atk():	
+	if spider_in_range and spider_atk_cooldown == true:
+		health -= 25
+		spider_atk_cooldown = false
+		$spider_atk_cooldown.start()
+		print(health)		
+
+func _on_skelton_atk_cooldown_timeout():
+	skeleton_atk_cooldown = true
+	health_condition()
+
+func _on_spider_atk_cooldown_timeout():
+	spider_atk_cooldown = true
+	health_condition()
+		
 func _on_atk_cooldown_timeout():
 	enemy_atk_cooldown = true
-	if health <= 0:
-		health = 0
-	if health > 100:
-		health = 100
-
+	health_condition()
+		
+func _on_goblin_atk_cooldown_timeout():
+	goblin_atk_cooldown = true
+	health_condition()
+		
 func _on_deal_dmg_cooldown_timeout():
 	$deal_dmg_cooldown.stop()
 	Global.player_current_atk = false
@@ -194,7 +253,7 @@ func update_hp():
 	var hpbar = $Player_HP
 	hpbar.value = health
 	if health > 100:
-		hpbar.visible = false
+		health = 100
 	else:
 		hpbar.visible = true
 		
@@ -216,7 +275,6 @@ func update_hunger_bar():
 	if hunger > 100:
 		hunger = 100
 
-
 func _on_thirsty_timer_timeout():
 	# Decrease thirsty by 1 every second
 	if thirsty > 0:
@@ -237,3 +295,4 @@ func update_thirsty_bar():
 
 func _on_replay_pressed():
 	get_tree().paused = false
+

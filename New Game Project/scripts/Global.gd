@@ -1,9 +1,14 @@
 extends Node
 
+var instance = null
 var drink = 0
+var player_cur_dir = Vector2.LEFT
 var player_current_atk = false
 var selected_image_path = ""
 var elements_identfied = ""
+var tree_fallen = false
+var is_laser = false
+var shoot_laser = false
 var auto_movement_enabled = true
 var map_name = ""
 var loaded_map = ""
@@ -13,6 +18,9 @@ var player_id = 99999
 var isUserLoggedIn = false
 var image_list = []
 var active_requests = 0
+
+func _ready():
+	instance = self
 func _process(delta):
 	pass
 

@@ -7,6 +7,9 @@ var player_inrange = false
 var wood_from_tree = 100
 var wood_harvest = 0
 
+func _ready():
+	$AnimatedSprite2D.play("tree")
+
 func _physics_process(delta):
 	deal_dmg()
 	update_tree_hp()
@@ -28,11 +31,14 @@ func deal_dmg():
 			health -= 20
 			wood_from_tree -= 20
 			wood_harvest = 100 - wood_from_tree
+			if health <= 40:
+				$AnimatedSprite2D.play("wood")
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false
 			print("tree health: ", health)
 			print("+", wood_harvest, " wood")
 			if health <= 0:
+				Global.instance.tree_fallen = true
 				self.queue_free()
 
 func _on_take_dmg_cooldown_timeout():
@@ -45,10 +51,4 @@ func update_tree_hp():
 		treebar.visible = false
 	else:
 		treebar.visible = true
-
-func get_save_data():
-	return {
-		"type": "tree",
-	"position": position
-	}
 

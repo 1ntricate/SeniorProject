@@ -23,7 +23,7 @@ func _on_file_dialog_file_selected(path):
 		var texture = ImageTexture.create_from_image(image)
 		texture.create_from_image(image)
 		$Sprite2D.texture = texture
-		 # Set the desired size of the displayed image
+		# Set the desired size of the displayed image
 		var desired_size = Vector2(150, 100)  # Adjust the size as needed
 		$Sprite2D.scale = desired_size / texture.get_size()
 		print("Texture created")

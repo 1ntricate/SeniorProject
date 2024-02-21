@@ -1,0 +1,70 @@
+[gd_scene load_steps=10 format=3 uid="uid://ba7woy5l0jyqq"]
+
+[ext_resource type="Script" path="res://scripts/goblin.gd" id="1_ghqo8"]
+[ext_resource type="Texture2D" uid="uid://bdc2vy25ut3kw" path="res://assets/goblin (1).png" id="1_k7dsi"]
+[ext_resource type="PackedScene" uid="uid://dtcgan6w0wnm5" path="res://scenes/goblin_hp.tscn" id="3_pvl0r"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4fh41"]
+radius = 11.0
+height = 36.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_anjfb"]
+atlas = ExtResource("1_k7dsi")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rhhnp"]
+atlas = ExtResource("1_k7dsi")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w3av8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_anjfb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rhhnp")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ro6i5"]
+radius = 38.0132
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s66n5"]
+radius = 20.0998
+
+[node name="goblin" type="CharacterBody2D"]
+script = ExtResource("1_ghqo8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_4fh41")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_w3av8")
+animation = &"idle"
+frame_progress = 0.780294
+
+[node name="detection_area" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="detection_shape" type="CollisionShape2D" parent="detection_area"]
+shape = SubResource("CircleShape2D_ro6i5")
+
+[node name="hitbox_area" type="Area2D" parent="."]
+
+[node name="hitbox_shape" type="CollisionShape2D" parent="hitbox_area"]
+shape = SubResource("CircleShape2D_s66n5")
+
+[node name="take_dmg_cooldown" type="Timer" parent="."]
+
+[node name="Goblin_Hp" parent="." instance=ExtResource("3_pvl0r")]
+
+[connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
+[connection signal="body_entered" from="hitbox_area" to="." method="_on_enemyhitbox_body_entered"]
+[connection signal="body_exited" from="hitbox_area" to="." method="_on_enemyhitbox_body_exited"]
+[connection signal="timeout" from="take_dmg_cooldown" to="." method="_on_take_dmg_cooldown_timeout"]

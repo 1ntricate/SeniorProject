@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dcn6pet2pcfau"]
+[gd_scene load_steps=22 format=3 uid="uid://dcn6pet2pcfau"]
 
 [ext_resource type="Script" path="res://scripts/Global.gd" id="1_wm34h"]
 [ext_resource type="Texture2D" uid="uid://8apkqf5mhynb" path="res://assets/grass.png" id="2_ohq8h"]
@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://iykiddabirkb" path="res://scenes/HP ProgressBar.tscn" id="9_42w6u"]
 [ext_resource type="Texture2D" uid="uid://21uqkqp2sltf" path="res://images/Blue_circle.png" id="10_u8sw6"]
 [ext_resource type="Texture2D" uid="uid://ckc0501l3p57u" path="res://images/Green_circle.png" id="11_bcd8d"]
-[ext_resource type="Texture2D" uid="uid://cu6738p4o6i0s" path="res://images/GAMEOVER.png" id="12_1ac2n"]
 [ext_resource type="PackedScene" uid="uid://bnaq0ucejxfl7" path="res://scenes/enemy.tscn" id="13_qjdar"]
 [ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="15_3iv6o"]
 [ext_resource type="PackedScene" uid="uid://dj37ri57e1q1q" path="res://scenes/rock.tscn" id="16_u4a32"]
@@ -524,15 +523,6 @@ sources/1 = SubResource("TileSetAtlasSource_cedav")
 sources/2 = SubResource("TileSetAtlasSource_eamns")
 sources/3 = SubResource("TileSetAtlasSource_jd5sv")
 
-[sub_resource type="GDScript" id="GDScript_u4ocl"]
-script/source = "extends Button
-
-
-# Called when the node enters the scene tree for the first time.
-func _on_quit_pressed():
-	get_tree().quit()
-"
-
 [node name="Game" type="Node2D"]
 position = Vector2(1, 0)
 scale = Vector2(1.1, 1.1)
@@ -550,15 +540,6 @@ collision_mask = 3
 slide_on_ceiling = false
 floor_stop_on_slope = false
 floor_block_on_wall = false
-
-[node name="Replay" type="Button" parent="Player"]
-offset_left = -18.1818
-offset_top = -0.909091
-offset_right = 23.8182
-offset_bottom = 30.0909
-text = "Quit
-"
-script = SubResource("GDScript_u4ocl")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(5, 3)
@@ -623,16 +604,6 @@ texture_under = ExtResource("11_bcd8d")
 texture_progress = ExtResource("11_bcd8d")
 tint_under = Color(1, 0, 0, 1)
 
-[node name="GameOver" type="TextureProgressBar" parent="Player"]
-offset_left = -161.818
-offset_top = -111.818
-offset_right = 165.182
-offset_bottom = 0.181816
-nine_patch_stretch = true
-texture_under = ExtResource("12_1ac2n")
-texture_progress = ExtResource("12_1ac2n")
-tint_under = Color(1, 1, 0.415686, 1)
-
 [node name="enemy" parent="." instance=ExtResource("13_qjdar")]
 position = Vector2(221.818, -87.2727)
 
@@ -640,6 +611,7 @@ position = Vector2(221.818, -87.2727)
 position = Vector2(-341.818, 119.091)
 
 [node name="tree" parent="." instance=ExtResource("15_3iv6o")]
+visible = false
 position = Vector2(-81.8182, -178.182)
 
 [node name="Tree_Hp" parent="tree" instance=ExtResource("16_xynwb")]
@@ -649,6 +621,7 @@ offset_right = 288.688
 offset_bottom = 158.092
 
 [node name="tree2" parent="." instance=ExtResource("15_3iv6o")]
+visible = false
 position = Vector2(-247.273, -58.1818)
 
 [node name="Tree_Hp" parent="tree2" instance=ExtResource("16_xynwb")]
@@ -680,5 +653,3 @@ scale = Vector2(0.131905, 0.713098)
 [node name="water" parent="." instance=ExtResource("18_hhh5v")]
 position = Vector2(-437.273, -32.7273)
 scale = Vector2(2.70909, 2.81818)
-
-[connection signal="pressed" from="Player/Replay" to="Player" method="_on_replay_pressed"]

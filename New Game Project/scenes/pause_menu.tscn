@@ -25,6 +25,7 @@ offset_right = 5374.0
 offset_bottom = 2778.0
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 

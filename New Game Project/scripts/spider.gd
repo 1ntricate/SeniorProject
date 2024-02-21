@@ -1,19 +1,41 @@
 extends CharacterBody2D
 
-var speed = 45
+var speed = 25
 var player_chase = false
 var player = null
-var health = 100
+var health = 150
 var player_inrange = false
 var dmg_taken_cooldown = true
 var random = randi() % 2
 var auto_movement_enabled = true
-var movement_direction = Vector2.LEFT  # Initial direction
+var movement_direction = Vector2.UP  # Initial direction
 @onready var animation = $AnimatedSprite2D
 
 func _ready():
 	Engine.time_scale = 1
 	animation.play("idle")
+	
+func check_direction():
+	var player_pos = player.position
+	var enemy_pos = position
+	var angle_to_player = (player_pos - enemy_pos).angle()
+
+	if abs(angle_to_player) < 45 or abs(angle_to_player) > 315:
+		# Player is to the right
+		$AnimatedSprite2D.play("move_right")
+		movement_direction = Vector2.RIGHT
+	elif abs(angle_to_player) > 135 and abs(angle_to_player) < 225:
+		# Player is to the left
+		$AnimatedSprite2D.flip_h = true
+		movement_direction = Vector2.LEFT
+	elif angle_to_player < 135 and angle_to_player > 45:
+		# Player is above
+		$AnimatedSprite2D.play("move_up")
+		movement_direction = Vector2.UP
+	else:
+		# Player is below
+		$AnimatedSprite2D.flip_h = true
+		movement_direction = Vector2.DOWN
 	
 func _physics_process(delta):
 	deal_dmg()
@@ -22,26 +44,15 @@ func _physics_process(delta):
 		# Move automatically left or right
 		position += movement_direction * speed * delta
 
-		# Check if the enemy has reached the right edge of the map
-		if position.x > get_viewport_rect().size.x:
-			movement_direction = Vector2.LEFT
-
-		# Check if the enemy has reached the left edge of the map
-		elif position.x < 0:
-			movement_direction = Vector2.RIGHT
-
+		if position.y > get_viewport_rect().size.y:
+			movement_direction = Vector2.DOWN
+		else:
+			movement_direction = Vector2.UP
 				
 	if player_chase:
 		position += (player.position - position) / speed
-#		$AnimatedSprite2D.play("move")
-
-		# player on the left side of the enemy -> flip
-		if (player.position.x - position.x) < 0:
-			$AnimatedSprite2D.flip_h = false
-			movement_direction = Vector2.LEFT
-		else:
-			$AnimatedSprite2D.flip_h = true
-			movement_direction = Vector2.RIGHT
+		$AnimatedSprite2D.play("move_right")
+		check_direction()
 	else:
 		$AnimatedSprite2D.play("idle")
 
@@ -55,14 +66,14 @@ func _on_detection_area_body_exited(body):
 	player_chase = false
 	auto_movement_enabled = true  # Resume automatic movement when player is out of range
 
-func enemy():
+func spider():
 	pass
 
-func _on_enemyhitbox_body_entered(body):
+func _on_hitbox_area_body_entered(body):
 	if body.has_method("player"):
 		player_inrange = true
 
-func _on_enemyhitbox_body_exited(body):
+func _on_hitbox_area_body_exited(body):
 	if body.has_method("player"):
 		player_inrange = false
 
@@ -72,19 +83,18 @@ func deal_dmg():
 			health -= 20
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false
-			print("slime health: ", health)
-			if health <= 40 and health > 0:
-				$AnimatedSprite2D.play("dead")
-			elif health <= 0:
+			print("spider health: ", health)
+			if health <= 0:
+#				$AnimatedSprite2D.play("dead")
 				self.queue_free()
 
 func _on_take_dmg_cooldown_timeout():
 	dmg_taken_cooldown = true
 
 func update_enemy_hp():
-	var enemybar = $Enemy_Hp
+	var enemybar = $Spider_Hp
 	enemybar.value = health
-	if health > 100:
+	if health > 150:
 		enemybar.visible = false
 	else:
 		enemybar.visible = true

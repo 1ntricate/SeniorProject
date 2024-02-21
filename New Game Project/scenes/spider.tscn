@@ -1,0 +1,154 @@
+[gd_scene load_steps=20 format=3 uid="uid://bwxmuo3iatovc"]
+
+[ext_resource type="Texture2D" uid="uid://2pu8ljv075vt" path="res://assets/spider.png" id="1_o7fuy"]
+[ext_resource type="Script" path="res://scripts/spider.gd" id="1_roatu"]
+[ext_resource type="PackedScene" uid="uid://b5go6x6iaqoc6" path="res://scenes/spider_hp.tscn" id="3_jkrjy"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8ssr5"]
+radius = 16.0
+height = 32.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xelq3"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b54ul"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_raubj"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3a4f5"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0o8ua"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jq6x5"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7cqky"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iqswq"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hvylu"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qeem8"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_53s0m"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32gug"]
+atlas = ExtResource("1_o7fuy")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jxlds"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xelq3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b54ul")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_raubj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3a4f5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0o8ua")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jq6x5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7cqky")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iqswq")
+}],
+"loop": true,
+"name": &"move_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hvylu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qeem8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_53s0m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_32gug")
+}],
+"loop": true,
+"name": &"move_up",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lucum"]
+radius = 59.4138
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8p14t"]
+radius = 17.0
+
+[node name="spider" type="CharacterBody2D"]
+script = ExtResource("1_roatu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CapsuleShape2D_8ssr5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jxlds")
+animation = &"move_right"
+frame_progress = 0.904751
+
+[node name="detection_area" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="dectection_shape" type="CollisionShape2D" parent="detection_area"]
+visible = false
+shape = SubResource("CircleShape2D_lucum")
+
+[node name="hitbox_area" type="Area2D" parent="."]
+
+[node name="hitbox_shape" type="CollisionShape2D" parent="hitbox_area"]
+visible = false
+position = Vector2(5, 0)
+shape = SubResource("CircleShape2D_8p14t")
+
+[node name="take_dmg_cooldown" type="Timer" parent="."]
+
+[node name="Spider_Hp" parent="." instance=ExtResource("3_jkrjy")]
+
+[connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
+[connection signal="body_entered" from="hitbox_area" to="." method="_on_hitbox_area_body_entered"]
+[connection signal="body_exited" from="hitbox_area" to="." method="_on_hitbox_area_body_exited"]
+[connection signal="timeout" from="take_dmg_cooldown" to="." method="_on_take_dmg_cooldown_timeout"]

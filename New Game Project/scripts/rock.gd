@@ -7,6 +7,9 @@ var player_inrange = false
 var rock_from_rock = 100
 var rock_harvest = 0
 
+func _ready():
+	$AnimatedSprite2D.play("100")
+
 func _physics_process(delta):
 	deal_dmg()
 	update_rock_hp()
@@ -30,7 +33,11 @@ func deal_dmg():
 			rock_harvest = 100 - rock_from_rock
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false
-			print("tree health: ", health)
+			if health < 60 and health > 30:
+				$AnimatedSprite2D.play("50")
+			elif health < 30:
+				$AnimatedSprite2D.play("0")
+			print("rock health: ", health)
 			print("+", rock_harvest, " rock")
 			if health <= 0:
 				self.queue_free()
@@ -46,11 +53,6 @@ func update_rock_hp():
 	else:
 		rockbar.visible = true
 
-func get_save_data():
-	return {
-		"type": "rock",
-	"position": position
-	}
 
 
 

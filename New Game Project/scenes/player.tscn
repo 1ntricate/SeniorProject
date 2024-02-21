@@ -424,7 +424,6 @@ collision_layer = 3
 script = ExtResource("2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 light_mask = 2
 visibility_layer = 3
 position = Vector2(0, -4)
@@ -437,7 +436,6 @@ animation = &"attack_side"
 frame_progress = 0.7288
 
 [node name="player-hitbox" type="Area2D" parent="."]
-visible = false
 light_mask = 3
 visibility_layer = 3
 position = Vector2(0, -5)
@@ -455,9 +453,20 @@ wait_time = 0.5
 
 [node name="thirsty_timer" type="Timer" parent="."]
 
+[node name="goblin_atk_cooldown" type="Timer" parent="."]
+wait_time = 1.5
+
+[node name="skeleton_atk_cooldown" type="Timer" parent="."]
+autostart = true
+
+[node name="spider_atk_cooldown" type="Timer" parent="."]
+
 [connection signal="body_entered" from="player-hitbox" to="." method="_on_playerhitbox_body_entered"]
 [connection signal="body_exited" from="player-hitbox" to="." method="_on_playerhitbox_body_exited"]
 [connection signal="timeout" from="atk_cooldown" to="." method="_on_atk_cooldown_timeout"]
 [connection signal="timeout" from="deal_dmg_cooldown" to="." method="_on_deal_dmg_cooldown_timeout"]
 [connection signal="timeout" from="hunger_timer" to="." method="_on_hunger_timer_timeout"]
 [connection signal="timeout" from="thirsty_timer" to="." method="_on_thirsty_timer_timeout"]
+[connection signal="timeout" from="goblin_atk_cooldown" to="." method="_on_goblin_atk_cooldown_timeout"]
+[connection signal="timeout" from="skeleton_atk_cooldown" to="." method="_on_skelton_atk_cooldown_timeout"]
+[connection signal="timeout" from="spider_atk_cooldown" to="." method="_on_spider_atk_cooldown_timeout"]

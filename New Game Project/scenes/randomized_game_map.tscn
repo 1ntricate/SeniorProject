@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://d0f0sym8wnupa"]
+[gd_scene load_steps=15 format=3 uid="uid://d0f0sym8wnupa"]
 
 [ext_resource type="Texture2D" uid="uid://cbo85w3e862vw" path="res://tiles.png" id="2_fsnby"]
 [ext_resource type="Script" path="res://scenes/RandomMapControl.gd" id="3_c7x5e"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://iykiddabirkb" path="res://scenes/HP ProgressBar.tscn" id="10_60rjc"]
 [ext_resource type="Texture2D" uid="uid://21uqkqp2sltf" path="res://images/Blue_circle.png" id="11_t8at1"]
 [ext_resource type="Texture2D" uid="uid://ckc0501l3p57u" path="res://images/Green_circle.png" id="12_rbeqy"]
-[ext_resource type="Texture2D" uid="uid://cu6738p4o6i0s" path="res://images/GAMEOVER.png" id="13_kvjuv"]
 [ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="16_temx2"]
 [ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="17_sn3yw"]
 [ext_resource type="PackedScene" uid="uid://dj37ri57e1q1q" path="res://scenes/rock.tscn" id="18_vykgv"]
@@ -36,15 +35,6 @@ texture = ExtResource("2_fsnby")
 [sub_resource type="TileSet" id="TileSet_n0exm"]
 sources/0 = SubResource("TileSetAtlasSource_c5hju")
 
-[sub_resource type="GDScript" id="GDScript_u4ocl"]
-script/source = "extends Button
-
-
-# Called when the node enters the scene tree for the first time.
-func _on_quit_pressed():
-	get_tree().quit()
-"
-
 [node name="RandomziedGameMap" type="Node2D"]
 position = Vector2(1, 0)
 scale = Vector2(1.1, 1.1)
@@ -60,15 +50,6 @@ collision_mask = 3
 slide_on_ceiling = false
 floor_stop_on_slope = false
 floor_block_on_wall = false
-
-[node name="Replay" type="Button" parent="Player"]
-offset_left = -18.1818
-offset_top = -0.909091
-offset_right = 23.8182
-offset_bottom = 30.0909
-text = "Quit
-"
-script = SubResource("GDScript_u4ocl")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(5, 3)
@@ -133,17 +114,8 @@ texture_under = ExtResource("12_rbeqy")
 texture_progress = ExtResource("12_rbeqy")
 tint_under = Color(1, 0, 0, 1)
 
-[node name="GameOver" type="TextureProgressBar" parent="Player"]
-offset_left = -161.818
-offset_top = -111.818
-offset_right = 165.182
-offset_bottom = 0.181816
-nine_patch_stretch = true
-texture_under = ExtResource("13_kvjuv")
-texture_progress = ExtResource("13_kvjuv")
-tint_under = Color(1, 1, 0.415686, 1)
-
 [node name="tree" parent="." instance=ExtResource("16_temx2")]
+visible = false
 position = Vector2(-81.8182, -178.182)
 
 [node name="Tree_Hp" parent="tree" instance=ExtResource("17_sn3yw")]
@@ -153,6 +125,7 @@ offset_right = 288.688
 offset_bottom = 158.092
 
 [node name="tree2" parent="." instance=ExtResource("16_temx2")]
+visible = false
 position = Vector2(-247.273, -58.1818)
 
 [node name="Tree_Hp" parent="tree2" instance=ExtResource("17_sn3yw")]
@@ -162,6 +135,7 @@ offset_right = 288.688
 offset_bottom = 158.092
 
 [node name="rock2" parent="." instance=ExtResource("18_vykgv")]
+visible = false
 position = Vector2(291.818, 121.818)
 
 [node name="RockHp" parent="rock2" instance=ExtResource("19_tin2b")]
@@ -172,6 +146,7 @@ offset_bottom = 45.8182
 scale = Vector2(0.131905, 0.713098)
 
 [node name="rock" parent="." instance=ExtResource("18_vykgv")]
+visible = false
 position = Vector2(39.0909, 118.182)
 
 [node name="RockHp" parent="rock" instance=ExtResource("19_tin2b")]
@@ -182,7 +157,6 @@ offset_bottom = 45.8182
 scale = Vector2(0.131905, 0.713098)
 
 [node name="water" parent="." instance=ExtResource("20_si233")]
+visible = false
 position = Vector2(-437.273, -32.7273)
 scale = Vector2(2.70909, 2.81818)
-
-[connection signal="pressed" from="Player/Replay" to="Player" method="_on_replay_pressed"]

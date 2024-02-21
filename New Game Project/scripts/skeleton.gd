@@ -1,14 +1,14 @@
 extends CharacterBody2D
 
-var speed = 45
+var speed = 25
 var player_chase = false
 var player = null
-var health = 100
+var health = 400
 var player_inrange = false
 var dmg_taken_cooldown = true
 var random = randi() % 2
 var auto_movement_enabled = true
-var movement_direction = Vector2.LEFT  # Initial direction
+var movement_direction = Vector2.RIGHT  # Initial direction
 @onready var animation = $AnimatedSprite2D
 
 func _ready():
@@ -20,7 +20,7 @@ func _physics_process(delta):
 	update_enemy_hp()
 	if auto_movement_enabled:
 		# Move automatically left or right
-		position += movement_direction * speed * delta
+		position += movement_direction * speed * delta 
 
 		# Check if the enemy has reached the right edge of the map
 		if position.x > get_viewport_rect().size.x:
@@ -33,14 +33,14 @@ func _physics_process(delta):
 				
 	if player_chase:
 		position += (player.position - position) / speed
-#		$AnimatedSprite2D.play("move")
+		$AnimatedSprite2D.play("move")
 
 		# player on the left side of the enemy -> flip
 		if (player.position.x - position.x) < 0:
-			$AnimatedSprite2D.flip_h = false
+			$AnimatedSprite2D.flip_h = true
 			movement_direction = Vector2.LEFT
 		else:
-			$AnimatedSprite2D.flip_h = true
+			$AnimatedSprite2D.flip_h = false
 			movement_direction = Vector2.RIGHT
 	else:
 		$AnimatedSprite2D.play("idle")
@@ -55,14 +55,14 @@ func _on_detection_area_body_exited(body):
 	player_chase = false
 	auto_movement_enabled = true  # Resume automatic movement when player is out of range
 
-func enemy():
+func skeleton():
 	pass
 
-func _on_enemyhitbox_body_entered(body):
+func _on_hitbox_area_body_entered(body):
 	if body.has_method("player"):
 		player_inrange = true
 
-func _on_enemyhitbox_body_exited(body):
+func _on_hitbox_area_body_exited(body):
 	if body.has_method("player"):
 		player_inrange = false
 
@@ -72,20 +72,23 @@ func deal_dmg():
 			health -= 20
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false
-			print("slime health: ", health)
-			if health <= 40 and health > 0:
+			print("skeleton health: ", health)
+			if health <= 0:
 				$AnimatedSprite2D.play("dead")
-			elif health <= 0:
-				self.queue_free()
+				$dead_timer.start()
+				dmg_taken_cooldown = false
+				$take_dmg_cooldown.stop()
 
 func _on_take_dmg_cooldown_timeout():
 	dmg_taken_cooldown = true
 
 func update_enemy_hp():
-	var enemybar = $Enemy_Hp
+	var enemybar = $Skeleton_Hp
 	enemybar.value = health
-	if health > 100:
+	if health > 400:
 		enemybar.visible = false
 	else:
 		enemybar.visible = true
 
+func _on_dead_timer_timeout():
+	queue_free()
