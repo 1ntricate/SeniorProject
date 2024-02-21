@@ -604,6 +604,13 @@ texture_under = ExtResource("11_bcd8d")
 texture_progress = ExtResource("11_bcd8d")
 tint_under = Color(1, 0, 0, 1)
 
+[node name="countdown" type="Label" parent="Player"]
+unique_name_in_owner = true
+offset_left = 290.0
+offset_top = -188.0
+offset_right = 330.0
+offset_bottom = -165.0
+
 [node name="enemy" parent="." instance=ExtResource("13_qjdar")]
 position = Vector2(221.818, -87.2727)
 

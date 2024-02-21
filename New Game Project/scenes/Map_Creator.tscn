@@ -20,7 +20,7 @@ script = ExtResource("1_caiy4")
 metadata/_edit_use_anchors_ = true
 
 [node name="Bg" type="Sprite2D" parent="MapMenu"]
-position = Vector2(11, -33)
+position = Vector2(197, -12)
 texture = ExtResource("2_rb622")
 
 [node name="MainMapContainer" type="VBoxContainer" parent="MapMenu"]
@@ -98,5 +98,22 @@ theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "Elements Identfied "
 
+[node name="Local_only" type="CheckBox" parent="MapMenu"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 153.0
+offset_top = -112.0
+offset_right = 179.0
+offset_bottom = -88.0
+button_pressed = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = 708.0
+offset_top = 181.0
+offset_right = 789.0
+offset_bottom = 220.0
+text = "Local Only"
+
 [connection signal="pressed" from="MapMenu/SaveButton" to="MapMenu" method="_on_save_button_pressed"]
 [connection signal="pressed" from="MapMenu/ReturnButton" to="MapMenu" method="_on_return_button_pressed"]
+[connection signal="toggled" from="MapMenu/Local_only" to="MapMenu" method="_on_local_only_toggled"]

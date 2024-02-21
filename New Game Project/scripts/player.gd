@@ -1,5 +1,9 @@
 extends CharacterBody2D
 
+@onready var timer_label = $countdown
+@onready var countdown = $survival_timer
+
+
 var enemy_in_range = false
 var goblin_in_range = false
 var skeleton_in_range = false
@@ -22,14 +26,23 @@ var is_attacking = false
 #@onready var pause_menu = $PauseMenu
 var isPaused = false
 var speed = 100
+var player_immunity = true
 
 func _ready():
 	Engine.time_scale = 1
+	countdown.start()
 	animation.play("front_idle")
 	$hunger_timer.start()
 	$thirsty_timer.start()
+	
 	#%PauseContainer.visible = false
-
+	
+func survival_timer():
+	var time_left = countdown.time_left
+	var min = floor(time_left/60)
+	var sec = int(time_left) % 60
+	return [min,sec]
+	
 func read_input():
 	velocity = Vector2()
 	var new_direction = "none"
@@ -132,6 +145,8 @@ func play_attack_animation():
 			animation.set_flip_h(true)
 			animation.play("attack_up")
 			$deal_dmg_cooldown.start()
+			
+
 
 func health_condition():	
 	if health <= 0:
@@ -140,6 +155,7 @@ func health_condition():
 		health = 100
 		
 func _physics_process(delta):
+	timer_label.text = "%02d:%02d" % survival_timer()
 	read_input()
 	enemy_atk()
 	goblin_atk()
@@ -148,6 +164,7 @@ func _physics_process(delta):
 	update_hp()
 	update_hunger_bar()
 	update_thirsty_bar()
+
 	if Global.shoot_laser == true:
 #		Global.player_current_atk = true
 		print("shoottt")
@@ -199,7 +216,7 @@ func _on_playerhitbox_body_exited(body):
 
 func enemy_atk():
 	#slime attack dmg
-	if enemy_in_range and enemy_atk_cooldown == true:
+	if enemy_in_range and enemy_atk_cooldown == true and player_immunity == false:
 		health -= 20
 		enemy_atk_cooldown = false
 		$atk_cooldown.start()
@@ -207,7 +224,7 @@ func enemy_atk():
 
 func goblin_atk():	
 	#goblin attack dmg
-	if goblin_in_range and goblin_atk_cooldown == true:
+	if goblin_in_range and goblin_atk_cooldown == true and player_immunity == false:
 		health -= 15
 		goblin_atk_cooldown = false
 		$goblin_atk_cooldown.start()
@@ -215,14 +232,14 @@ func goblin_atk():
 		
 func skeleton_atk():	
 	#goblin attack dmg
-	if skeleton_in_range and skeleton_atk_cooldown == true:
+	if skeleton_in_range and skeleton_atk_cooldown == true and player_immunity == false:
 		health -= 25
 		skeleton_atk_cooldown = false
 		$skeleton_atk_cooldown.start()
 		print(health)	
 
 func spider_atk():	
-	if spider_in_range and spider_atk_cooldown == true:
+	if spider_in_range and spider_atk_cooldown == true and player_immunity == false:
 		health -= 25
 		spider_atk_cooldown = false
 		$spider_atk_cooldown.start()
@@ -296,3 +313,5 @@ func update_thirsty_bar():
 func _on_replay_pressed():
 	get_tree().paused = false
 
+func _on_spawn_immunity_timeout():
+	player_immunity = false

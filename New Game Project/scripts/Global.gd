@@ -18,9 +18,13 @@ var player_id = 99999
 var isUserLoggedIn = false
 var image_list = []
 var active_requests = 0
+var upload_map = false
 
 func _ready():
 	instance = self
+
+
+
 func _process(delta):
 	pass
 

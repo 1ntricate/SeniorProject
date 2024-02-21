@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c16kipcjhl7hv"]
+[gd_scene load_steps=11 format=3 uid="uid://c16kipcjhl7hv"]
 
 [ext_resource type="Script" path="res://scenes/ProcessedMapControl.gd" id="1_h84gs"]
 [ext_resource type="Texture2D" uid="uid://cbo85w3e862vw" path="res://tiles.png" id="1_m5yql"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://iykiddabirkb" path="res://scenes/HP ProgressBar.tscn" id="5_vly5m"]
 [ext_resource type="Texture2D" uid="uid://21uqkqp2sltf" path="res://images/Blue_circle.png" id="6_l3ujo"]
 [ext_resource type="Texture2D" uid="uid://ckc0501l3p57u" path="res://images/Green_circle.png" id="7_bdmjx"]
-[ext_resource type="Texture2D" uid="uid://cu6738p4o6i0s" path="res://images/GAMEOVER.png" id="8_ktm7y"]
 [ext_resource type="PackedScene" uid="uid://8kuxoo6lla18" path="res://scenes/water.tscn" id="13_5x4n1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c5hju"]
@@ -32,15 +31,6 @@ texture = ExtResource("1_m5yql")
 [sub_resource type="TileSet" id="TileSet_n0exm"]
 sources/0 = SubResource("TileSetAtlasSource_c5hju")
 
-[sub_resource type="GDScript" id="GDScript_u4ocl"]
-script/source = "extends Button
-
-
-# Called when the node enters the scene tree for the first time.
-func _on_quit_pressed():
-	get_tree().quit()
-"
-
 [node name="ProcessedGameMap" type="Node2D"]
 position = Vector2(1, 0)
 scale = Vector2(1.1, 1.1)
@@ -56,15 +46,6 @@ collision_mask = 3
 slide_on_ceiling = false
 floor_stop_on_slope = false
 floor_block_on_wall = false
-
-[node name="Replay" type="Button" parent="Player"]
-offset_left = -18.1818
-offset_top = -0.909091
-offset_right = 23.8182
-offset_bottom = 30.0909
-text = "Quit
-"
-script = SubResource("GDScript_u4ocl")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(5, 3)
@@ -129,18 +110,13 @@ texture_under = ExtResource("7_bdmjx")
 texture_progress = ExtResource("7_bdmjx")
 tint_under = Color(1, 0, 0, 1)
 
-[node name="GameOver" type="TextureProgressBar" parent="Player"]
-offset_left = -161.818
-offset_top = -111.818
-offset_right = 165.182
-offset_bottom = 0.181816
-nine_patch_stretch = true
-texture_under = ExtResource("8_ktm7y")
-texture_progress = ExtResource("8_ktm7y")
-tint_under = Color(1, 1, 0.415686, 1)
+[node name="countdown" type="Label" parent="Player"]
+unique_name_in_owner = true
+offset_left = 290.0
+offset_top = -188.0
+offset_right = 330.0
+offset_bottom = -165.0
 
 [node name="water" parent="." instance=ExtResource("13_5x4n1")]
 position = Vector2(-437.273, -32.7273)
 scale = Vector2(2.70909, 2.81818)
-
-[connection signal="pressed" from="Player/Replay" to="Player" method="_on_replay_pressed"]

@@ -29,3 +29,8 @@ func _on_save_button_pressed():
 func _on_return_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 	
+
+
+func _on_local_only_toggled(toggled_on):
+	Global.upload_map = true
+	

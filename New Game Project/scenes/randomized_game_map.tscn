@@ -114,6 +114,13 @@ texture_under = ExtResource("12_rbeqy")
 texture_progress = ExtResource("12_rbeqy")
 tint_under = Color(1, 0, 0, 1)
 
+[node name="countdown" type="Label" parent="Player"]
+unique_name_in_owner = true
+offset_left = 290.0
+offset_top = -188.0
+offset_right = 330.0
+offset_bottom = -165.0
+
 [node name="tree" parent="." instance=ExtResource("16_temx2")]
 visible = false
 position = Vector2(-81.8182, -178.182)

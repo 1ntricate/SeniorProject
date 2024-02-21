@@ -80,6 +80,8 @@ var grass_tile_3 = Vector2(2,3)
 var sand_tile_1 = Vector2(0,2)
 var sand_tile_2 = Vector2(0,3)
 
+# temperature = y-xis
+# mositure = x-axis
 func generate_chunk(position,elements):
 	var tile_pos = local_to_map(position)
 	print(player.position)
@@ -109,10 +111,6 @@ func save_game():
 		# Using metadata
 		if object.has_meta("Saveable"):
 			print("saveable")
-			if object.get_meta("type") == "tree":
-				type = "tree_scene"
-			elif object.get_meta("type") == "rock":
-				type = "rock_scene"
 			var object_dict = {
 			"type": type,
 			"position": object.position
@@ -142,7 +140,7 @@ func save_game():
 	if in_file:
 		var scene_data = in_file.get_as_text()
 		in_file.close()
-		if Global.player_id != 99999:
+		if Global.player_id != 99999 && Global.upload_map== true:
 			Network._upload_map(Global.player_id, scene_data,json_data, Global.map_name)
 
 	

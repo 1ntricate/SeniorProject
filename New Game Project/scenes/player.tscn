@@ -461,6 +461,15 @@ autostart = true
 
 [node name="spider_atk_cooldown" type="Timer" parent="."]
 
+[node name="spawn_immunity" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="survival_timer" type="Timer" parent="."]
+wait_time = 459.934
+one_shot = true
+
 [connection signal="body_entered" from="player-hitbox" to="." method="_on_playerhitbox_body_entered"]
 [connection signal="body_exited" from="player-hitbox" to="." method="_on_playerhitbox_body_exited"]
 [connection signal="timeout" from="atk_cooldown" to="." method="_on_atk_cooldown_timeout"]
@@ -470,3 +479,4 @@ autostart = true
 [connection signal="timeout" from="goblin_atk_cooldown" to="." method="_on_goblin_atk_cooldown_timeout"]
 [connection signal="timeout" from="skeleton_atk_cooldown" to="." method="_on_skelton_atk_cooldown_timeout"]
 [connection signal="timeout" from="spider_atk_cooldown" to="." method="_on_spider_atk_cooldown_timeout"]
+[connection signal="timeout" from="spawn_immunity" to="." method="_on_spawn_immunity_timeout"]
