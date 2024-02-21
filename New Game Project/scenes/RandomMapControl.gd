@@ -39,7 +39,7 @@ func _ready():
 		var new_tree = tree.instantiate()
 		add_child(new_rock)
 		add_child(new_tree)
-		while monster_count < 100:
+		if monster_count < 100:
 			add_child(new_enemy)
 			add_child(new_skeleton)
 			add_child(new_spider)
