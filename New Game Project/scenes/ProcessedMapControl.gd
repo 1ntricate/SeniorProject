@@ -3,45 +3,100 @@ extends TileMap
 var moisture = FastNoiseLite.new()
 var temperature = FastNoiseLite.new()
 var altitude= FastNoiseLite.new()
-var width = 100
-var height = 100
+var width = 500
+var height = 500
 @onready var player = get_parent().get_child(2)
-var offset_range = 1000
+var offset_range = 1800
 var spawn_pos = Vector2(221.818, -87.2727)
-# Elements 
-var tree = "Tree"
-var grass = "Grass"
-var stone = "Stone"
-var sand = "Sand"
-var sky = "Sky"
+var elements = Global.elements_identfied
+var monster_count = 20
+var resoruce_objects_count = 15
+var enemey_offset_range = 800
+
+var chosen_tile = null
+'''
+var max_temp = 0
+var min_temp = 999
+var max_moist = 0
+var min_moist = 999
+var max_alt = 0
+var min_alt = 999
+'''
+# tile coordinates
+var water_tile_1 = Vector2(3,0)
+var water_tile_2 = Vector2(3,1)
+var water_tile_3 = Vector2(3,2)
+var water_tile_4 = Vector2(3,3)
+
+var grass_tile_1 = Vector2(1,1)
+var grass_tile_2 = Vector2(2,1)
+var grass_tile_3 = Vector2(1,2)
+var grass_tile_4 = Vector2(2,2)
+var grass_tile_5 = Vector2(2,3)
+
+var sand_tile_1 = Vector2(0,2)
+var sand_tile_2 = Vector2(0,3)
+var sand_tile_3 = Vector2(1,3)
+
+var steel_tile = Vector2(2,0)
 
 func _ready():
 	# spawn enemies
-	var enemy_scence = "res://scenes/enemy.tscn"
-	var enemy = load(enemy_scence)
-	for i in range(50):
-		var random_offset_x = randf_range(-offset_range, offset_range)
-		var random_offset_y = randf_range(-offset_range, offset_range)
-		var new_enemy = enemy.instantiate()
-		new_enemy.position = spawn_pos + Vector2(random_offset_x, random_offset_y)
-		add_child(new_enemy)
+	var slime_scence = "res://scenes/enemy.tscn"
+	var skeleton_scene = "res://scenes/skeleton.tscn"
+	var goblin_scene = "res://scenes/goblin.tscn"
+	var spider_scene = "res://scenes/spider.tscn"
+	var rock_scene = "res://scenes/rock_scene.tscn"
+	var tree_scene = "res://scenes/tree_scene.tscn"
+	var slime = load(slime_scence)
+	var skeleton = load(skeleton_scene)
+	var spider = load(spider_scene)
+	var goblin = load(goblin_scene)
+	var rock = load(rock_scene)
+	var tree = load(tree_scene)
+
 	
+
+	# Spawn seperately to ensure unqique spawn positions
+	for i in range(monster_count):  # You can adjust the number of copies as needed
+		var new_slime = slime.instantiate()
+		add_child(new_slime)
+		# set the position of each copy
+		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
+		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
+		new_slime.position = spawn_pos + Vector2(random_offset_x, random_offset_y)
+		
+	for i in range(monster_count):  # You can adjust the number of copies as needed
+		var new_skeleton = skeleton.instantiate()
+		add_child(new_skeleton)
+		# set the position of each copy
+		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
+		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
+		new_skeleton.position =  spawn_pos + Vector2(random_offset_x, random_offset_y)
+	
+	for i in range(monster_count):  # You can adjust the number of copies as needed
+		var new_spider = spider.instantiate()
+		add_child(new_spider)
+		# set the position of each copy
+		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
+		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
+		new_spider.position =  spawn_pos + Vector2(random_offset_x*2, random_offset_y*2)
+		
+	for i in range(monster_count):  # You can adjust the number of copies as needed
+		var new_goblin = goblin.instantiate()
+		add_child(new_goblin)
+		# set the position of each copy
+		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
+		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
+		new_goblin.position =  -spawn_pos + Vector2(random_offset_x, random_offset_y)
+		
+	# if creating new map
 	if Global.new_map:
-		
-		var rock_scene = "res://scenes/rock_scene.tscn"
-		var tree_scene = "res://scenes/tree_scene.tscn"
-		var rock = load(rock_scene)
-		var tree = load(tree_scene)
-		
 		moisture.seed = randi()
 		temperature.seed = randi()
 		altitude.seed = randi()
 		altitude.frequency = 0.005
-		
-		var elements = Global.elements_identfied
 		generate_chunk(player.position, elements)
-		# spawn enemies
-		
 		# spawn elements as objects 
 		for i in range (50):
 			var random_offset_x = randf_range(-offset_range, offset_range)
@@ -53,7 +108,8 @@ func _ready():
 				new_tree.set_meta("type","tree")
 				add_child(new_tree)
 				new_tree.position =  +spawn_pos + Vector2(random_offset_x, random_offset_y)
-			# Check for the word "Rock" in a case-insensitive manner
+				var tree_type = new_tree.get_meta("type")
+				print("tree type is: ",tree_type)
 			if "stone" in elements:
 				print("'stone' was found")
 				var new_rock = rock.instantiate()
@@ -61,58 +117,111 @@ func _ready():
 				new_rock.set_meta("type","rock")
 				new_rock.add_to_group("rocks")
 				add_child(new_rock)
-				new_rock.position =  spawn_pos + Vector2(random_offset_x, random_offset_y)	
-		
+				new_rock.position =  spawn_pos + Vector2(random_offset_x, random_offset_y)
 		call_deferred("save_game")
 		Global.new_map = false
+	# else load existing map
 	else:
 		var current_scene = get_tree().current_scene
 		var scene_path = Global.loaded_map
 		var json_path = scene_path.replace(".tscn", ".json")
-		print("Json path is ", scene_path)
+		print("json path: ",json_path)
 		load_scene_from_file(json_path)
 		
-var water_tile_1 = Vector2(3,0)
-var water_tile_2 = Vector2(3,1)
-var grass_tile_1 = Vector2(1,1)
-var grass_tile_2 = Vector2(1,2)
-var grass_tile_3 = Vector2(2,3)
-var sand_tile_1 = Vector2(0,2)
-var sand_tile_2 = Vector2(0,3)
-
-# temperature = y-xis
-# mositure = x-axis
 func generate_chunk(position,elements):
 	var tile_pos = local_to_map(position)
-	print(player.position)
-
 	for x in range(width):
 		for y in range(height):
+			chosen_tile = null
 			var moist = moisture.get_noise_2d(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y)*10
 			var temp = temperature.get_noise_2d(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y)*10
 			var alt = altitude.get_noise_2d(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y)*10
-			var random = Vector2(round((moist+10)/5),(round((temp+10)/5)))
-			#if "tree" in elements:
-			set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, Vector2(round((moist+10)/5),(round((temp+10)/5))))
-			#elif "stone" in elements:
-			#	set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, Vector2(round((moist+10)/5),(round((temp+10)/5))))
-			#set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, Vector2(round((moist+10)/5),(round((temp+10)/5))))
-			
-			#if alt < 2:
-			#	set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, Vector2(3, round((temp+10)/5)))
-			#else:
-			#	set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, Vector2(round((moist+10)/5), round((temp+10)/5)))
+			if moist > 5:
+				moist = 5
+			if temp > 5:
+				temp = 5
+			if alt > 5:
+				alt = 5
+			# choose map tile 
+			if "grass" in elements:
+				chosen_tile = choose_grass_tile(moist,temp, alt)
+			if chosen_tile == null and "water" in elements:
+				chosen_tile = choose_water_tile(moist,temp,alt)
+			if chosen_tile == null and "sand" in elements:
+				chosen_tile = chose_sand_tile(moist,temp,alt)
+			# Finally, set the chosen tile
+			if chosen_tile:
+				set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, chosen_tile)
+			else:
+				set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, steel_tile)
+	'''
+			if temp > max_temp:
+				max_temp = temp
+			if temp < min_temp:
+				min_temp = temp
+			if moist > max_moist:
+				max_moist = moist
+			if moist < min_moist:
+				min_moist = moist
+			if alt > max_alt:
+				max_alt = alt
+			if alt < min_alt:
+				min_alt = alt
+		
+	print("max temp: ",max_temp)	
+	print("min temp: ", min_temp)
+	print("max moist: ",max_moist)	
+	print("min moist: ", min_moist)
+	print("max alt: ",max_alt)		
+	print("min alt: ", min_alt)
+	'''	
+	
+func choose_grass_tile(moist,temp,alt):
+	if "grass" in elements and moist  >= -7 and moist <= -2.5 and temp >=-7 and temp <=-2.5:
+		return grass_tile_1
+	elif "grass" in elements and moist  > -2.5 and moist < 2 and temp >-7 and temp < -2.5:
+		return grass_tile_2
+	elif "grass" in elements and moist  > -7 and moist > -2.5 and temp < 2:
+		return grass_tile_3
+	elif "grass" in elements and moist  > -2.5 and moist < 2 and temp > 2.5 and moist < 2:
+		return grass_tile_4
+	elif "grass" in elements and moist  > -2.5 and moist < 2 and temp >= 2.5:
+		return grass_tile_5
+	else:
+		return null
+
+func chose_sand_tile(moist,temp,alt):
+	if "sand" in elements and moist > -7.5 and temp > -2.5 and temp < 2:
+		return sand_tile_1
+	elif "sand" in elements and moist > -7.5 and temp >= 2.5:
+		return sand_tile_2
+	elif "sand" in elements and moist > -7 and moist < -2.5 and temp >= 2.5:
+		return sand_tile_3
+	else:
+		return null
+	
+func choose_water_tile(moist,temp,alt):
+	if "water" in elements and moist >= 2.5 and temp < -7.5:
+		return water_tile_1
+	elif "water" in elements and moist >= 2.5 and temp > -7 and temp < -2.5:
+		return water_tile_2
+	elif "water" in elements and moist >= 2.5 and temp > -2.5 and temp < 2:
+		return water_tile_3
+	elif "water" in elements and moist >= 2.5 and temp >= 2.5:
+		return water_tile_4
+	else:
+		return null
 
 func save_game():
-	var type = ""
 	print("Save game called")
 	var objects_data = []
 	for object in get_children():
 		# Using metadata
+		print("type: ", object.get_meta("type"))
 		if object.has_meta("Saveable"):
 			print("saveable")
 			var object_dict = {
-			"type": type,
+			"type": object.get_meta("type"),
 			"position": object.position
 			}
 			objects_data.append(object_dict)
@@ -157,6 +266,7 @@ func load_scene_from_file(file_path):
 			var save_data = json.data
 			# Spawn objects
 			for object_data in save_data["objects"]:
+				print("object_data: ", object_data)
 				spawn_object(object_data)
 		else:
 			print("Failed to parse JSON")
@@ -165,7 +275,7 @@ func load_scene_from_file(file_path):
 
 func spawn_object(object_data):
 	# Assuming object_data["type"] gives a string that corresponds to the resource path
-	var resource_path = "res://scenes/" + object_data["type"] + ".tscn"
+	var resource_path = "res://scenes/" + object_data["type"] +"_scene" + ".tscn"
 	var object_scene = load(resource_path) # Use load for runtime-determined paths
 	var new_obj = object_scene.instantiate()
 	add_child(new_obj)
@@ -174,6 +284,10 @@ func spawn_object(object_data):
 	var position_vector = Vector2(float(position_elements[0]), float(position_elements[1]))
 	new_obj.position = position_vector
 	
+
+
+
+
 
 
 

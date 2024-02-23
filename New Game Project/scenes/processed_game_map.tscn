@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c16kipcjhl7hv"]
+[gd_scene load_steps=13 format=3 uid="uid://c16kipcjhl7hv"]
 
 [ext_resource type="Script" path="res://scenes/ProcessedMapControl.gd" id="1_h84gs"]
 [ext_resource type="Texture2D" uid="uid://cbo85w3e862vw" path="res://tiles.png" id="1_m5yql"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://iykiddabirkb" path="res://scenes/HP ProgressBar.tscn" id="5_vly5m"]
 [ext_resource type="Texture2D" uid="uid://21uqkqp2sltf" path="res://images/Blue_circle.png" id="6_l3ujo"]
 [ext_resource type="Texture2D" uid="uid://ckc0501l3p57u" path="res://images/Green_circle.png" id="7_bdmjx"]
+[ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="9_r51ab"]
+[ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="10_ce2b1"]
 [ext_resource type="PackedScene" uid="uid://8kuxoo6lla18" path="res://scenes/water.tscn" id="13_5x4n1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c5hju"]
@@ -120,3 +122,14 @@ offset_bottom = -165.0
 [node name="water" parent="." instance=ExtResource("13_5x4n1")]
 position = Vector2(-437.273, -32.7273)
 scale = Vector2(2.70909, 2.81818)
+
+[node name="tree" parent="." instance=ExtResource("9_r51ab")]
+visible = false
+position = Vector2(-81.8182, -178.182)
+
+[node name="Tree_Hp" parent="tree" instance=ExtResource("10_ce2b1")]
+unique_name_in_owner = true
+offset_left = 8.68817
+offset_top = 124.092
+offset_right = 288.688
+offset_bottom = 158.092

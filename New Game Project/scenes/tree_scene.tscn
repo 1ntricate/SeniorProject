@@ -11,6 +11,7 @@ scale = Vector2(1.1, 1.1)
 position = Vector2(-81.8182, -178.182)
 
 [node name="Tree_Hp" parent="tree" instance=ExtResource("15_ovk2b")]
+unique_name_in_owner = true
 offset_left = 8.68817
 offset_top = 124.092
 offset_right = 288.688
