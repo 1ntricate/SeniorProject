@@ -40,6 +40,8 @@ var sand_tile_3 = Vector2(1,3)
 
 var steel_tile = Vector2(2,0)
 
+
+
 func _ready():
 	# spawn enemies
 	var slime_scence = "res://scenes/enemy.tscn"
@@ -101,23 +103,46 @@ func _ready():
 		for i in range (50):
 			var random_offset_x = randf_range(-offset_range, offset_range)
 			var random_offset_y = randf_range(-offset_range, offset_range)
-			if "tree" in elements:
-				print("'Tree' was found ")
-				var new_tree = tree.instantiate()
-				new_tree.set_meta("Saveable",true)
-				new_tree.set_meta("type","tree")
-				add_child(new_tree)
-				new_tree.position =  +spawn_pos + Vector2(random_offset_x, random_offset_y)
-				var tree_type = new_tree.get_meta("type")
-				print("tree type is: ",tree_type)
-			if "stone" in elements:
-				print("'stone' was found")
-				var new_rock = rock.instantiate()
-				new_rock.set_meta("Saveable",true)
-				new_rock.set_meta("type","rock")
-				new_rock.add_to_group("rocks")
-				add_child(new_rock)
-				new_rock.position =  spawn_pos + Vector2(random_offset_x, random_offset_y)
+			if "tree" in elements or "grass" in elements and Global.grass_coordinates.keys():
+				var keys = Global.grass_coordinates.keys()
+  				  # Check if the dictionary is not empty to avoid errors
+				if keys.size() > 0:
+					# Randomly select an index from the keys array
+					var random_index = randi() % keys.size()
+					# Retrieve the key (coordinate string) at the randomly selected index
+					var coord_key = keys[random_index]
+	   		 		# Split the key back into its original x, y components
+					var coords = coord_key.split(",")
+					var x = int(coords[0])
+					var y = int(coords[1])
+					var grass_vect = Vector2(x,y)
+					var new_tree = tree.instantiate()
+					new_tree.set_meta("Saveable",true)
+					new_tree.set_meta("type","tree")
+					add_child(new_tree)
+					new_tree.position = grass_vect
+					
+			if "stone" in elements or "sand" in elements and Global.sand_coordinates.keys():
+				var keys = Global.sand_coordinates.keys()
+  				  # Check if the dictionary is not empty to avoid errors
+				if keys.size() > 0:
+					# Randomly select an index from the keys array
+					var random_index = randi() % keys.size()
+					# Retrieve the key (coordinate string) at the randomly selected index
+					var coord_key = keys[random_index]
+	   		 		# Split the key back into its original x, y components
+					var coords = coord_key.split(",")
+					var x = int(coords[0])
+					var y = int(coords[1])
+					var stone_vect = Vector2(x,y)
+					#print("'stone' was found")
+					var new_rock = rock.instantiate()
+					new_rock.set_meta("Saveable",true)
+					new_rock.set_meta("type","rock")
+					new_rock.add_to_group("rocks")
+					add_child(new_rock)
+					new_rock.position =  stone_vect
+					
 		call_deferred("save_game")
 		Global.new_map = false
 	# else load existing map
@@ -128,6 +153,8 @@ func _ready():
 		print("json path: ",json_path)
 		load_scene_from_file(json_path)
 		
+
+
 func generate_chunk(position,elements):
 	var tile_pos = local_to_map(position)
 	for x in range(width):
@@ -145,10 +172,27 @@ func generate_chunk(position,elements):
 			# choose map tile 
 			if "grass" in elements:
 				chosen_tile = choose_grass_tile(moist,temp, alt)
+				if chosen_tile != null:
+					var coord_key = str((tile_pos.x-width/2 + x)*10) + "," + str((tile_pos.y-height/2 + y)*10)
+					print("coord_key from chunk: ", coord_key)
+					# You can increment a counter or simply mark the position as having grass
+					Global.grass_coordinates[coord_key] = true # Or increment if tracking counts
+				
 			if chosen_tile == null and "water" in elements:
 				chosen_tile = choose_water_tile(moist,temp,alt)
+				if chosen_tile != null:
+					var coord_key = str((tile_pos.x-width/2 + x)*10) + "," + str((tile_pos.y-height/2 + y)*10)
+					print("coord_key from chunk: ", coord_key)
+					# You can increment a counter or simply mark the position as having grass
+					Global.water_coordinates[coord_key] = true 
+				
 			if chosen_tile == null and "sand" in elements:
 				chosen_tile = chose_sand_tile(moist,temp,alt)
+				if chosen_tile != null:
+					var coord_key = str((tile_pos.x-width/2 + x)*10) + "," + str((tile_pos.y-height/2 + y)*10)
+					print("coord_key from chunk: ", coord_key)
+					# You can increment a counter or simply mark the position as having grass
+					Global.sand_coordinates[coord_key] = true 
 			# Finally, set the chosen tile
 			if chosen_tile:
 				set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, chosen_tile)

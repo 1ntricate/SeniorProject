@@ -20,6 +20,10 @@ var image_list = []
 var active_requests = 0
 var upload_map = false
 
+var grass_coordinates = {}
+var water_coordinates = {}
+var snow_coordinates = {}
+var sand_coordinates = {}
 func _ready():
 	instance = self
 
