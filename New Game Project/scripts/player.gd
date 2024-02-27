@@ -23,13 +23,16 @@ var cur_dir = "none"
 var is_attacking = false
 
 @onready var animation = $AnimatedSprite2D
+@onready var weapon_animation = $AnimationPlayer
+@onready var weapon = $weapon
 #@onready var pause_menu = $PauseMenu
 var isPaused = false
 var speed = 100
 var player_immunity = true
-
+var last_dir: String = "Down"
 func _ready():
 	Engine.time_scale = 1
+	#countdown.wait_time = 1.0
 	countdown.start()
 	animation.play("front_idle")
 	$hunger_timer.start()
@@ -37,6 +40,7 @@ func _ready():
 	
 	#%PauseContainer.visible = false
 	
+
 func survival_timer():
 	var time_left = countdown.time_left
 	var min = floor(time_left/60)
@@ -62,8 +66,18 @@ func read_input():
 	if Input.is_action_pressed("attack"):
 		is_attacking = true
 		play_attack_animation()
+	if Input.is_action_pressed("axe_attack"):
+		is_attacking = true
+		weapon.visible = true
+		weapon_animation.play("axe" +cur_dir)
+		
 	elif Input.is_action_just_released("attack"):
 		is_attacking = false
+	elif Input.is_action_just_released("axe_attack"):
+		Global.player_current_atk = true
+		Global.player_axe_atk = true
+		is_attacking = false
+		weapon.visible = false
 #	moving with 'WASD'
 	else:
 		if Input.is_action_pressed("up"):
@@ -87,17 +101,30 @@ func read_input():
 			velocity.x += 1
 			direction = Vector2(1, 0)
 			movement = 1
+			
 		
 	if new_direction != cur_dir:
 		cur_dir = new_direction
+		print("cur dir: ", cur_dir)
 		play_animation(movement)
+		last_dir = cur_dir
 	else:
 		play_animation(0)
 
 	velocity = velocity.normalized()
-	set_velocity(velocity * 200)
+	#Avelocity = velocity
+	if Global.player_on_water:
+		set_velocity(velocity * 100)
+		thirsty += .05
+		velocity = velocity
+	elif Global.player_on_sand:
+		set_velocity(velocity * 150)
+		velocity = velocity
+	else:
+		set_velocity(velocity * 200)
+		velocity = velocity
 	move_and_slide()
-	velocity = velocity
+	
 	
 func play_animation(movement):
 	match cur_dir:
@@ -217,7 +244,7 @@ func _on_playerhitbox_body_exited(body):
 func enemy_atk():
 	#slime attack dmg
 	if enemy_in_range and enemy_atk_cooldown == true and player_immunity == false:
-		health -= 20
+		health -= 3
 		enemy_atk_cooldown = false
 		$atk_cooldown.start()
 		print(health)
@@ -225,7 +252,7 @@ func enemy_atk():
 func goblin_atk():	
 	#goblin attack dmg
 	if goblin_in_range and goblin_atk_cooldown == true and player_immunity == false:
-		health -= 15
+		health -= 8
 		goblin_atk_cooldown = false
 		$goblin_atk_cooldown.start()
 		print(health)		
@@ -233,14 +260,14 @@ func goblin_atk():
 func skeleton_atk():	
 	#goblin attack dmg
 	if skeleton_in_range and skeleton_atk_cooldown == true and player_immunity == false:
-		health -= 25
+		health -= 10
 		skeleton_atk_cooldown = false
 		$skeleton_atk_cooldown.start()
 		print(health)	
 
 func spider_atk():	
 	if spider_in_range and spider_atk_cooldown == true and player_immunity == false:
-		health -= 25
+		health -= 5
 		spider_atk_cooldown = false
 		$spider_atk_cooldown.start()
 		print(health)		
@@ -273,7 +300,7 @@ func update_hp():
 		health = 100
 	else:
 		hpbar.visible = true
-		
+
 func _on_hunger_timer_timeout():
 	# Decrease hunger by 1 every second
 	if hunger > 0:
@@ -315,3 +342,8 @@ func _on_replay_pressed():
 
 func _on_spawn_immunity_timeout():
 	player_immunity = false
+
+
+func _on_survival_timer_timeout():
+	Global.spawn_enemies = true
+	pass # Replace with function body.

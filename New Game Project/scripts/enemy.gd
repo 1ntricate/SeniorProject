@@ -69,7 +69,10 @@ func _on_enemyhitbox_body_exited(body):
 func deal_dmg():
 	if player_inrange and Global.player_current_atk == true:
 		if dmg_taken_cooldown == true:
-			health -= 20
+			if Global.player_axe_atk:
+				health -=50
+			else: 
+				health -= 252
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false
 			print("slime health: ", health)
@@ -77,6 +80,7 @@ func deal_dmg():
 				$AnimatedSprite2D.play("dead")
 			elif health <= 0:
 				self.queue_free()
+				Global.slime_count -= 1
 
 func _on_take_dmg_cooldown_timeout():
 	dmg_taken_cooldown = true

@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var speed = 25
+var speed = 30
 var player_chase = false
 var player = null
 var health = 400
@@ -21,7 +21,7 @@ func _physics_process(delta):
 	if auto_movement_enabled:
 		# Move automatically left or right
 		position += movement_direction * speed * delta 
-
+		
 		# Check if the enemy has reached the right edge of the map
 		if position.x > get_viewport_rect().size.x:
 			movement_direction = Vector2.LEFT
@@ -32,6 +32,7 @@ func _physics_process(delta):
 
 				
 	if player_chase:
+		# can be adjusted so enemies run away from player instead of chasing
 		position += (player.position - position) / speed
 		$AnimatedSprite2D.play("move")
 
@@ -69,7 +70,10 @@ func _on_hitbox_area_body_exited(body):
 func deal_dmg():
 	if player_inrange and Global.player_current_atk == true:
 		if dmg_taken_cooldown == true:
-			health -= 20
+			if Global.player_axe_atk:
+				health -=200
+			else: 
+				health -= 100
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false
 			print("skeleton health: ", health)
@@ -78,6 +82,7 @@ func deal_dmg():
 				$dead_timer.start()
 				dmg_taken_cooldown = false
 				$take_dmg_cooldown.stop()
+				Global.skeleton_count-= 1
 
 func _on_take_dmg_cooldown_timeout():
 	dmg_taken_cooldown = true

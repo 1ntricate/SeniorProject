@@ -69,13 +69,18 @@ func _on_enemyhitbox_body_exited(body):
 func deal_dmg():
 	if player_inrange and Global.player_current_atk == true:
 		if dmg_taken_cooldown == true:
-			health -= 20
+			if Global.player_axe_atk:
+				health -=100
+			else: 
+				health -= 50
+				
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false
 			print("goblin health: ", health)
 			if health <= 0:
 #				$AnimatedSprite2D.play("dead")
 				self.queue_free()
+				Global.goblin_count -= 1
 
 func _on_take_dmg_cooldown_timeout():
 	dmg_taken_cooldown = true

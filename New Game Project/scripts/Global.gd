@@ -4,6 +4,7 @@ var instance = null
 var drink = 0
 var player_cur_dir = Vector2.LEFT
 var player_current_atk = false
+var player_axe_atk = false
 var selected_image_path = ""
 var elements_identfied = ""
 var tree_fallen = false
@@ -20,10 +21,15 @@ var image_list = []
 var active_requests = 0
 var upload_map = false
 
-var grass_coordinates = {}
-var water_coordinates = {}
-var snow_coordinates = {}
-var sand_coordinates = {}
+var player_on_water = false
+var player_on_sand = false
+
+var skeleton_count = 0
+var slime_count = 0
+var goblin_count = 0
+var spider_count = 0
+
+var spawn_enemies = false
 func _ready():
 	instance = self
 

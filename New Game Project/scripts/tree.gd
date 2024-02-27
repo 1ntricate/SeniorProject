@@ -28,8 +28,12 @@ func tree():
 func deal_dmg():
 	if player_inrange and Global.player_current_atk == true:
 		if dmg_taken_cooldown == true:
-			health -= 20
-			wood_from_tree -= 20
+			if Global.player_axe_atk:
+				health -=50
+				wood_from_tree -= 50
+			else: 
+				health -= 20
+				wood_from_tree -= 20
 			wood_harvest = 100 - wood_from_tree
 			if health <= 40:
 				$AnimatedSprite2D.play("wood")

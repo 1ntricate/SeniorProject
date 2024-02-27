@@ -80,13 +80,17 @@ func _on_hitbox_area_body_exited(body):
 func deal_dmg():
 	if player_inrange and Global.player_current_atk == true:
 		if dmg_taken_cooldown == true:
-			health -= 20
+			if Global.player_axe_atk:
+				health -=70
+			else: 
+				health -= 35
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false
 			print("spider health: ", health)
 			if health <= 0:
 #				$AnimatedSprite2D.play("dead")
 				self.queue_free()
+				Global.spider_count -= 1
 
 func _on_take_dmg_cooldown_timeout():
 	dmg_taken_cooldown = true
