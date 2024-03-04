@@ -614,9 +614,6 @@ offset_bottom = -165.0
 [node name="enemy" parent="." instance=ExtResource("13_qjdar")]
 position = Vector2(221.818, -87.2727)
 
-[node name="enemy2" parent="." instance=ExtResource("13_qjdar")]
-position = Vector2(-341.818, 119.091)
-
 [node name="tree" parent="." instance=ExtResource("15_3iv6o")]
 visible = false
 position = Vector2(-81.8182, -178.182)
@@ -656,6 +653,9 @@ offset_top = 31.8182
 offset_right = 309.182
 offset_bottom = 45.8182
 scale = Vector2(0.131905, 0.713098)
+
+[node name="enemy2" parent="rock" instance=ExtResource("13_qjdar")]
+position = Vector2(-380.909, 0.909012)
 
 [node name="water" parent="." instance=ExtResource("18_hhh5v")]
 position = Vector2(-437.273, -32.7273)

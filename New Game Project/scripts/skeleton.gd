@@ -97,3 +97,15 @@ func update_enemy_hp():
 
 func _on_dead_timer_timeout():
 	queue_free()
+
+
+func _on_hitbox_area_area_entered(area):
+	if area.is_in_group("projectile"):
+		health -= 100
+		if health <= 0:
+			$AnimatedSprite2D.play("dead")
+			$dead_timer.start()
+			dmg_taken_cooldown = false
+			$take_dmg_cooldown.stop()
+			Global.skeleton_count-= 1	
+	

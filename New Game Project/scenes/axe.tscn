@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dxiqjcoxy11fd"]
 
-[ext_resource type="Texture2D" uid="uid://df1bw8obtqs23" path="res://FlowerAxe.png" id="1_1bx6o"]
+[ext_resource type="Texture2D" uid="uid://df1bw8obtqs23" path="res://FlowerAxe.png" id="1_jg61n"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bycn"]
 size = Vector2(8, 11)
@@ -10,7 +10,7 @@ size = Vector2(8, 11)
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(7, -4)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("1_1bx6o")
+texture = ExtResource("1_jg61n")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(11, -7)

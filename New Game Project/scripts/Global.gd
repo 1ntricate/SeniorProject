@@ -33,8 +33,6 @@ var spawn_enemies = false
 func _ready():
 	instance = self
 
-
-
 func _process(delta):
 	pass
 

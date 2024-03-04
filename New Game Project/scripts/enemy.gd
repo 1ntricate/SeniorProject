@@ -3,8 +3,10 @@ extends CharacterBody2D
 var speed = 45
 var player_chase = false
 var player = null
+var bullet = null
 var health = 100
 var player_inrange = false
+var bullet_inrange = false
 var dmg_taken_cooldown = true
 var random = randi() % 2
 var auto_movement_enabled = true
@@ -46,9 +48,11 @@ func _physics_process(delta):
 		$AnimatedSprite2D.play("idle")
 
 func _on_detection_area_body_entered(body):
-	player = body
-	player_chase = true
-	auto_movement_enabled = false  # Stop automatic movement when player is in range
+	if body.is_in_group("player"):
+		player = body
+		player_chase = true
+		auto_movement_enabled = false
+	  # Stop automatic movement when player is in range
 
 func _on_detection_area_body_exited(body):
 	player = null
@@ -61,6 +65,8 @@ func enemy():
 func _on_enemyhitbox_body_entered(body):
 	if body.has_method("player"):
 		player_inrange = true
+	
+		
 
 func _on_enemyhitbox_body_exited(body):
 	if body.has_method("player"):
@@ -72,7 +78,7 @@ func deal_dmg():
 			if Global.player_axe_atk:
 				health -=50
 			else: 
-				health -= 252
+				health -= 25
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false
 			print("slime health: ", health)
@@ -93,3 +99,16 @@ func update_enemy_hp():
 	else:
 		enemybar.visible = true
 
+
+
+func _on_enemyhitbox_area_entered(area):
+	if area.is_in_group("projectile"):
+		print("bullet in range")
+		health -=25
+		if health <= 40 and health > 0:
+			$AnimatedSprite2D.play("dead")
+		elif health <= 0:
+			self.queue_free()
+			Global.slime_count -= 1
+	
+	

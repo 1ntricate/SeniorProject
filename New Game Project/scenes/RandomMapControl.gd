@@ -128,7 +128,7 @@ func spawn_enemies(enemy_type, amount):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	check_player_position2()
-	manage_enemy_spawning()
+	#manage_enemy_spawning()
 	if Global.spawn_enemies:
 		enemy_wave()
 		Global.spawn_enemies = false

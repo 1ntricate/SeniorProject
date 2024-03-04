@@ -93,3 +93,14 @@ func update_enemy_hp():
 	else:
 		goblinbar.visible = true
 
+func _on_hitbox_area_area_entered(area):
+	if area.is_in_group("projectile"):
+		health -= 50
+		$take_dmg_cooldown.start()
+		dmg_taken_cooldown = false
+		print("goblin health: ", health)
+		if health <= 0:
+			$AnimatedSprite2D.play("dead")
+			self.queue_free()
+			Global.goblin_count -= 1
+	

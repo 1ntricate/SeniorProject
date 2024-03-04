@@ -103,3 +103,12 @@ func update_enemy_hp():
 	else:
 		enemybar.visible = true
 
+
+
+func _on_hitbox_area_area_entered(area):
+	if area.is_in_group("projectile"):
+		health -= 35
+		if health <= 0:
+			$AnimatedSprite2D.play("dead")
+			self.queue_free()
+			Global.spider_count -= 1

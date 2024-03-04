@@ -16,7 +16,7 @@ var health = 100
 var hunger = 100
 var thirsty = 100
 var alive = true
-
+var b
 var direction: Vector2 = Vector2()
 var click_position: Vector2 = Vector2()
 var cur_dir = "none"
@@ -25,12 +25,17 @@ var is_attacking = false
 @onready var animation = $AnimatedSprite2D
 @onready var weapon_animation = $AnimationPlayer
 @onready var weapon = $weapon
+
+@onready var bullet = preload("res://scenes/bullet.tscn")
+
+var gravity := 50
 #@onready var pause_menu = $PauseMenu
 var isPaused = false
 var speed = 100
 var player_immunity = true
 var last_dir: String = "Down"
 func _ready():
+	
 	Engine.time_scale = 1
 	#countdown.wait_time = 1.0
 	countdown.start()
@@ -38,9 +43,18 @@ func _ready():
 	$hunger_timer.start()
 	$thirsty_timer.start()
 	
-	#%PauseContainer.visible = false
-	
+	#%PauseContainer.visible = false	
 
+
+func shoot():
+	if Input.is_action_just_pressed("shoot") and $shoot_timer.is_stopped():
+		var b = bullet.instantiate()
+		get_parent().add_child(b)
+		b.global_position = $Marker2D.global_position
+		# Start the timer after shooting
+		$shoot_timer.start()
+
+		
 func survival_timer():
 	var time_left = countdown.time_left
 	var min = floor(time_left/60)
@@ -66,10 +80,17 @@ func read_input():
 	if Input.is_action_pressed("attack"):
 		is_attacking = true
 		play_attack_animation()
+	if Input.is_action_pressed("shoot"):
+		is_attacking = true
+		#play_attack_animation()
 	if Input.is_action_pressed("axe_attack"):
 		is_attacking = true
 		weapon.visible = true
-		weapon_animation.play("axe" +cur_dir)
+		if cur_dir == "left":
+			#weapon_animation.flip_h = 1
+			pass
+		else:
+			weapon_animation.play("axe" +cur_dir)
 		
 	elif Input.is_action_just_released("attack"):
 		is_attacking = false
@@ -191,6 +212,7 @@ func _physics_process(delta):
 	update_hp()
 	update_hunger_bar()
 	update_thirsty_bar()
+	shoot()
 
 	if Global.shoot_laser == true:
 #		Global.player_current_atk = true

@@ -139,7 +139,6 @@ shape = SubResource("CircleShape2D_lucum")
 [node name="hitbox_area" type="Area2D" parent="."]
 
 [node name="hitbox_shape" type="CollisionShape2D" parent="hitbox_area"]
-visible = false
 position = Vector2(5, 0)
 shape = SubResource("CircleShape2D_8p14t")
 
@@ -149,6 +148,7 @@ shape = SubResource("CircleShape2D_8p14t")
 
 [connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
+[connection signal="area_entered" from="hitbox_area" to="." method="_on_hitbox_area_area_entered"]
 [connection signal="body_entered" from="hitbox_area" to="." method="_on_hitbox_area_body_entered"]
 [connection signal="body_exited" from="hitbox_area" to="." method="_on_hitbox_area_body_exited"]
 [connection signal="timeout" from="take_dmg_cooldown" to="." method="_on_take_dmg_cooldown_timeout"]
