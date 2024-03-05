@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtjrn7t220l8q"]
+
+[ext_resource type="Texture2D" uid="uid://dmruk4rftm2ih" path="res://assets/bar_asset/hpbar.png" id="1_gpnht"]
+[ext_resource type="Texture2D" uid="uid://t6genorgv2yx" path="res://assets/bar_asset/heart_icon.png" id="2_cwj8l"]
+
+[node name="Player_HP" type="TextureProgressBar"]
+offset_left = -302.727
+offset_top = -236.364
+offset_right = -174.727
+offset_bottom = -108.364
+texture_under = ExtResource("1_gpnht")
+texture_progress = ExtResource("1_gpnht")
+tint_under = Color(0, 0, 0, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-15.4545, 67.2728)
+scale = Vector2(0.990193, 1.01011)
+texture = ExtResource("2_cwj8l")

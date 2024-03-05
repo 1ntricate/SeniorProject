@@ -203,6 +203,10 @@ func health_condition():
 		health = 100
 		
 func _physics_process(delta):
+	if Global.current_tree_hp_0 == true:
+		health += 10
+		hunger += 10
+		Global.current_tree_hp_0 = false
 	timer_label.text = "%02d:%02d" % survival_timer()
 	read_input()
 	enemy_atk()

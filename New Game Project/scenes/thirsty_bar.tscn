@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwav3fobau2b6"]
+
+[ext_resource type="Texture2D" uid="uid://bfmg43k6446fy" path="res://assets/bar_asset/thirstbar.png" id="1_0uthy"]
+[ext_resource type="Texture2D" uid="uid://cus07485syday" path="res://assets/bar_asset/thirsticon.png" id="2_sbwcj"]
+
+[node name="ThirstyBar" type="TextureProgressBar"]
+offset_left = -303.636
+offset_top = -151.818
+offset_right = -175.636
+offset_bottom = -23.8182
+texture_under = ExtResource("1_0uthy")
+texture_progress = ExtResource("1_0uthy")
+tint_under = Color(0, 0, 0, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-14.5454, 63.6364)
+texture = ExtResource("2_sbwcj")

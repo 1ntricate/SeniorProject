@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://o5u0satefgk0"]
+
+[ext_resource type="Texture2D" uid="uid://xg2li1ga6jms" path="res://assets/bar_asset/hungerbar.png" id="1_ekwms"]
+[ext_resource type="Texture2D" uid="uid://mcaledk2vll2" path="res://assets/bar_asset/hungericon.png" id="2_yjjly"]
+
+[node name="HungerBar" type="TextureProgressBar"]
+offset_left = -301.818
+offset_top = -196.364
+offset_right = -173.818
+offset_bottom = -68.3636
+texture_under = ExtResource("1_ekwms")
+texture_progress = ExtResource("1_ekwms")
+tint_under = Color(0, 0, 0, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-15.4546, 64.5454)
+texture = ExtResource("2_yjjly")

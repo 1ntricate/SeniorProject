@@ -1,20 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://dt5qvufmhxfw5"]
+[gd_scene load_steps=3 format=3 uid="uid://bkp6cxofn3fem"]
 
-[ext_resource type="Texture2D" uid="uid://21uqkqp2sltf" path="res://images/Blue_circle.png" id="1_h3ysj"]
+[ext_resource type="Texture2D" uid="uid://bfmg43k6446fy" path="res://assets/bar_asset/thirstbar.png" id="1_0uthy"]
+[ext_resource type="Texture2D" uid="uid://cus07485syday" path="res://assets/bar_asset/thirsticon.png" id="2_sbwcj"]
 
-[node name="Thirsty" type="Node2D"]
+[node name="ThirstyBar" type="TextureProgressBar"]
+offset_left = -300.909
+offset_top = -152.727
+offset_right = -172.909
+offset_bottom = -24.7273
+texture_under = ExtResource("1_0uthy")
+texture_progress = ExtResource("1_0uthy")
+tint_under = Color(0, 0, 0, 1)
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
-offset_left = 1.0
-offset_top = 3.0
-offset_right = 204.0
-offset_bottom = 171.0
-size_flags_horizontal = 0
-value = 100.0
-fill_mode = 4
-nine_patch_stretch = true
-texture_under = ExtResource("1_h3ysj")
-texture_progress = ExtResource("1_h3ysj")
-tint_under = Color(1, 0.647059, 0, 1)
-tint_progress = Color(0.0392157, 0.0705882, 0.960784, 1)
-metadata/_edit_use_anchors_ = true
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-17.2727, 66.3636)
+texture = ExtResource("2_sbwcj")
