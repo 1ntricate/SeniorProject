@@ -81,19 +81,19 @@ text = "Return"
 [node name="TextEdit" type="TextEdit" parent="MapMenu"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 241.0
-offset_top = -128.0
-offset_right = 393.0
-offset_bottom = 52.0
+offset_left = 329.0
+offset_top = -124.0
+offset_right = 481.0
+offset_bottom = 56.0
 placeholder_text = "Elements"
 wrap_mode = 1
 
 [node name="Label2" type="Label" parent="MapMenu"]
 layout_mode = 0
-offset_left = 241.0
-offset_top = -162.0
-offset_right = 391.0
-offset_bottom = -129.0
+offset_left = 329.0
+offset_top = -156.0
+offset_right = 479.0
+offset_bottom = -123.0
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "Elements Identfied "
@@ -107,6 +107,19 @@ offset_right = 179.0
 offset_bottom = -88.0
 button_pressed = true
 
+[node name="PrivacyButton" type="OptionButton" parent="MapMenu"]
+layout_mode = 0
+offset_left = 143.0
+offset_top = -18.0
+offset_right = 243.0
+offset_bottom = 13.0
+item_count = 2
+allow_reselect = true
+popup/item_0/text = "Private"
+popup/item_0/id = 0
+popup/item_1/text = "Public"
+popup/item_1/id = 1
+
 [node name="Label" type="Label" parent="."]
 offset_left = 708.0
 offset_top = 181.0
@@ -114,6 +127,14 @@ offset_right = 789.0
 offset_bottom = 220.0
 text = "Local Only"
 
+[node name="Label2" type="Label" parent="."]
+offset_left = 719.0
+offset_top = 273.0
+offset_right = 800.0
+offset_bottom = 312.0
+text = "Privacy"
+
 [connection signal="pressed" from="MapMenu/SaveButton" to="MapMenu" method="_on_save_button_pressed"]
 [connection signal="pressed" from="MapMenu/ReturnButton" to="MapMenu" method="_on_return_button_pressed"]
 [connection signal="toggled" from="MapMenu/Local_only" to="MapMenu" method="_on_local_only_toggled"]
+[connection signal="item_selected" from="MapMenu/PrivacyButton" to="MapMenu" method="_on_privacy_button_item_selected"]

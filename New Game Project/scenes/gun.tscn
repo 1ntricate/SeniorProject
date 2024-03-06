@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0sbsbt4mo2s8"]
+
+[ext_resource type="Texture2D" uid="uid://k76q2xmpj87b" path="res://FlowerGun.png" id="1_8ic4w"]
+
+[node name="Gun" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, 4.76837e-07)
+scale = Vector2(0.21875, 0.28125)
+texture = ExtResource("1_8ic4w")

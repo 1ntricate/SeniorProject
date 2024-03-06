@@ -40,17 +40,28 @@ func _ready():
 	#countdown.wait_time = 1.0
 	countdown.start()
 	animation.play("front_idle")
+	animation.set_flip_h(false)
 	$hunger_timer.start()
 	$thirsty_timer.start()
 	
 	#%PauseContainer.visible = false	
-
-
 func shoot():
 	if Input.is_action_just_pressed("shoot") and $shoot_timer.is_stopped():
 		var b = bullet.instantiate()
 		get_parent().add_child(b)
 		b.global_position = $Marker2D.global_position
+		# Reset directions
+		b.x_direction = 0
+		b.y_direction = 0
+		# bullet direction
+		if last_dir == "left":
+			b.x_direction = -1
+		elif last_dir == "right":
+			b.x_direction = 1
+		elif last_dir == "up":
+			b.y_direction = -1
+		elif last_dir == "down":
+			b.y_direction = 1
 		# Start the timer after shooting
 		$shoot_timer.start()
 
@@ -83,52 +94,56 @@ func read_input():
 	if Input.is_action_pressed("shoot"):
 		is_attacking = true
 		#play_attack_animation()
-	if Input.is_action_pressed("axe_attack"):
+	if Input.is_action_pressed("axe_attack") and $axe_timer.is_stopped():
+		Global.player_axe_atk = true
+		Global.player_current_atk = true
+		#Global.player_atk = true
 		is_attacking = true
 		weapon.visible = true
-		if cur_dir == "left":
-			#weapon_animation.flip_h = 1
-			pass
-		else:
-			weapon_animation.play("axe" +cur_dir)
+		weapon_animation.play("axe" +last_dir)
+		$axe_timer.start()
 		
 	elif Input.is_action_just_released("attack"):
 		is_attacking = false
 	elif Input.is_action_just_released("axe_attack"):
-		Global.player_current_atk = true
-		Global.player_axe_atk = true
+		is_attacking = false
+		Global.player_axe_atk = false
+		Global.player_current_atk = false
+		#Global.player_atk = false
 		is_attacking = false
 		weapon.visible = false
 #	moving with 'WASD'
 	else:
 		if Input.is_action_pressed("up"):
+			last_dir = "up"
 			new_direction = "up"
 			velocity.y -= 1
 			direction = Vector2(0, -1)
 			movement = 1
 		elif Input.is_action_pressed("down"):
 			new_direction = "down"
+			last_dir = new_direction
 			velocity.y += 1
 			direction = Vector2(0, 1)
 			movement = 1
 
 		if Input.is_action_pressed("left"):
 			new_direction = "left"
+			last_dir = new_direction
 			velocity.x -= 1
 			direction = Vector2(-1, 0)
 			movement = 1
 		elif Input.is_action_pressed("right"):
 			new_direction = "right"
+			last_dir = new_direction
 			velocity.x += 1
 			direction = Vector2(1, 0)
 			movement = 1
 			
-		
+	#print("last dir: ", last_dir)
 	if new_direction != cur_dir:
 		cur_dir = new_direction
-		print("cur dir: ", cur_dir)
 		play_animation(movement)
-		last_dir = cur_dir
 	else:
 		play_animation(0)
 
@@ -148,6 +163,7 @@ func read_input():
 	
 	
 func play_animation(movement):
+	#print("Direction: ", cur_dir, ", Flipped: ", animation.is_flipped_h())
 	match cur_dir:
 		"right":
 			animation.set_flip_h(false)
@@ -162,13 +178,13 @@ func play_animation(movement):
 			else:
 				animation.play("side_idle")
 		"down":
-			animation.set_flip_h(true)
+			#animation.set_flip_h(true)
 			if movement == 1:
 				animation.play("walk_down")
 			else:
 				animation.play("front_idle")
 		"up":
-			animation.set_flip_h(true)
+			#animation.set_flip_h(true)
 			if movement == 1:
 				animation.play("walk_up")
 			else:

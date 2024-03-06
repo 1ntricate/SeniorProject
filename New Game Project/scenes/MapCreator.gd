@@ -20,7 +20,7 @@ func _process(delta):
 
 func _on_save_button_pressed():
 	Global.map_name = map_name.get_text()
-	var dsc = map_dsc.get_text()
+	Global.map_dsc = map_dsc.get_text()
 	Global.new_map = true
 	get_tree().change_scene_to_file("res://scenes/processed_game_map.tscn")
 
@@ -33,4 +33,16 @@ func _on_return_button_pressed():
 
 func _on_local_only_toggled(toggled_on):
 	Global.upload_map = true
+	
+
+
+func _on_privacy_button_item_selected(index):
+	if index == 0 and Global.upload_map == true:
+		print("private")
+		Global.map_privacy = 0
+		print("privacy: ", Global.map_privacy)
+	if index == 1  and Global.upload_map == true:
+		print("public")
+		Global.map_privacy = 1
+		print("privacy: ", Global.map_privacy)
 	

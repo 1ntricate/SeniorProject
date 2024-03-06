@@ -28,6 +28,7 @@ var map_options = ['Default Map', 'Randomized Map', 'Create new Map']
 var loggedusername
 
 signal images_received
+signal maps_received
 
 # Config file
 # Move it into a singleton 
@@ -144,7 +145,12 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 			image_urls = response["response"]
 			Global.image_urls = image_urls
 			emit_signal("images_received")
-		
+	if response['command'] == 'get_map_list':
+		if response.has("response") and response["response"] is Array:
+			# Store the URLs in array
+			var map_list = response["response"]
+			Global.map_list = map_list
+			emit_signal("maps_received")
 	# If not requesting a nonce, we handle all other requests here:
 	# Check if the response contains a 'greeting' field and extract the username:
 	if 'greeting' in response['response'] and 'player_id' in response['response']:
@@ -284,17 +290,22 @@ func _get_maps(PlayerID):
 	var data = {"PlayerID" : PlayerID}
 	request_queue.push_back({"command" : command, "data" : data})
 	
-func _upload_map(PlayerID, scene,position_data, file_name):
+func _upload_map(PlayerID, scene,position_data, file_name,privacy,description):
 	print("upload map called")
+	print("dsc from _upload_map(): ", description)
 	var command = "upload_map"
-	var data = {"PlayerID" : PlayerID, "scene": scene, "pos_data": position_data, "file_name": file_name}
+	var data = {"PlayerID" : PlayerID, "scene": scene, "pos_data": position_data, "file_name": file_name, "privacy": privacy, "description": description}
+	request_queue.push_back({"command" : command, "data" : data})
+	
+func get_map_list():
+	var command = "get_map_list"
+	var data = {"Dummy" : 1029}
 	request_queue.push_back({"command" : command, "data" : data})
 	
 func _on_start_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 	PlayContainer.visible = true
 	MainContainer.visible = false
-
 
 
 func _on_option_button_pressed():
@@ -380,10 +391,6 @@ func _on_login_button_2_pressed():
 		
 	
 
-func _on_process_button_pressed():
-	get_tree().change_scene_to_file("res://scenes/manage_images.tscn")
-	#get_tree().change_scene_to_file("res://gallery.tscn")
-
 func _on_play_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
@@ -398,5 +405,5 @@ func _on_manage_img_button_pressed():
 
 
 func _on_browse_maps_button_pressed():
-	get_tree().change_scene_to_file("res://image_list.tscn")
-	pass # Replace with function body.
+	get_tree().change_scene_to_file("res://scenes/public_maps.tscn")
+	

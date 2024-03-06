@@ -50,9 +50,9 @@ text = "Play"
 layout_mode = 2
 text = "Login"
 
-[node name="Process_button" type="Button" parent="MainMenu/MainContainer"]
+[node name="BrowseMapsButton" type="Button" parent="MainMenu/MainContainer"]
 layout_mode = 2
-text = "Process Image"
+text = "Browse Public Maps"
 
 [node name="manage_img_button" type="Button" parent="MainMenu/MainContainer"]
 layout_mode = 2
@@ -455,7 +455,7 @@ text = "Return
 
 [connection signal="pressed" from="MainMenu/MainContainer/Start_button" to="MainMenu" method="_on_start_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Login_button" to="MainMenu" method="_on_login_button_pressed"]
-[connection signal="pressed" from="MainMenu/MainContainer/Process_button" to="MainMenu" method="_on_process_button_pressed"]
+[connection signal="pressed" from="MainMenu/MainContainer/BrowseMapsButton" to="MainMenu" method="_on_browse_maps_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/manage_img_button" to="MainMenu" method="_on_manage_img_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Option_button" to="MainMenu" method="_on_option_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Exit_button" to="MainMenu" method="_on_exit_button_pressed"]

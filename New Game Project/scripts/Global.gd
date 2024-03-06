@@ -12,9 +12,14 @@ var tree_fallen = false
 var is_laser = false
 var shoot_laser = false
 var auto_movement_enabled = true
+
 var map_name = ""
 var loaded_map = ""
+var map_privacy = 0
+var map_dsc = ""
 var new_map = false
+var map_list = []
+
 var image_urls = []
 var player_id = 99999
 var isUserLoggedIn = false
@@ -25,7 +30,6 @@ var current_tree_hp_0 = false
 
 var player_on_water = false
 var player_on_sand = false
-
 var skeleton_count = 0
 var slime_count = 0
 var goblin_count = 0
