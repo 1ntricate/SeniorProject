@@ -34,7 +34,16 @@ func deal_dmg():
 			health -= 20
 			wood_from_tree -= 20
 			wood_harvest = 100 - wood_from_tree
+			if health <= 80:
+				$AnimatedSprite2D.play("tree_80")
+			$take_dmg_cooldown.start()
+			if health <= 60:
+				$AnimatedSprite2D.play("tree_60")
+			$take_dmg_cooldown.start()
 			if health <= 40:
+				$AnimatedSprite2D.play("tree_40")
+			$take_dmg_cooldown.start()
+			if health <= 20:
 				$AnimatedSprite2D.play("wood")
 			$take_dmg_cooldown.start()
 			dmg_taken_cooldown = false

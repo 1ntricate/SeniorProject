@@ -11,23 +11,26 @@ var enemy_atk_cooldown = true
 var goblin_atk_cooldown = true
 var skeleton_atk_cooldown = true
 var spider_atk_cooldown = true
+var is_attacking = false
+var alive = true
+var inventory_on = false
+
 var health = 100
 var hunger = 100
 var thirsty = 100
 var movement = 0
-var alive = true
-var inventory_on = false
 var b
 var direction: Vector2 = Vector2()
 var click_position: Vector2 = Vector2()
 var cur_dir = "none"
 var new_direction = "none"
-var is_attacking = false
 
 @onready var animation = $AnimatedSprite2D
 @onready var weapon_animation = $AnimationPlayer
-@onready var weapon = $weapon
 @onready var inventory = $Inventory
+@onready var weapon = $weapon
+@onready var axe    = $weapon/axe
+@onready var sword  = $weapon/sword
 
 @onready var bullet = preload("res://scenes/bullet.tscn")
 
@@ -37,8 +40,8 @@ var isPaused = false
 var speed = 100
 var player_immunity = true
 var last_dir: String = "Down"
+
 func _ready():
-	
 	Engine.time_scale = 1
 	#countdown.wait_time = 1.0
 	countdown.start()
@@ -78,45 +81,64 @@ func survival_timer():
 func read_input():
 	velocity = Vector2()
 	# press I for inventory
-	if Input.is_action_just_pressed("inventory") and inventory_on == false:
+	if  Input.is_action_just_pressed("inventory") and inventory_on == false:
 		inventory.visible = true
 		inventory_on = true
 	elif Input.is_action_just_pressed("inventory") and inventory_on == true:
 		inventory.visible = false
 		inventory_on = false
 		
-#	press 'k' to attack	
-	if Input.is_action_pressed("attack"):
-		is_attacking = true
-		play_attack_animation()
-	if Input.is_action_pressed("shoot"):
-		is_attacking = true
-		#play_attack_animation()
-	if Global.equipped == "axe":
+	# check what weapons are equipped	
+		 # equipped on slot 1 
+	if Global.melee_equipped == "axe":
 		if Input.is_action_pressed("axe_attack") and $axe_timer.is_stopped():
 			Global.player_axe_atk = true
 			Global.player_current_atk = true
 			#Global.player_atk = true
 			is_attacking = true
-			weapon.visible = true
+			axe.visible = true
 			weapon_animation.play("axe" +last_dir)
-			$axe_timer.start()
-			
-		elif Input.is_action_just_released("attack"):
-			is_attacking = false
+			$axe_timer.start()	
 		elif Input.is_action_just_released("axe_attack"):
 			is_attacking = false
 			Global.player_axe_atk = false
 			Global.player_current_atk = false
 			#Global.player_atk = false
 			is_attacking = false
-			weapon.visible = false
-		check_moving_input()
-#	moving with 'WASD'
-	else:
-		check_moving_input()
+			axe.visible = false
 			
-	#print("last dir: ", last_dir)
+	elif Global.melee_equipped == "sword":
+		if Input.is_action_pressed("axe_attack") and $axe_timer.is_stopped():
+			Global.player_axe_atk = true
+			Global.player_current_atk = true
+			#Global.player_atk = true
+			is_attacking = true
+			sword.visible = true
+			weapon_animation.play("axe" +last_dir)
+			$axe_timer.start()	
+		elif Input.is_action_just_released("axe_attack"):
+			is_attacking = false
+			Global.player_axe_atk = false
+			Global.player_current_atk = false
+			#Global.player_atk = false
+			is_attacking = false
+			sword.visible = false
+		 
+		#equipped on slot 2	
+	elif Global.ranged_equipped == "gun":	
+		if Input.is_action_pressed("shoot"):
+			is_attacking = true
+			shoot()
+	else:
+		#press 'k' to attack	
+		if Input.is_action_pressed("attack"):
+			is_attacking = true
+			play_attack_animation()
+			
+	check_moving_input() #check WASD for movement
+			
+			
+	# update direction
 	if new_direction != cur_dir:
 		cur_dir = new_direction
 		play_animation(movement)
@@ -124,7 +146,9 @@ func read_input():
 		play_animation(0)
 
 	velocity = velocity.normalized()
-	#Avelocity = velocity
+	
+	
+	# update speed based on environment
 	if Global.player_on_water:
 		set_velocity(velocity * 100)
 		thirsty += .05
@@ -137,6 +161,7 @@ func read_input():
 		velocity = velocity
 	move_and_slide()
 	
+# WASD movements 	
 func check_moving_input():
 	if Input.is_action_pressed("up"):
 		last_dir = "up"
@@ -213,7 +238,6 @@ func play_attack_animation():
 			$deal_dmg_cooldown.start()
 			
 
-
 func health_condition():	
 	if health <= 0:
 		health = 0
@@ -221,11 +245,8 @@ func health_condition():
 		health = 100
 		
 func _physics_process(delta):
-	if Global.current_tree_hp_0 == true:
-		health += 10
-		hunger += 10
-		Global.current_tree_hp_0 = false
 	timer_label.text = "%02d:%02d" % survival_timer()
+	healing()
 	read_input()
 	enemy_atk()
 	goblin_atk()
@@ -234,11 +255,8 @@ func _physics_process(delta):
 	update_hp()
 	update_hunger_bar()
 	update_thirsty_bar()
-	shoot()
+	#shoot()
 
-	if Global.shoot_laser == true:
-#		Global.player_current_atk = true
-		print("shoottt")
 	if health <= 0:
 		alive = false 
 		health = 0
@@ -250,6 +268,12 @@ func _physics_process(delta):
 func player():
 	pass
 
+func healing():
+	if Global.current_tree_hp_0 == true:
+		health += 10
+		hunger += 10
+		Global.current_tree_hp_0 = false
+		
 func pauseMenu():
 	if isPaused:
 		%PauseMenu.hide()
@@ -272,8 +296,6 @@ func _on_playerhitbox_body_entered(body):
 	if body.has_method("water"):
 		if is_attacking == true:
 			thirsty += 5
-	if body.has_method("gem"):
-		health += 10
 
 func _on_playerhitbox_body_exited(body):
 	if body.has_method("enemy"):
@@ -291,7 +313,7 @@ func enemy_atk():
 		health -= 3
 		enemy_atk_cooldown = false
 		$atk_cooldown.start()
-		print(health)
+		#print(health)
 
 func goblin_atk():	
 	#goblin attack dmg
@@ -299,7 +321,7 @@ func goblin_atk():
 		health -= 8
 		goblin_atk_cooldown = false
 		$goblin_atk_cooldown.start()
-		print(health)		
+		#print(health)		
 		
 func skeleton_atk():	
 	#goblin attack dmg
@@ -307,14 +329,14 @@ func skeleton_atk():
 		health -= 10
 		skeleton_atk_cooldown = false
 		$skeleton_atk_cooldown.start()
-		print(health)	
+		#print(health)	
 
 func spider_atk():	
 	if spider_in_range and spider_atk_cooldown == true and player_immunity == false:
 		health -= 5
 		spider_atk_cooldown = false
 		$spider_atk_cooldown.start()
-		print(health)		
+		#print(health)		
 
 func _on_skelton_atk_cooldown_timeout():
 	skeleton_atk_cooldown = true
@@ -386,7 +408,6 @@ func _on_replay_pressed():
 
 func _on_spawn_immunity_timeout():
 	player_immunity = false
-
 
 func _on_survival_timer_timeout():
 	Global.spawn_enemies = true

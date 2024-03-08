@@ -3,7 +3,7 @@ class_name Slot
 
 @onready var texture_rect = $TextureRect
 
-@export_enum("NONE:0","WEAPON:1") var slot_type : int
+@export_enum("NONE:0","MELEE_WEAPON:1", "RANGED_WEAPON:2") var slot_type : int
 
 var filled : bool = false
 
@@ -40,7 +40,7 @@ func get_w_name():
 func set_property(data):
 	texture_rect.property = data
 	
-	#if data["TEXTURE"] == null:
-		#filled = false
-	#else:
-		#filled = true
+	if data["TEXTURE"] == null:
+		filled = false
+	else:
+		filled = true

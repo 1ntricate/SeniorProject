@@ -4,5 +4,17 @@
 		"slot_type" : 1,
 		"ATK"		: 3 ,
 		"w_name"	: "axe"
+	},
+	"1": {
+		"texture"	: "FlowerGun.png",
+		"slot_type"	: 2,
+		"ATK"		: 3,
+		"w_name"	: "gun"
+	},
+	"2": {
+		"texture"	: "Sword.png",
+		"slot_type"	: 1,
+		"ATK"		: 3,
+		"w_name"	: "sword"
 	}
 }

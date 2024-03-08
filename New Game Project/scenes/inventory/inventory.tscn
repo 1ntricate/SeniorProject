@@ -72,7 +72,7 @@ offset_left = 1.0
 offset_top = 45.0
 offset_right = 41.0
 offset_bottom = 85.0
-slot_type = 3
+slot_type = 2
 
 [node name="ATK" type="Label" parent="UI"]
 unique_name_in_owner = true
