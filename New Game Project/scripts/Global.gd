@@ -1,6 +1,7 @@
 extends Node
 
 var instance = null
+var equipped = ""
 var drink = 0
 var player_cur_dir = Vector2.LEFT
 var player_current_atk = false

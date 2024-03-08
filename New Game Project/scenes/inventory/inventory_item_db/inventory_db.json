@@ -1,0 +1,8 @@
+{
+	"0": {
+		"texture"   : "FlowerAxe.png",
+		"slot_type" : 1,
+		"ATK"		: 3 ,
+		"w_name"	: "axe"
+	}
+}

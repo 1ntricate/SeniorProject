@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://bnhifhc3m24sv"]
+
+[ext_resource type="PackedScene" uid="uid://dyuin28nla2tp" path="res://scenes/inventory/slot.tscn" id="1_24kna"]
+[ext_resource type="Script" path="res://scenes/inventory/equip_slot.gd" id="2_ak7ic"]
+
+[node name="EquipSlot" instance=ExtResource("1_24kna")]
+script = ExtResource("2_ak7ic")

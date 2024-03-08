@@ -1,0 +1,81 @@
+[gd_scene load_steps=5 format=3 uid="uid://dud21yqmqmlcr"]
+
+[ext_resource type="PackedScene" uid="uid://dyuin28nla2tp" path="res://scenes/inventory/slot.tscn" id="1_h7yy6"]
+[ext_resource type="Script" path="res://scenes/inventory/Inventory.gd" id="1_lm6hs"]
+[ext_resource type="Script" path="res://scenes/inventory/Character.gd" id="2_8c1ru"]
+[ext_resource type="PackedScene" uid="uid://bnhifhc3m24sv" path="res://scenes/inventory/equip_slot.tscn" id="4_3igg3"]
+
+[node name="Inventory" type="Node2D"]
+position = Vector2(138, 54)
+
+[node name="UI" type="Control" parent="."]
+clip_contents = true
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 3
+anchors_preset = 0
+offset_left = -2.0
+offset_top = 2.0
+offset_right = 498.0
+offset_bottom = 502.0
+
+[node name="Inventory" type="GridContainer" parent="UI"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 130.0
+offset_bottom = 126.0
+columns = 3
+script = ExtResource("1_lm6hs")
+
+[node name="slot" parent="UI/Inventory" instance=ExtResource("1_h7yy6")]
+layout_mode = 2
+
+[node name="slot2" parent="UI/Inventory" instance=ExtResource("1_h7yy6")]
+layout_mode = 2
+
+[node name="slot3" parent="UI/Inventory" instance=ExtResource("1_h7yy6")]
+layout_mode = 2
+
+[node name="slot4" parent="UI/Inventory" instance=ExtResource("1_h7yy6")]
+layout_mode = 2
+
+[node name="slot5" parent="UI/Inventory" instance=ExtResource("1_h7yy6")]
+layout_mode = 2
+
+[node name="slot6" parent="UI/Inventory" instance=ExtResource("1_h7yy6")]
+layout_mode = 2
+
+[node name="slot7" parent="UI/Inventory" instance=ExtResource("1_h7yy6")]
+layout_mode = 2
+
+[node name="slot8" parent="UI/Inventory" instance=ExtResource("1_h7yy6")]
+layout_mode = 2
+
+[node name="slot9" parent="UI/Inventory" instance=ExtResource("1_h7yy6")]
+layout_mode = 2
+
+[node name="Character" type="Control" parent="UI"]
+anchors_preset = 0
+offset_left = 171.0
+offset_top = 5.0
+offset_right = 211.0
+offset_bottom = 45.0
+script = ExtResource("2_8c1ru")
+
+[node name="EquipSlot" parent="UI/Character" instance=ExtResource("4_3igg3")]
+layout_mode = 0
+slot_type = 1
+
+[node name="EquipSlot2" parent="UI/Character" instance=ExtResource("4_3igg3")]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 45.0
+offset_right = 41.0
+offset_bottom = 85.0
+slot_type = 3
+
+[node name="ATK" type="Label" parent="UI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

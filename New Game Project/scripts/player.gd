@@ -3,7 +3,6 @@ extends CharacterBody2D
 @onready var timer_label = $countdown
 @onready var countdown = $survival_timer
 
-
 var enemy_in_range = false
 var goblin_in_range = false
 var skeleton_in_range = false
@@ -15,16 +14,20 @@ var spider_atk_cooldown = true
 var health = 100
 var hunger = 100
 var thirsty = 100
+var movement = 0
 var alive = true
+var inventory_on = false
 var b
 var direction: Vector2 = Vector2()
 var click_position: Vector2 = Vector2()
 var cur_dir = "none"
+var new_direction = "none"
 var is_attacking = false
 
 @onready var animation = $AnimatedSprite2D
 @onready var weapon_animation = $AnimationPlayer
 @onready var weapon = $weapon
+@onready var inventory = $Inventory
 
 @onready var bullet = preload("res://scenes/bullet.tscn")
 
@@ -74,19 +77,14 @@ func survival_timer():
 	
 func read_input():
 	velocity = Vector2()
-	var new_direction = "none"
-	var movement = 0
-	
-	# press 'spacebar' to shoot laser
-#	if Input.is_action_just_pressed("laser"):
-#		Global.is_laser = true
-#		Global.shoot_laser = true
-#		Global.player_cur_dir = cur_dir
-#		Global.player_current_atk = true
-#	elif Input.is_action_just_released("laser"):
-#		Global.is_laser = false
-#		Global.shoot_laser = false
-
+	# press I for inventory
+	if Input.is_action_just_pressed("inventory") and inventory_on == false:
+		inventory.visible = true
+		inventory_on = true
+	elif Input.is_action_just_pressed("inventory") and inventory_on == true:
+		inventory.visible = false
+		inventory_on = false
+		
 #	press 'k' to attack	
 	if Input.is_action_pressed("attack"):
 		is_attacking = true
@@ -94,51 +92,29 @@ func read_input():
 	if Input.is_action_pressed("shoot"):
 		is_attacking = true
 		#play_attack_animation()
-	if Input.is_action_pressed("axe_attack") and $axe_timer.is_stopped():
-		Global.player_axe_atk = true
-		Global.player_current_atk = true
-		#Global.player_atk = true
-		is_attacking = true
-		weapon.visible = true
-		weapon_animation.play("axe" +last_dir)
-		$axe_timer.start()
-		
-	elif Input.is_action_just_released("attack"):
-		is_attacking = false
-	elif Input.is_action_just_released("axe_attack"):
-		is_attacking = false
-		Global.player_axe_atk = false
-		Global.player_current_atk = false
-		#Global.player_atk = false
-		is_attacking = false
-		weapon.visible = false
+	if Global.equipped == "axe":
+		if Input.is_action_pressed("axe_attack") and $axe_timer.is_stopped():
+			Global.player_axe_atk = true
+			Global.player_current_atk = true
+			#Global.player_atk = true
+			is_attacking = true
+			weapon.visible = true
+			weapon_animation.play("axe" +last_dir)
+			$axe_timer.start()
+			
+		elif Input.is_action_just_released("attack"):
+			is_attacking = false
+		elif Input.is_action_just_released("axe_attack"):
+			is_attacking = false
+			Global.player_axe_atk = false
+			Global.player_current_atk = false
+			#Global.player_atk = false
+			is_attacking = false
+			weapon.visible = false
+		check_moving_input()
 #	moving with 'WASD'
 	else:
-		if Input.is_action_pressed("up"):
-			last_dir = "up"
-			new_direction = "up"
-			velocity.y -= 1
-			direction = Vector2(0, -1)
-			movement = 1
-		elif Input.is_action_pressed("down"):
-			new_direction = "down"
-			last_dir = new_direction
-			velocity.y += 1
-			direction = Vector2(0, 1)
-			movement = 1
-
-		if Input.is_action_pressed("left"):
-			new_direction = "left"
-			last_dir = new_direction
-			velocity.x -= 1
-			direction = Vector2(-1, 0)
-			movement = 1
-		elif Input.is_action_pressed("right"):
-			new_direction = "right"
-			last_dir = new_direction
-			velocity.x += 1
-			direction = Vector2(1, 0)
-			movement = 1
+		check_moving_input()
 			
 	#print("last dir: ", last_dir)
 	if new_direction != cur_dir:
@@ -161,6 +137,32 @@ func read_input():
 		velocity = velocity
 	move_and_slide()
 	
+func check_moving_input():
+	if Input.is_action_pressed("up"):
+		last_dir = "up"
+		new_direction = "up"
+		velocity.y -= 1
+		direction = Vector2(0, -1)
+		movement = 1
+	elif Input.is_action_pressed("down"):
+		new_direction = "down"
+		last_dir = new_direction
+		velocity.y += 1
+		direction = Vector2(0, 1)
+		movement = 1
+
+	if Input.is_action_pressed("left"):
+		new_direction = "left"
+		last_dir = new_direction
+		velocity.x -= 1
+		direction = Vector2(-1, 0)
+		movement = 1
+	elif Input.is_action_pressed("right"):
+		new_direction = "right"
+		last_dir = new_direction
+		velocity.x += 1
+		direction = Vector2(1, 0)
+		movement = 1
 	
 func play_animation(movement):
 	#print("Direction: ", cur_dir, ", Flipped: ", animation.is_flipped_h())

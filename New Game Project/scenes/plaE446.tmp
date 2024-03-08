@@ -883,7 +883,6 @@ show_behind_parent = true
 position = Vector2(8, 5)
 
 [node name="Inventory" parent="." instance=ExtResource("7_q00sa")]
-visible = false
 position = Vector2(-60, -68)
 
 [connection signal="body_entered" from="player-hitbox" to="." method="_on_playerhitbox_body_entered"]
