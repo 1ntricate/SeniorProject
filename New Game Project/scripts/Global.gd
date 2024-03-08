@@ -19,6 +19,7 @@ var map_privacy = 0
 var map_dsc = ""
 var new_map = false
 var map_list = []
+var map_urls = []
 
 var image_urls = []
 var player_id = 99999

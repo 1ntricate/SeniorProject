@@ -1,7 +1,7 @@
 extends Control
 
 var image_folder_path = "res://player_maps/"
-var popup_options = ["Play Map"] # Define your options here
+var popup_options = ["Play Map", "Delete Map"] # Define your options here
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,18 +35,33 @@ var image_paths = []
 
 
 func _on_popup_menu_id_pressed(id):
+	print("id selected: ", id)
 	var selected_item = $ItemList.get_selected_items()[0]
 	var file_name = $ItemList.get_item_text(selected_item)
-	file_name = file_name + ".tscn"
 	# Handle the selected option here
 	print("Option selected for:", file_name, ", Option:", popup_options[id])
-	var absolute_path = ProjectSettings.globalize_path("res://")
-	print("psth ",absolute_path)
-	var path = absolute_path + "/player_maps/" + file_name
-	Global.loaded_map = path
-	print("Path from mapList is ",path)
+	var absolute_path = ProjectSettings.globalize_path("res://") + "/player_maps/"
+	# process image selected
+	if id == 0:
+		var path = absolute_path + file_name + ".tscn"
+		Global.loaded_map = path
+		print("map path is: ", path)
+		get_tree().change_scene_to_file(path)
+	# delete image selected
+	if id == 1:
+		var dir = DirAccess.open(absolute_path)
+		if dir:
+			dir.remove(file_name+".tscn")
+			dir.remove(file_name+".json")
+			reload()
 	
-	get_tree().change_scene_to_file(path)
+func reload():
+	var scene_tree = get_tree()
+	if scene_tree:
+		var result = scene_tree.reload_current_scene()
+		if result != OK:
+			print("Failed to reload the scene.")
+	
 	
 func _on_item_list_item_selected(index):
 	$PopupMenu.clear()

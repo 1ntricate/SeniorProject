@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dekacf7ff3ip0"
-path="res://.godot/imported/FlowerAxe_inverted.png-6366dde0559ea2d339be9c9b7fc8fdae.ctex"
+uid="uid://kxk252eew7t5"
+path="res://.godot/imported/fox_level.png-dfd148fa82a8dd4893bcedf608d97d1a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://FlowerAxe_inverted.png"
-dest_files=["res://.godot/imported/FlowerAxe_inverted.png-6366dde0559ea2d339be9c9b7fc8fdae.ctex"]
+source_file="res://player_images/fox_level.png"
+dest_files=["res://.godot/imported/fox_level.png-dfd148fa82a8dd4893bcedf608d97d1a.ctex"]
 
 [params]
 

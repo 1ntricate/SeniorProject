@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://m5a1pkrdrit2" path="res://assets/player.png" id="1"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://dxiqjcoxy11fd" path="res://scenes/axe.tscn" id="3_172lf"]
-[ext_resource type="Texture2D" path="res://MaleWalkGun1.png" id="3_tdo3q"]
-[ext_resource type="Texture2D" path="res://MaleWalkGun2.png" id="4_7w6vy"]
+[ext_resource type="Texture2D" uid="uid://rp0jee2yuw44" path="res://MaleWalkGun1.png" id="3_tdo3q"]
+[ext_resource type="Texture2D" uid="uid://bvm3uwn83lal1" path="res://MaleWalkGun2.png" id="4_7w6vy"]
 [ext_resource type="PackedScene" path="res://scenes/gun.tscn" id="4_5145r"]
 
 [sub_resource type="RectangleShape2D" id="1"]

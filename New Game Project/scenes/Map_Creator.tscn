@@ -114,6 +114,7 @@ offset_top = -18.0
 offset_right = 243.0
 offset_bottom = 13.0
 item_count = 2
+selected = 0
 allow_reselect = true
 popup/item_0/text = "Private"
 popup/item_0/id = 0

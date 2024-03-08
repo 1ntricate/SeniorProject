@@ -23,12 +23,16 @@ var map_options = ['Default Map', 'Randomized Map', 'Create new Map']
 @onready var login_button2 = get_node("%Login_button2")
 @onready var username_input = get_node("%Username")
 @onready var password_input = get_node("%Password")
-
-
+var map_name = ""
+var image_name = ""
 var loggedusername
+var download_queue = []
+var is_request_active = false
 
 signal images_received
-signal maps_received
+signal map_list_received
+signal map_received
+
 
 # Config file
 # Move it into a singleton 
@@ -111,7 +115,6 @@ func _process(_delta):
 	else:
 		_send_request(request_queue.pop_front())
 		
-	
 func _http_request_completed(_result, _response_code, _headers, _body):
 	var image_urls = []
 	is_requesting = false
@@ -138,6 +141,7 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 		nonce = response['response']['nonce']
 		print("Got nonce: " + response['response']['nonce'])
 		return
+		
 	if response['command'] == 'get_images':
 		print("get images requested")
 		if response.has("response") and response["response"] is Array:
@@ -145,12 +149,24 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 			image_urls = response["response"]
 			Global.image_urls = image_urls
 			emit_signal("images_received")
+			
 	if response['command'] == 'get_map_list':
 		if response.has("response") and response["response"] is Array:
 			# Store the URLs in array
 			var map_list = response["response"]
 			Global.map_list = map_list
-			emit_signal("maps_received")
+			# After successfully fetching the map list
+			emit_signal("map_list_received")
+	
+	if response['command'] == 'download_map':
+		if response.has("response") and response["response"] is Array:
+			# Store the URLs in array
+			var map_urls = response["response"]
+			Global.map_urls = map_urls
+			
+			Network.connect("map_received", Callable(self, "_on_map_received"))
+			emit_signal("map_received")
+
 	# If not requesting a nonce, we handle all other requests here:
 	# Check if the response contains a 'greeting' field and extract the username:
 	if 'greeting' in response['response'] and 'player_id' in response['response']:
@@ -171,7 +187,6 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 			
 			#welcomeLabel.text = "Welcome, " + username
 	
-
 func request_nonce():
 	var client = HTTPClient.new()
 	var data = client.query_string_from_dict({"data" : JSON.stringify({})})
@@ -218,42 +233,80 @@ func _send_request(request: Dictionary):
 	
 	# Print out request for debugging:
 	#print("Requesting...\n\tCommand: " + request['command'] + "\n\tBody: " + body)
+
 func _on_images_received():
 	_setup_requests(Global.image_urls)
 
+func _on_map_received():
+	print("\nSignal fired\n")
+	_setup_map_requests(Global.map_urls)
+
 func _setup_requests(urls):
-	print(urls)
 	for link in urls:
-		var image_url = link["url"]
-		var file_name = link["filename"]
-		print("filename is ", file_name)
-		if not file_name in Global.image_list:
-			Global.image_list.append(file_name)
-			var http_request = HTTPRequest.new()
-			add_child(http_request)
-			http_request.request_completed.connect(self._http_request_completed2)
-			Global.active_requests +=1
-			#request_to_filename[http_request] = filename 
-			var error = http_request.request(image_url)
+		var image_info = {"url": link["url"], "filename": link["filename"]}
+		download_queue.push_back(image_info)
+	_process_next_request()			
+	
+func _process_next_request():
+	if download_queue.is_empty() or is_request_active:
+		return # Exit if no items are in the queue or a request is active
+	
+	is_request_active = true
+	var next_item = download_queue.pop_front()
+	var image_url = next_item["url"]
+	var file_name = next_item["filename"]
+	image_name = file_name
+	Global.image_list.append(file_name) 
+	
+	var http_request = HTTPRequest.new()
+	http_request.request_completed.connect(self._http_request_completed2)
+	#http_request.connect("request_completed", self, "_http_request_completed2", [file_name])
+	add_child(http_request)
+	var error = http_request.request(image_url)	
+
+func _http_request_completed2(result, response_code, headers, body):
+	var file_name = image_name 
+	is_request_active = false # Mark the current request as completed
+	var save_path = "res://player_images/"
+	var full_save_path = save_path + file_name
+	if result == HTTPRequest.RESULT_SUCCESS:
+		if !FileAccess.file_exists(full_save_path):
+			var out_file = FileAccess.open(full_save_path, FileAccess.WRITE)
+			if out_file:
+				out_file.store_buffer(body)
+				out_file.close()
+				print(file_name + " added to directory.")
 		else:
 			print("Image already downloaded")
-		
+	_process_next_request() # Process the next item in the queue
 			
-func _http_request_completed2(result, response_code, headers, body):
-	var save_path = "res://player_images/"
+func _setup_map_requests(urls):
+	print(urls)
+	for link in urls:
+		var scene_url = link["url1"]
+		var json_url = link["url2"]
+		map_name = link["filename"]
+		var http_request = HTTPRequest.new()
+		add_child(http_request)
+		http_request.request_completed.connect(self._http_map_request_completed)
+		Global.active_requests +=1
+		#request_to_filename[http_request] = filename 
+		var error = http_request.request(scene_url)
+		
+func _http_map_request_completed(result, response_code, headers, body):
+	var save_path = "res://player_maps/"
 	if result == HTTPRequest.RESULT_SUCCESS:
 		#var filer_namme = 
-		var image_name =  _generate_random_string(6) + ".png"
 		# overwriting all images to .png, if the image was not orginally png GODOT will not import it into the game
-		var full_save_path = save_path + image_name
+		var full_save_path = save_path + map_name
 		var out_file = FileAccess.open(full_save_path, FileAccess.WRITE)
 		#var filer_name = request_to_filename[http_request]
 		if out_file:
 			out_file.store_buffer(body)
 			out_file.close()
-			print("Image added to directory")
+			print("Map Downloaded")
 			
-	
+
 func _generate_random_string(length: int) -> String:
 	var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 	var random_string = ""
@@ -266,8 +319,7 @@ func _login(email,password):
 	var command = "login"
 	var data = {"email" : email, "password" : password}
 	request_queue.push_back({"command" : command, "data" : data})
-	
-	
+
 func _get_images(player_id):
 	var command = "get_images"
 	var data = {"PlayerID" : player_id}
@@ -289,7 +341,7 @@ func _get_maps(PlayerID):
 	var command = "get_maps"
 	var data = {"PlayerID" : PlayerID}
 	request_queue.push_back({"command" : command, "data" : data})
-	
+
 func _upload_map(PlayerID, scene,position_data, file_name,privacy,description):
 	print("upload map called")
 	print("dsc from _upload_map(): ", description)
@@ -301,7 +353,13 @@ func get_map_list():
 	var command = "get_map_list"
 	var data = {"Dummy" : 1029}
 	request_queue.push_back({"command" : command, "data" : data})
+
+func download_map(map_id,flag):
+	var command = "download_map"
+	var data = {"MapID" : map_id, "Flag": flag}
+	request_queue.push_back({"command" : command, "data" : data})
 	
+
 func _on_start_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 	PlayContainer.visible = true

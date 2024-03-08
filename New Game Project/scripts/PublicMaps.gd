@@ -1,53 +1,42 @@
 extends Control
 
 var image_folder_path = "res://player_maps/"
-var popup_options = ["Play Map"] # Define your options here
+var popup_options = ["Download Map", "UpVote", "DownVote"] 
+var map_ids = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$ItemList.icon_mode = ItemList.ICON_MODE_TOP # Ensure this is set
+	$ItemList.icon_mode = ItemList.ICON_MODE_TOP 
 	#load_items_into_gallery(image_folder_path)
+	Network.connect("map_list_received", Callable(self, "_on_map_list_received"))
 	Network.get_map_list()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 	
-func load_items_into_gallery(path):
-	var dir = DirAccess.open(path)
-	if dir != null:
-		dir.list_dir_begin()
-		var file = "none"
-		while file != "":
-			file = dir.get_next()
-			if !file.begins_with(".") and (file.ends_with(".tscn")):
-				var map = file.replace(".tscn", "")
-				$ItemList.add_item(map)
-				
-					
-func load_image_as_thumbnail(path):
-	var image = Image.load_from_file(path) 
-	var texture = ImageTexture.create_from_image(image)
-	var myVector2i = Vector2i(100, 100)
-	texture.set_size_override(myVector2i)
-	return texture
-	
-var image_paths = []
+func _on_map_list_received():
+	print("List received: ", Global.map_list)
+	load_map_list()
 
+func load_map_list():
+	for map in Global.map_list:
+		var map_name = map["MapName"].replace(".tscn", "")
+		var map_id = map["MapID"]
+		var description = map["Description"]
+		var user_name = map["UserName"]
+		var upvotes = map["Upvotes"]
+		var downvotes = map["Downvotes"]
+		var display_text = "%s (Created By: %s, Upvotes: %d, Downvotes: %d)" % [map_name, user_name, upvotes, downvotes]
+		$ItemList.add_item(display_text)
+		$ItemList.set_item_tooltip($ItemList.get_item_count() - 1, description)	
+		map_ids.append(map_id)
 
 func _on_popup_menu_id_pressed(id):
-	var selected_item = $ItemList.get_selected_items()[0]
-	var file_name = $ItemList.get_item_text(selected_item)
-	file_name = file_name + ".tscn"
-	# Handle the selected option here
-	print("Option selected for:", file_name, ", Option:", popup_options[id])
-	var absolute_path = ProjectSettings.globalize_path("res://")
-	print("psth ",absolute_path)
-	var path = absolute_path + "/player_maps/" + file_name
-	Global.loaded_map = path
-	print("Path from mapList is ",path)
-	
-	get_tree().change_scene_to_file(path)
+	var selected_index = $ItemList.get_selected_items()[0]
+	var map_id = map_ids[selected_index-1]
+	print("Map ID selected:", map_id)
+	Network.download_map(map_id,1)
 	
 func _on_item_list_item_selected(index):
 	$PopupMenu.clear()

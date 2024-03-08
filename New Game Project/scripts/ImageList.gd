@@ -1,7 +1,7 @@
 extends Control
 
 var image_folder_path = "res://player_images/"
-var popup_options = ["Process Image"] # Define your options here
+var popup_options = ["Process Image", "Delete Image"] # Define your options here
 
 var request_to_filename = {}
 var file_name = ""
@@ -57,17 +57,26 @@ func load_images_from_directory(path):
 	return null
 
 func _on_popup_menu_id_pressed(id):
+	print("id selected: ", id)
 	var selected_item = $ItemList.get_selected_items()[0]
 	var file_name = $ItemList.get_item_text(selected_item)
 	# Handle the selected option here
 	print("Option selected for:", file_name, ", Option:", popup_options[id])
-	var absolute_path = ProjectSettings.globalize_path("res://")
-	print("psth ",absolute_path)
-	var path = absolute_path + "/player_images/" + file_name
-	print("Path is ",path)
-	Global.selected_image_path = path
+	var absolute_path = ProjectSettings.globalize_path("res://") + "/player_images/"
+	# process image selected
+	if id == 0:
+		var path = absolute_path + file_name
+		print("Path is ",path)
+		Global.selected_image_path = path
+		get_tree().change_scene_to_file("res://scenes/process_image.tscn")
+	# delete image selected
+	if id == 1:
+		var dir = DirAccess.open(absolute_path)
+		if dir:
+			dir.remove(file_name)
+			dir.remove(file_name+".import")
+			reload()
 	
-	get_tree().change_scene_to_file("res://scenes/process_image.tscn")
 	
 func _on_item_list_item_selected(index):
 	$PopupMenu.clear()
