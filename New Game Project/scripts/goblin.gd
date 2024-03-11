@@ -1,19 +1,8 @@
-extends CharacterBody2D
-
-var speed = 45
-var player_chase = false
-var player = null
-var health = 200
-var player_inrange = false
-var dmg_taken_cooldown = true
-var random = randi() % 2
-var auto_movement_enabled = true
-var movement_direction = Vector2.RIGHT  # Initial direction
-@onready var animation = $AnimatedSprite2D
+extends "res://scripts/base_enemy_class.gd"
 
 func _ready():
-	Engine.time_scale = 1
-	animation.play("idle")
+	health = 200
+	enemybar = $Goblin_Hp
 	
 func _physics_process(delta):
 	deal_dmg()
@@ -45,54 +34,12 @@ func _physics_process(delta):
 		emit_signal("position_changed", global_transform.origin,"goblin")	
 	else:
 		$AnimatedSprite2D.play("idle")
-
-func _on_detection_area_body_entered(body):
-	player = body
-	player_chase = true
-	auto_movement_enabled = false  # Stop automatic movement when player is in range
-
-func _on_detection_area_body_exited(body):
-	player = null
-	player_chase = false
-	auto_movement_enabled = true  # Resume automatic movement when player is out of range
+	if health <= 0:
+		self.queue_free()
+		Global.goblin_count -= 1
 
 func goblin():
 	pass
-
-func _on_enemyhitbox_body_entered(body):
-	if body.has_method("player"):
-		player_inrange = true
-
-func _on_enemyhitbox_body_exited(body):
-	if body.has_method("player"):
-		player_inrange = false
-
-func deal_dmg():
-	if player_inrange and Global.player_current_atk == true:
-		if dmg_taken_cooldown == true:
-			if Global.player_axe_atk:
-				health -=100
-			else: 
-				health -= 50
-				
-			$take_dmg_cooldown.start()
-			dmg_taken_cooldown = false
-			print("goblin health: ", health)
-			if health <= 0:
-#				$AnimatedSprite2D.play("dead")
-				self.queue_free()
-				Global.goblin_count -= 1
-
-func _on_take_dmg_cooldown_timeout():
-	dmg_taken_cooldown = true
-
-func update_enemy_hp():
-	var goblinbar = $Goblin_Hp
-	goblinbar.value = health
-	if health > 200:
-		goblinbar.visible = false
-	else:
-		goblinbar.visible = true
 
 func _on_hitbox_area_area_entered(area):
 	if area.is_in_group("projectile"):

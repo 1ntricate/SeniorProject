@@ -52,8 +52,6 @@ func _ready():
 	$hunger_timer.start()
 	$thirsty_timer.start()
 	
-	
-	
 func _physics_process(delta):
 	timer_label.text = "%02d:%02d" % survival_timer()
 	healing()
@@ -147,15 +145,15 @@ func read_input():
 			sword.visible = false
 		 
 		#equipped on slot 2	
-	#elif Global.ranged_equipped == "gun":	
-	if Input.is_action_pressed("shoot"):
-		is_attacking = true
-		shoot()
-	else:
-		#press 'k' to attack	
-		if Input.is_action_pressed("attack"):
+	if Global.ranged_equipped == "gun":	
+		if Input.is_action_pressed("shoot"):
 			is_attacking = true
-			play_attack_animation()
+			shoot()
+		else:
+		#press 'k' to attack	
+			if Input.is_action_pressed("attack"):
+				is_attacking = true
+				play_attack_animation()
 			
 	check_moving_input() #check WASD for movement
 			

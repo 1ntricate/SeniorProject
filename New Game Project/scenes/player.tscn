@@ -894,7 +894,7 @@ shape = SubResource("1")
 position = Vector2(2.38419e-07, 0)
 scale = Vector2(-0.898, 0.638)
 sprite_frames = SubResource("2")
-animation = &"m_walk_up"
+animation = &"attack_side"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

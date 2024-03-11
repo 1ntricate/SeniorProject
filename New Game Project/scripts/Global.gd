@@ -10,6 +10,8 @@ var player_current_atk = false
 var player_in_range = false
 var player_axe_atk = false
 
+var player_base_dmg = 10
+
 var tree_fallen = false
 var is_laser = false
 var shoot_laser = false

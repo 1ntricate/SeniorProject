@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dcn6pet2pcfau"]
+[gd_scene load_steps=25 format=3 uid="uid://dcn6pet2pcfau"]
 
 [ext_resource type="Script" path="res://scripts/Global.gd" id="1_wm34h"]
 [ext_resource type="Texture2D" uid="uid://8apkqf5mhynb" path="res://assets/grass.png" id="2_ohq8h"]
@@ -7,15 +7,18 @@
 [ext_resource type="Texture2D" uid="uid://bek70wqq0ehmu" path="res://assets/Graphical Assets/environment/Props/plant-house.png" id="5_m2jl5"]
 [ext_resource type="PackedScene" uid="uid://cxe851fhabkwf" path="res://scenes/player.tscn" id="8_pfypu"]
 [ext_resource type="PackedScene" uid="uid://dtjrn7t220l8q" path="res://scenes/player_hp.tscn" id="9_p5cha"]
-[ext_resource type="PackedScene" uid="uid://dwav3fobau2b6" path="res://scenes/thirsty_bar.tscn" id="10_tu5sg"]
-[ext_resource type="PackedScene" uid="uid://o5u0satefgk0" path="res://scenes/hunger_bar.tscn" id="11_dfiox"]
+[ext_resource type="PackedScene" path="res://scenes/thirsty_bar.tscn" id="10_tu5sg"]
+[ext_resource type="PackedScene" path="res://scenes/hunger_bar.tscn" id="11_dfiox"]
 [ext_resource type="PackedScene" uid="uid://bnaq0ucejxfl7" path="res://scenes/enemy.tscn" id="13_qjdar"]
 [ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="15_3iv6o"]
 [ext_resource type="PackedScene" uid="uid://dj37ri57e1q1q" path="res://scenes/rock.tscn" id="16_u4a32"]
 [ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="16_xynwb"]
 [ext_resource type="PackedScene" uid="uid://o4kn4ounrgsr" path="res://scenes/RockHp.tscn" id="17_asqd4"]
 [ext_resource type="PackedScene" uid="uid://g7uu0doorq5l" path="res://scenes/pause_menu.tscn" id="17_rahrg"]
+[ext_resource type="PackedScene" uid="uid://gsy5ymrus631" path="res://scenes/skeleton.tscn" id="17_ymraw"]
+[ext_resource type="PackedScene" uid="uid://bwxmuo3iatovc" path="res://scenes/spider.tscn" id="18_gg1ec"]
 [ext_resource type="PackedScene" uid="uid://8kuxoo6lla18" path="res://scenes/water.tscn" id="18_hhh5v"]
+[ext_resource type="PackedScene" uid="uid://ba7woy5l0jyqq" path="res://scenes/goblin.tscn" id="19_ljvhl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xovyt"]
 texture = ExtResource("2_ohq8h")
@@ -588,7 +591,7 @@ offset_bottom = -35.6364
 scale = Vector2(0.5, 0.5)
 
 [node name="enemy" parent="." instance=ExtResource("13_qjdar")]
-position = Vector2(221.818, -87.2727)
+position = Vector2(254.545, -189.091)
 
 [node name="enemy2" parent="." instance=ExtResource("13_qjdar")]
 position = Vector2(-341.818, 119.091)
@@ -634,3 +637,12 @@ scale = Vector2(0.131905, 0.713098)
 [node name="water" parent="." instance=ExtResource("18_hhh5v")]
 position = Vector2(-437.273, -32.7273)
 scale = Vector2(2.70909, 2.81818)
+
+[node name="skeleton" parent="." instance=ExtResource("17_ymraw")]
+position = Vector2(-300, -205.455)
+
+[node name="spider" parent="." instance=ExtResource("18_gg1ec")]
+position = Vector2(136.364, 57.2727)
+
+[node name="goblin" parent="." instance=ExtResource("19_ljvhl")]
+position = Vector2(208.182, -48.1818)
