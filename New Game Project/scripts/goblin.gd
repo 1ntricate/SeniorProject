@@ -29,7 +29,7 @@ func _physics_process(delta):
 		# Check if the enemy has reached the left edge of the map
 		elif position.x < 0:
 			movement_direction = Vector2.RIGHT
-
+		emit_signal("position_changed", global_transform.origin,"goblin")	
 				
 	if player_chase:
 		position += (player.position - position) / speed
@@ -42,6 +42,7 @@ func _physics_process(delta):
 		else:
 			$AnimatedSprite2D.flip_h = false
 			movement_direction = Vector2.RIGHT
+		emit_signal("position_changed", global_transform.origin,"goblin")	
 	else:
 		$AnimatedSprite2D.play("idle")
 

@@ -5,7 +5,7 @@ var temperature = FastNoiseLite.new()
 var altitude= FastNoiseLite.new()
 var width = 500
 var height = 500
-var monster_count = 10
+var monster_count = 25
 var resoruce_objects_count = 25
 
 @onready var player = get_parent().get_child(1)
@@ -43,7 +43,7 @@ func _ready():
 	moisture.seed = randi()
 	temperature.seed = randi()
 	generate_chunk(player.position)
-	
+
 	# Spawn seperately to ensure unqique spawn positions
 	for i in range(monster_count):  # You can adjust the number of copies as needed
 		var new_slime = slime.instantiate()
@@ -53,7 +53,8 @@ func _ready():
 		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
 		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
 		new_slime.position = spawn_pos + Vector2(random_offset_x, random_offset_y)
-		
+		new_slime.connect("position_changed", Callable(self, "_on_enemy_position_changed"))
+	
 	for i in range(monster_count):  # You can adjust the number of copies as needed
 		var new_skeleton = skeleton.instantiate()
 		add_child(new_skeleton)
@@ -62,16 +63,8 @@ func _ready():
 		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
 		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
 		new_skeleton.position =  spawn_pos + Vector2(random_offset_x, random_offset_y)
+		new_skeleton.connect("position_changed", Callable(self, "_on_enemy_position_changed"))
 	
-	for i in range(monster_count):  # You can adjust the number of copies as needed
-		var new_spider = spider.instantiate()
-		add_child(new_spider)
-		Global.spider_count += 1
-		# set the position of each copy
-		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
-		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
-		new_spider.position =  spawn_pos + Vector2(random_offset_x*2, random_offset_y*2)
-		
 	for i in range(monster_count):  # You can adjust the number of copies as needed
 		var new_goblin = goblin.instantiate()
 		add_child(new_goblin)
@@ -80,6 +73,19 @@ func _ready():
 		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
 		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
 		new_goblin.position =  -spawn_pos + Vector2(random_offset_x, random_offset_y)
+		new_goblin.connect("position_changed", Callable(self, "_on_enemy_position_changed"))
+
+	for i in range(monster_count):  # You can adjust the number of copies as needed
+		var new_spider = spider.instantiate()
+		add_child(new_spider)
+		Global.spider_count += 1
+		# set the position of each copy
+		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
+		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
+		new_spider.position =  spawn_pos + Vector2(random_offset_x*2, random_offset_y*2)
+		new_spider.connect("position_changed", Callable(self, "_on_enemy_position_changed"))
+		
+	
 
 	for i in range(resoruce_objects_count):  # You can adjust the number of copies as needed
 		var new_rock = rock.instantiate()
@@ -97,6 +103,35 @@ func _ready():
 		var random_offset_y = randf_range(-offset_range, offset_range)
 		new_tree.position =  +spawn_pos + Vector2(random_offset_x, random_offset_y)
 		
+func _on_enemy_position_changed(new_position,enemy_type):
+	var enemy_tile_pos = local_to_map(new_position)
+	var tile_atlas_coords = get_cell_atlas_coords(0, enemy_tile_pos)
+	match enemy_type:
+		"slime":
+			#print("slime moved")
+			if tile_atlas_coords in water_tiles:
+				Global.slime_on_water = true
+				print("slime on water")
+			else:
+				Global.slime_on_water = false
+		"skeleton":
+			#if tile_atlas_coords in snow_tiles:
+				#Global.skeleton_on_snow = true				
+			pass
+		"goblin":
+			pass
+		"spider":
+			if tile_atlas_coords in sand_tiles:
+				Global.spider_on_sand = true
+				print("spider on sand")
+			else:
+				Global.spider_on_sand = false
+		
+	if tile_atlas_coords in sand_tiles:
+		Global.player_on_sand = true
+		#print("Player is on sand")
+	else:
+		Global.player_on_sand = false
 
 func manage_enemy_spawning():
 	check_enemy_count("enemy", Global.slime_count, 5)
@@ -129,45 +164,28 @@ func spawn_enemies(enemy_type, amount):
 func _process(delta):
 	check_player_position2()
 	#manage_enemy_spawning()
-	if Global.spawn_enemies:
-		enemy_wave()
-		Global.spawn_enemies = false
+	#if Global.spawn_enemies:
+	#	enemy_wave()
+	#	Global.spawn_enemies = false
 		
-
-	
 func check_player_position2():
 	var player_tile_pos = local_to_map(player.position)
 	var tile_atlas_coords = get_cell_atlas_coords(0, player_tile_pos)
 	if tile_atlas_coords in grass_tiles:
-		print("Player is on grass")
+		pass
+		#print("Player is on grass")
 	
 	if tile_atlas_coords in water_tiles:
 		Global.player_on_water = true
-		print("Player is on water")
+		#print("Player is on water")
 	else: 
 		Global.player_on_water = false
 		
 	if tile_atlas_coords in sand_tiles:
 		Global.player_on_sand = true
-		print("Player is on sand")
+		#print("Player is on sand")
 	else:
 		Global.player_on_sand = false
-		
-# tilemap coordinates range from (0,0) to (3,3)
-var tile_coordinates = {
-	"snow_tile_1": Vector2(0, 0),
-	"snow_tile_2": Vector2(0, 1),
-	"snow_tile_3": Vector2(1, 0),
-	"water_tile_1": Vector2(3, 0),
-	"water_tile_2": Vector2(3, 1),
-	"steel_tile_1": Vector2(2,0),
-	"grass_tile_1": Vector2(1, 1),
-	"grass_tile_2": Vector2(1, 2),
-	"grass_tile_3": Vector2(2, 3),
-	"sand_tile_1": Vector2(0, 2),
-	"sand_tile_2": Vector2(0, 3)
-}
-
 
 func generate_chunk(position):
 	var tile_pos = local_to_map(position)

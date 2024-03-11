@@ -43,17 +43,37 @@ func check_player_position2():
 	var player_tile_pos = local_to_map(player.position)
 	var tile_atlas_coords = get_cell_atlas_coords(0, player_tile_pos)
 	if tile_atlas_coords in grass_tiles:
-		print("Player is on grass")
+		#print("Player is on grass")
+		pass
 	
 	if tile_atlas_coords in water_tiles:
 		Global.player_on_water = true
-		print("Player is on water")
+		#print("Player is on water")
 	else: 
 		Global.player_on_water = false
 		
 	if tile_atlas_coords in sand_tiles:
 		Global.player_on_sand = true
-		print("Player is on sand")
+		#print("Player is on sand")
+	else:
+		Global.player_on_sand = false
+		
+func check_spider_position():
+	var player_tile_pos = local_to_map(player.position)
+	var tile_atlas_coords = get_cell_atlas_coords(0, player_tile_pos)
+	if tile_atlas_coords in grass_tiles:
+		#print("Player is on grass")
+		pass
+	
+	if tile_atlas_coords in water_tiles:
+		Global.player_on_water = true
+		#print("Player is on water")
+	else: 
+		Global.player_on_water = false
+		
+	if tile_atlas_coords in sand_tiles:
+		Global.player_on_sand = true
+		#print("Player is on sand")
 	else:
 		Global.player_on_sand = false
 		

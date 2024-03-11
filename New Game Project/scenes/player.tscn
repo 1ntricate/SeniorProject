@@ -1,16 +1,24 @@
-[gd_scene load_steps=69 format=3 uid="uid://cxe851fhabkwf"]
+[gd_scene load_steps=77 format=3 uid="uid://cxe851fhabkwf"]
 
 [ext_resource type="Texture2D" uid="uid://m5a1pkrdrit2" path="res://assets/player.png" id="1"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://dxiqjcoxy11fd" path="res://scenes/axe.tscn" id="3_172lf"]
 [ext_resource type="Texture2D" uid="uid://rp0jee2yuw44" path="res://MaleWalkGun1.png" id="3_tdo3q"]
 [ext_resource type="Texture2D" uid="uid://bvm3uwn83lal1" path="res://MaleWalkGun2.png" id="4_7w6vy"]
-[ext_resource type="PackedScene" uid="uid://b0sbsbt4mo2s8" path="res://scenes/gun.tscn" id="4_5145r"]
+[ext_resource type="PackedScene" uid="uid://6xol2hh13ub" path="res://scenes/gun.tscn" id="4_5145r"]
+[ext_resource type="Texture2D" uid="uid://bpd3iiu70610b" path="res://MaleWalk.png" id="5_k821y"]
+[ext_resource type="Texture2D" uid="uid://cvfm008xx2t0g" path="res://MSideWalk.png" id="5_q8fwd"]
+[ext_resource type="Texture2D" uid="uid://db3gfb0j2tdg2" path="res://MaleWalk (1).png" id="6_8tasv"]
+[ext_resource type="Texture2D" uid="uid://dmful28cdelj7" path="res://MSideWalk2.png" id="6_pcysg"]
 [ext_resource type="PackedScene" uid="uid://bcs8l2qoja2fl" path="res://scenes/sword.tscn" id="6_q8h5v"]
+[ext_resource type="Script" path="res://scenes/mouse_cursor.gd" id="7_1whx2"]
 [ext_resource type="PackedScene" uid="uid://dud21yqmqmlcr" path="res://scenes/inventory/inventory.tscn" id="7_q00sa"]
+[ext_resource type="Texture2D" uid="uid://05di8rqjxhxc" path="res://MBackWalk1.png" id="9_6avpl"]
+[ext_resource type="Script" path="res://scenes/gun.gd" id="9_nes4p"]
+[ext_resource type="Texture2D" uid="uid://bu3nh2i26dpgo" path="res://MBackWalk2.png" id="10_ylpfa"]
 
 [sub_resource type="RectangleShape2D" id="1"]
-size = Vector2(12, 12)
+size = Vector2(15, 16)
 
 [sub_resource type="AtlasTexture" id="39"]
 atlas = ExtResource("1")
@@ -353,6 +361,75 @@ animations = [{
 }],
 "loop": true,
 "name": &"gun_walk",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_k821y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_8tasv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_k821y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_8tasv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_k821y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_8tasv")
+}],
+"loop": true,
+"name": &"m_walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_q8fwd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_pcysg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_q8fwd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_pcysg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_q8fwd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_pcysg")
+}],
+"loop": true,
+"name": &"m_walk_side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_6avpl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ylpfa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_6avpl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ylpfa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_6avpl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ylpfa")
+}],
+"loop": true,
+"name": &"m_walk_up",
 "speed": 5.0
 }, {
 "frames": [{
@@ -810,13 +887,14 @@ script = ExtResource("2")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 light_mask = 2
 visibility_layer = 3
-position = Vector2(0, -4)
+position = Vector2(1.5, 1)
 shape = SubResource("1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2.38419e-07, 0)
 scale = Vector2(-0.898, 0.638)
 sprite_frames = SubResource("2")
-animation = &"walk_side"
+animation = &"m_walk_up"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -874,6 +952,7 @@ visible = false
 [node name="Marker2D" type="Marker2D" parent="."]
 visible = false
 position = Vector2(10, 2)
+script = ExtResource("7_1whx2")
 
 [node name="shoot_timer" type="Timer" parent="."]
 wait_time = 0.5
@@ -884,11 +963,16 @@ one_shot = true
 
 [node name="Gun" parent="." instance=ExtResource("4_5145r")]
 show_behind_parent = true
-position = Vector2(8, 5)
+position = Vector2(7, 2)
+script = ExtResource("9_nes4p")
 
 [node name="Inventory" parent="." instance=ExtResource("7_q00sa")]
 visible = false
 position = Vector2(-60, -68)
+
+[node name="drown_timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
 
 [connection signal="body_entered" from="player-hitbox" to="." method="_on_playerhitbox_body_entered"]
 [connection signal="body_exited" from="player-hitbox" to="." method="_on_playerhitbox_body_exited"]
@@ -901,3 +985,4 @@ position = Vector2(-60, -68)
 [connection signal="timeout" from="spider_atk_cooldown" to="." method="_on_spider_atk_cooldown_timeout"]
 [connection signal="timeout" from="spawn_immunity" to="." method="_on_spawn_immunity_timeout"]
 [connection signal="timeout" from="survival_timer" to="." method="_on_survival_timer_timeout"]
+[connection signal="timeout" from="drown_timer" to="." method="_on_drown_timer_timeout"]

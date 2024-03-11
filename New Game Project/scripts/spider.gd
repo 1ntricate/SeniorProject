@@ -11,6 +11,8 @@ var auto_movement_enabled = true
 var movement_direction = Vector2.UP  # Initial direction
 @onready var animation = $AnimatedSprite2D
 
+signal position_changed(new_position)
+
 func _ready():
 	Engine.time_scale = 1
 	animation.play("idle")
@@ -40,22 +42,24 @@ func check_direction():
 func _physics_process(delta):
 	deal_dmg()
 	update_enemy_hp()
+	if Global.spider_on_sand:
+		print("Spider on Sand")
 	if auto_movement_enabled:
 		# Move automatically left or right
 		position += movement_direction * speed * delta
-
 		if position.y > get_viewport_rect().size.y:
 			movement_direction = Vector2.DOWN
 		else:
 			movement_direction = Vector2.UP
-				
+		emit_signal("position_changed", global_transform.origin,"spider")		
 	if player_chase:
 		position += (player.position - position) / speed
 		$AnimatedSprite2D.play("move_right")
 		check_direction()
+		emit_signal("position_changed", global_transform.origin,"spider")		
 	else:
 		$AnimatedSprite2D.play("idle")
-
+	
 func _on_detection_area_body_entered(body):
 	player = body
 	player_chase = true
@@ -103,8 +107,6 @@ func update_enemy_hp():
 	else:
 		enemybar.visible = true
 
-
-
 func _on_hitbox_area_area_entered(area):
 	if area.is_in_group("projectile"):
 		health -= 35
@@ -112,3 +114,4 @@ func _on_hitbox_area_area_entered(area):
 			$AnimatedSprite2D.play("dead")
 			self.queue_free()
 			Global.spider_count -= 1
+

@@ -4,9 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://cbo85w3e862vw" path="res://tiles.png" id="1_m5yql"]
 [ext_resource type="PackedScene" uid="uid://cxe851fhabkwf" path="res://scenes/player.tscn" id="3_mkjrw"]
 [ext_resource type="PackedScene" uid="uid://g7uu0doorq5l" path="res://scenes/pause_menu.tscn" id="4_2jpha"]
-[ext_resource type="PackedScene" uid="uid://iykiddabirkb" path="res://scenes/HP ProgressBar.tscn" id="5_vly5m"]
-[ext_resource type="Texture2D" uid="uid://21uqkqp2sltf" path="res://images/Blue_circle.png" id="6_l3ujo"]
-[ext_resource type="Texture2D" uid="uid://ckc0501l3p57u" path="res://images/Green_circle.png" id="7_bdmjx"]
+[ext_resource type="PackedScene" uid="uid://dtjrn7t220l8q" path="res://scenes/player_hp.tscn" id="5_a8qpi"]
+[ext_resource type="PackedScene" uid="uid://o5u0satefgk0" path="res://scenes/hunger_bar.tscn" id="6_34iew"]
+[ext_resource type="PackedScene" uid="uid://dwav3fobau2b6" path="res://scenes/thirsty_bar.tscn" id="7_sap4r"]
 [ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="9_r51ab"]
 [ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="10_ce2b1"]
 [ext_resource type="PackedScene" uid="uid://8kuxoo6lla18" path="res://scenes/water.tscn" id="13_5x4n1"]
@@ -66,51 +66,12 @@ offset_bottom = 47.0
 grow_horizontal = 1
 grow_vertical = 1
 
-[node name="Player_HP" parent="Player" instance=ExtResource("5_vly5m")]
-visibility_layer = 512
-offset_left = -244.545
-offset_top = -180.0
-offset_right = 155.455
-offset_bottom = -153.0
-scale = Vector2(0.495537, 0.633098)
-metadata/_edit_use_anchors_ = true
-
-[node name="ThirstyBar" type="TextureProgressBar" parent="Player"]
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -338.182
-offset_top = -187.273
-offset_right = -279.182
-offset_bottom = -136.273
-grow_horizontal = 0
-grow_vertical = 2
-value = 100.0
-fill_mode = 4
-nine_patch_stretch = true
-texture_under = ExtResource("6_l3ujo")
-texture_progress = ExtResource("6_l3ujo")
-tint_under = Color(1, 0.647059, 0, 1)
-
-[node name="HungerBar" type="TextureProgressBar" parent="Player"]
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Player_HP" parent="Player" instance=ExtResource("5_a8qpi")]
 offset_left = -330.0
-offset_top = -180.0
-offset_right = -277.0
-offset_bottom = -136.0
-grow_horizontal = 0
-grow_vertical = 2
-scale = Vector2(0.769937, 0.79704)
-value = 100.0
-fill_mode = 4
-nine_patch_stretch = true
-texture_under = ExtResource("7_bdmjx")
-texture_progress = ExtResource("7_bdmjx")
-tint_under = Color(1, 0, 0, 1)
+offset_top = -209.091
+offset_right = -202.0
+offset_bottom = -81.091
+scale = Vector2(0.5, 0.5)
 
 [node name="countdown" type="Label" parent="Player"]
 unique_name_in_owner = true
@@ -118,6 +79,20 @@ offset_left = 290.0
 offset_top = -188.0
 offset_right = 330.0
 offset_bottom = -165.0
+
+[node name="HungerBar" parent="Player" instance=ExtResource("6_34iew")]
+offset_left = -330.0
+offset_top = -186.364
+offset_right = -202.0
+offset_bottom = -58.3636
+scale = Vector2(0.5, 0.5)
+
+[node name="ThirstyBar" parent="Player" instance=ExtResource("7_sap4r")]
+offset_left = -330.0
+offset_top = -163.636
+offset_right = -202.0
+offset_bottom = -35.6364
+scale = Vector2(0.5, 0.5)
 
 [node name="water" parent="." instance=ExtResource("13_5x4n1")]
 position = Vector2(-437.273, -32.7273)

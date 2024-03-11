@@ -24,6 +24,8 @@ var direction: Vector2 = Vector2()
 var click_position: Vector2 = Vector2()
 var cur_dir = "none"
 var new_direction = "none"
+var slow_attack = false
+var drown = true
 
 @onready var animation = $AnimatedSprite2D
 @onready var weapon_animation = $AnimationPlayer
@@ -45,33 +47,53 @@ func _ready():
 	Engine.time_scale = 1
 	#countdown.wait_time = 1.0
 	countdown.start()
-	animation.play("front_idle")
+	animation.play("m_walk_down")
 	animation.set_flip_h(false)
 	$hunger_timer.start()
 	$thirsty_timer.start()
 	
-	#%PauseContainer.visible = false	
+	
+	
+func _physics_process(delta):
+	timer_label.text = "%02d:%02d" % survival_timer()
+	healing()
+	read_input()
+	enemy_atk()
+	goblin_atk()
+	skeleton_atk()
+	spider_atk()
+	update_hp()
+	update_hunger_bar()
+	update_thirsty_bar()
+	attack_slowdown()
+	if drown:
+		drown_player()
+	#shoot()
+
+	if health <= 0:
+		alive = false 
+		health = 0
+		print("You are dead")
+		get_tree().change_scene_to_file("res://scenes/Gameover.tscn")
+	if Input.is_action_just_pressed("escape"):
+		pauseMenu()
+		
 func shoot():
 	if Input.is_action_just_pressed("shoot") and $shoot_timer.is_stopped():
 		var b = bullet.instantiate()
 		get_parent().add_child(b)
+		# bullet spawn pos
 		b.global_position = $Marker2D.global_position
-		# Reset directions
-		b.x_direction = 0
-		b.y_direction = 0
-		# bullet direction
-		if last_dir == "left":
-			b.x_direction = -1
-		elif last_dir == "right":
-			b.x_direction = 1
-		elif last_dir == "up":
-			b.y_direction = -1
-		elif last_dir == "down":
-			b.y_direction = 1
+		# firing direction
+		var mouse_position = get_global_mouse_position()
+		var direction = (mouse_position - b.global_position).normalized()
+		b.direction = direction
+		b.speed = 700
+		# rotate bullet to firing direction
+		b.rotation = atan2(direction.y,direction.x)
 		# Start the timer after shooting
 		$shoot_timer.start()
 
-		
 func survival_timer():
 	var time_left = countdown.time_left
 	var min = floor(time_left/60)
@@ -125,10 +147,10 @@ func read_input():
 			sword.visible = false
 		 
 		#equipped on slot 2	
-	elif Global.ranged_equipped == "gun":	
-		if Input.is_action_pressed("shoot"):
-			is_attacking = true
-			shoot()
+	#elif Global.ranged_equipped == "gun":	
+	if Input.is_action_pressed("shoot"):
+		is_attacking = true
+		shoot()
 	else:
 		#press 'k' to attack	
 		if Input.is_action_pressed("attack"):
@@ -150,17 +172,41 @@ func read_input():
 	
 	# update speed based on environment
 	if Global.player_on_water:
+		if $drown_timer.is_stopped():
+			$drown_timer.start()
+			print("drown timer started")
+		if !slow_attack:
+			slow_attack = true
+			print("slow attack")
 		set_velocity(velocity * 100)
 		thirsty += .05
 		velocity = velocity
 	elif Global.player_on_sand:
+		$drown_timer.stop()
+		drown = false
+		slow_attack = false
+		thirsty -= .05
 		set_velocity(velocity * 150)
 		velocity = velocity
 	else:
+		drown = false
+		$drown_timer.stop()
+		slow_attack = false
 		set_velocity(velocity * 200)
 		velocity = velocity
 	move_and_slide()
-	
+
+func attack_slowdown():
+	if slow_attack:
+		#print("Attacks slowed")
+		$atk_cooldown.wait_time = 2.5
+		$shoot_timer.wait_time = 1.0
+		$axe_timer.wait_time = 2.0
+	else:
+		$atk_cooldown.wait_time = 1.5
+		$shoot_timer.wait_time = 0.5
+		$axe_timer.wait_time = 1
+		
 # WASD movements 	
 func check_moving_input():
 	if Input.is_action_pressed("up"):
@@ -195,27 +241,27 @@ func play_animation(movement):
 		"right":
 			animation.set_flip_h(false)
 			if movement == 1:
-				animation.play("walk_side")
-			else:
-				animation.play("side_idle")
+				animation.play("m_walk_side")
+			#else:
+			#	animation.play("side_idle")
 		"left":
 			animation.set_flip_h(true)
 			if movement == 1:
-				animation.play("walk_side")
-			else:
-				animation.play("side_idle")
+				animation.play("m_walk_side")
+			#else:
+			#	animation.play("side_idle")
 		"down":
 			#animation.set_flip_h(true)
 			if movement == 1:
-				animation.play("walk_down")
-			else:
-				animation.play("front_idle")
+				animation.play("m_walk_down")
+			#else:
+			#	animation.play("front_idle")
 		"up":
 			#animation.set_flip_h(true)
 			if movement == 1:
-				animation.play("walk_up")
-			else:
-				animation.play("back_idle")
+				animation.play("m_walk_up")
+			#else:
+			#	animation.play("back_idle")
 
 func play_attack_animation():
 	Global.player_current_atk = true
@@ -244,27 +290,7 @@ func health_condition():
 	if health > 100:
 		health = 100
 		
-func _physics_process(delta):
-	timer_label.text = "%02d:%02d" % survival_timer()
-	healing()
-	read_input()
-	enemy_atk()
-	goblin_atk()
-	skeleton_atk()
-	spider_atk()
-	update_hp()
-	update_hunger_bar()
-	update_thirsty_bar()
-	#shoot()
 
-	if health <= 0:
-		alive = false 
-		health = 0
-		print("You are dead")
-		get_tree().change_scene_to_file("res://scenes/Gameover.tscn")
-	if Input.is_action_just_pressed("escape"):
-		pauseMenu()
-		
 func player():
 	pass
 
@@ -412,3 +438,12 @@ func _on_spawn_immunity_timeout():
 func _on_survival_timer_timeout():
 	Global.spawn_enemies = true
 	pass # Replace with function body.
+
+func drown_player():
+	print("drowning!")
+	health -= 0.5
+
+func _on_drown_timer_timeout():
+	print("drown timer ended")
+	drown = true
+	

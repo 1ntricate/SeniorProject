@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://di5f2uqhiwjro"
-path="res://.godot/imported/Crater-Lake_Kim-Chamales-crop.jpg-e3fe939abc71c86c1180653c37fbcf30.ctex"
+uid="uid://bu3nh2i26dpgo"
+path="res://.godot/imported/MBackWalk2.png-7f64127d6f4380571e6d89b431f87990.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player_images/Crater-Lake_Kim-Chamales-crop.jpg"
-dest_files=["res://.godot/imported/Crater-Lake_Kim-Chamales-crop.jpg-e3fe939abc71c86c1180653c37fbcf30.ctex"]
+source_file="res://MBackWalk2.png"
+dest_files=["res://.godot/imported/MBackWalk2.png-7f64127d6f4380571e6d89b431f87990.ctex"]
 
 [params]
 
