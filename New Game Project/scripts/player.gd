@@ -14,6 +14,7 @@ var spider_atk_cooldown = true
 var is_attacking = false
 var alive = true
 var inventory_on = false
+var key_input = false
 
 var health = 100
 var hunger = 100
@@ -27,6 +28,7 @@ var new_direction = "none"
 var slow_attack = false
 var drown = true
 
+@onready var button = $InputKey
 @onready var animation = $AnimatedSprite2D
 @onready var weapon_animation = $AnimationPlayer
 @onready var inventory = $Inventory
@@ -100,6 +102,14 @@ func survival_timer():
 	
 func read_input():
 	velocity = Vector2()
+	# press j for key
+	if  Input.is_action_just_pressed("key_input") and key_input == false:
+		button.visible = true
+		key_input = true
+	elif Input.is_action_just_pressed("key_input") and key_input == true:
+		button.visible = false
+		key_input = false
+		
 	# press I for inventory
 	if  Input.is_action_just_pressed("inventory") and inventory_on == false:
 		inventory.visible = true
