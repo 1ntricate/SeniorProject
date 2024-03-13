@@ -106,9 +106,11 @@ func read_input():
 	if  Input.is_action_just_pressed("key_input") and key_input == false:
 		button.visible = true
 		key_input = true
+		Global.is_changing_key_input = true
 	elif Input.is_action_just_pressed("key_input") and key_input == true:
 		button.visible = false
 		key_input = false
+		#Global.is_changing_key_input = false
 		
 	# press I for inventory
 	if  Input.is_action_just_pressed("inventory") and inventory_on == false:
@@ -405,7 +407,7 @@ func _on_hunger_timer_timeout():
 	# Decrease hunger by 1 every second
 	if hunger > 0:
 		hunger -= 1
-		print("Hunger:", hunger)
+		#print("Hunger:", hunger)
 
 	# Check if the player is starving
 	if hunger == 0:
@@ -423,7 +425,7 @@ func _on_thirsty_timer_timeout():
 	# Decrease thirsty by 1 every second
 	if thirsty > 0:
 		thirsty -= 1
-		print("Thirsty:", thirsty)
+		#print("Thirsty:", thirsty)
 
 	# Check if the player is starving
 	if thirsty == 0:
