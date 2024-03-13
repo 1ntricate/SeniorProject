@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqin3vtpl6ksr"]
+[gd_scene load_steps=3 format=3 uid="uid://b1hfnkgdo26j4"]
 
-[ext_resource type="Script" path="res://scenes/MapCreator.gd" id="1_caiy4"]
-[ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_rb622"]
+[ext_resource type="Script" path="res://scenes/MapEditor.gd" id="1_y1idm"]
+[ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_wc2x1"]
 
 [node name="main" type="Node"]
 
@@ -16,12 +16,12 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
-script = ExtResource("1_caiy4")
+script = ExtResource("1_y1idm")
 metadata/_edit_use_anchors_ = true
 
 [node name="Bg" type="Sprite2D" parent="MapMenu"]
 position = Vector2(197, -12)
-texture = ExtResource("2_rb622")
+texture = ExtResource("2_wc2x1")
 
 [node name="MainMapContainer" type="VBoxContainer" parent="MapMenu"]
 unique_name_in_owner = true
@@ -98,15 +98,14 @@ theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "Elements Identfied "
 
-[node name="Local_only" type="CheckBox" parent="MapMenu"]
+[node name="OnServer" type="CheckBox" parent="MapMenu"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 153.0
 offset_top = -112.0
 offset_right = 179.0
 offset_bottom = -88.0
-tooltip_text = "If unchecked Map will be uploaded to server."
-button_pressed = true
+tooltip_text = "If Checked, map is backed up on Server. Uncheck to remove Map."
 
 [node name="PrivacyButton" type="OptionButton" parent="MapMenu"]
 layout_mode = 0
@@ -128,7 +127,7 @@ offset_left = 708.0
 offset_top = 181.0
 offset_right = 789.0
 offset_bottom = 220.0
-text = "Local Only"
+text = "On Server"
 
 [node name="Label2" type="Label" parent="."]
 offset_left = 719.0
@@ -139,5 +138,5 @@ text = "Privacy"
 
 [connection signal="pressed" from="MapMenu/SaveButton" to="MapMenu" method="_on_save_button_pressed"]
 [connection signal="pressed" from="MapMenu/ReturnButton" to="MapMenu" method="_on_return_button_pressed"]
-[connection signal="toggled" from="MapMenu/Local_only" to="MapMenu" method="_on_local_only_toggled"]
+[connection signal="toggled" from="MapMenu/OnServer" to="MapMenu" method="_on_local_only_toggled"]
 [connection signal="item_selected" from="MapMenu/PrivacyButton" to="MapMenu" method="_on_privacy_button_item_selected"]

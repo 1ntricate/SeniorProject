@@ -109,6 +109,7 @@ func spawn_resoruces():
 
 
 func _ready():
+	Network.connect("map_uploaded", Callable(self,"_on_map_uploaded"))
 	# spawn enemies
 	var slime = preload("res://scenes/enemy.tscn")
 	var skeleton = preload("res://scenes/skeleton.tscn")
@@ -159,6 +160,7 @@ func _ready():
 		#spawn_resources()
 		call_deferred("save_game")
 		Global.new_map = false
+		#print("MapID: ", Global.uploaded_map_id)
 		
 	# else load existing map
 	else:
@@ -171,7 +173,28 @@ func _ready():
 func _process(delta):
 	#print(player.position)
 	check_player_position2()
-
+	
+func _on_map_uploaded():
+	print("map uploaded")
+	Global.upload_map = false
+	var json_path = "res://player_maps/" +  Global.map_name+ ".json"
+	var in_file = FileAccess.open(json_path, FileAccess.READ)
+	if in_file:
+		var json_text = in_file.get_as_text()
+		in_file.close()
+		var json = JSON.new()
+		var error = json.parse(json_text)
+		if error != OK:
+			print("Failed to parse JSON")
+			return
+		var save_data = json.data
+		save_data["map_id"] = Global.uploaded_map_id
+		var json_data = json.stringify(save_data)
+		var out_file = FileAccess.open(json_path,FileAccess.WRITE)
+		if out_file:
+			out_file.store_line(json_data)
+			print("Added MapID to json")
+	
 func generate_chunk(position,elements):
 	var tile_pos = local_to_map(position)
 	for x in range(width):
@@ -254,11 +277,11 @@ func save_game():
 			"position": object.position
 			}
 			objects_data.append(object_dict)
-		else:
-			pass
-			#print("Not saveable")
 	var save_data = {
-		"objects": objects_data
+		"objects": objects_data,
+		"map_id": 0,
+		"description": Global.map_dsc,
+		"privacy": Global.map_privacy
 	}
 	var json = JSON.new()
 	var json_data = json.stringify(save_data)
@@ -282,7 +305,9 @@ func save_game():
 		if Global.player_id != 99999 && Global.upload_map== true:
 			print("privacy from PMC: ", Global.map_privacy)
 			Network._upload_map(Global.player_id, scene_data,json_data, Global.map_name,Global.map_privacy, Global.map_dsc)
-
+		else:
+			print("Upload conditions not met")
+			
 func load_scene_from_file(file_path):
 	var in_file = FileAccess.open(file_path, FileAccess.READ)
 	if in_file:
