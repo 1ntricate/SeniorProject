@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://c16kipcjhl7hv"]
+[gd_scene load_steps=14 format=3 uid="uid://c16kipcjhl7hv"]
 
 [ext_resource type="Script" path="res://scenes/ProcessedMapControl.gd" id="1_h84gs"]
 [ext_resource type="Texture2D" uid="uid://cbo85w3e862vw" path="res://tiles.png" id="1_m5yql"]
 [ext_resource type="PackedScene" uid="uid://cxe851fhabkwf" path="res://scenes/player.tscn" id="3_mkjrw"]
 [ext_resource type="PackedScene" uid="uid://g7uu0doorq5l" path="res://scenes/pause_menu.tscn" id="4_2jpha"]
+[ext_resource type="Script" path="res://scenes/Camera2D.gd" id="4_c4kiq"]
 [ext_resource type="PackedScene" uid="uid://dtjrn7t220l8q" path="res://scenes/player_hp.tscn" id="5_a8qpi"]
 [ext_resource type="PackedScene" uid="uid://o5u0satefgk0" path="res://scenes/hunger_bar.tscn" id="6_34iew"]
 [ext_resource type="PackedScene" uid="uid://dwav3fobau2b6" path="res://scenes/thirsty_bar.tscn" id="7_sap4r"]
@@ -52,6 +53,7 @@ floor_block_on_wall = false
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(5, 3)
 zoom = Vector2(1.5, 1.5)
+script = ExtResource("4_c4kiq")
 
 [node name="PauseMenu" parent="Player/Camera2D" instance=ExtResource("4_2jpha")]
 unique_name_in_owner = true

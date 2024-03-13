@@ -32,8 +32,9 @@ var is_request_active = false
 signal images_received
 signal map_list_received
 signal map_received
-
-
+signal map_uploaded
+signal map_removed
+signal map_updated
 # Config file
 # Move it into a singleton 
 var SettingsFile = ConfigFile.new()
@@ -121,27 +122,17 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 	if _result != HTTPRequest.RESULT_SUCCESS:
 		printerr("Error w/ connection: " + String(_result))
 		return
-		
 	var response_body = _body.get_string_from_utf8()
-	
 	print("Response Body:\n%s" % response_body)
 	# Grab our JSON and handle any errors reported by our PHP code:
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(response_body)
-	
 	var response = test_json_conv.get_data()
-	
-
-	#if response['error'] != "none":
-	#	printerr("returned error: " + response['error'])
-	#	return
-	
 	# Check if we were requesting a nonce:
 	if response['command'] == 'get_nonce':
 		nonce = response['response']['nonce']
 		print("Got nonce: " + response['response']['nonce'])
-		return
-		
+		return	
 	if response['command'] == 'get_images':
 		print("get images requested")
 		if response.has("response") and response["response"] is Array:
@@ -157,16 +148,30 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 			Global.map_list = map_list
 			# After successfully fetching the map list
 			emit_signal("map_list_received")
-	
+	if response['command'] == 'upload_map':
+		if response.has("response"):
+			# Store the new map_id
+			var reply = response["response"]
+			var map_id = reply["map_id"]
+			Global.uploaded_map_id  = map_id
+			emit_signal("map_uploaded")
+			
 	if response['command'] == 'download_map':
 		if response.has("response") and response["response"] is Array:
 			# Store the URLs in array
 			var map_urls = response["response"]
 			Global.map_urls = map_urls
-			
 			Network.connect("map_received", Callable(self, "_on_map_received"))
 			emit_signal("map_received")
-
+			
+	if response['command'] == 'remove_map':
+		if response.has("response") and 'sucess' in response['response']:
+			emit_signal("map_removed")
+			
+	if response['command'] == 'update_map':
+		if response.has("response") and 'map_id' in response['response']:
+			emit_signal("map_updated")
+			
 	# If not requesting a nonce, we handle all other requests here:
 	# Check if the response contains a 'greeting' field and extract the username:
 	if 'greeting' in response['response'] and 'player_id' in response['response']:
@@ -186,7 +191,7 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 			Network._get_images(Global.player_id)
 			
 			#welcomeLabel.text = "Welcome, " + username
-	
+
 func request_nonce():
 	var client = HTTPClient.new()
 	var data = client.query_string_from_dict({"data" : JSON.stringify({})})
@@ -347,6 +352,16 @@ func _upload_map(PlayerID, scene,position_data, file_name,privacy,description):
 	print("dsc from _upload_map(): ", description)
 	var command = "upload_map"
 	var data = {"PlayerID" : PlayerID, "scene": scene, "pos_data": position_data, "file_name": file_name, "privacy": privacy, "description": description}
+	request_queue.push_back({"command" : command, "data" : data})
+
+func _remove_map(PlayerID, MapID):
+	var command = "remove_map"
+	var data = {"PlayerID" : PlayerID, "map_id": MapID}
+	request_queue.push_back({"command" : command, "data" : data})
+
+func _update_map(PlayerID, MapID,scene,position_data, file_name,privacy,description):
+	var command = "update_map"
+	var data = {"PlayerID" : PlayerID,"Map_id": MapID, "scene": scene, "pos_data": position_data, "file_name": file_name, "privacy": privacy, "description": description}
 	request_queue.push_back({"command" : command, "data" : data})
 	
 func get_map_list():

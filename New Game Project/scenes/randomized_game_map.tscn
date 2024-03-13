@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://d0f0sym8wnupa"]
+[gd_scene load_steps=14 format=3 uid="uid://d0f0sym8wnupa"]
 
 [ext_resource type="TileSet" uid="uid://0bgiine1gyor" path="res://new_tile_set.tres" id="1_kp2lv"]
 [ext_resource type="Script" path="res://scenes/RandomMapControl.gd" id="3_c7x5e"]
+[ext_resource type="Script" path="res://scenes/Camera2D.gd" id="4_c4nwk"]
 [ext_resource type="PackedScene" uid="uid://dtjrn7t220l8q" path="res://scenes/player_hp.tscn" id="5_itgrs"]
 [ext_resource type="PackedScene" uid="uid://dwav3fobau2b6" path="res://scenes/thirsty_bar.tscn" id="6_y4gya"]
 [ext_resource type="PackedScene" uid="uid://o5u0satefgk0" path="res://scenes/hunger_bar.tscn" id="7_fsxlf"]
@@ -32,6 +33,7 @@ floor_block_on_wall = false
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(5, 3)
 zoom = Vector2(1.5, 1.5)
+script = ExtResource("4_c4nwk")
 
 [node name="PauseMenu" parent="Player/Camera2D" instance=ExtResource("9_bp2qh")]
 unique_name_in_owner = true
