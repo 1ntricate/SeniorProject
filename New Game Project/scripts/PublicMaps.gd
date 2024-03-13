@@ -33,6 +33,7 @@ func load_map_list():
 		map_ids.append(map_id)
 
 func _on_popup_menu_id_pressed(id):
+	# Download map selected
 	var selected_index = $ItemList.get_selected_items()[0]
 	var map_id = map_ids[selected_index-1]
 	print("Map ID selected:", map_id)
@@ -43,7 +44,6 @@ func _on_item_list_item_selected(index):
 	for option in popup_options:
 		$PopupMenu.add_item(option)
 		$PopupMenu.popup() # Show the popup at the current mouse position.
-
 
 func _on_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")

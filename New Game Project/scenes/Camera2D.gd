@@ -1,23 +1,28 @@
 extends Camera2D
-
+var filename_without_extension
 var ssCount = 1
 # Called when the node enters the scene tree for the first time.
 
 func _ready():
-	var dir = DirAccess.open("res://player_screenshots/")
-	print("Camera2d Loaded")
-	#dir.make_dir("screenshots")
-	#dir = DirAccess.open("res://player_screenshots")
-	for n in dir.get_files():
-		ssCount+= 1
+	pass
 
 func screenshot():
 	await RenderingServer.frame_post_draw
+	if Global.loaded_map == null:
+		filename_without_extension = Global.map_name
+	else:
+		var parts = Global.loaded_map.split("/")
+		var filename_with_extension = parts[-1]
+		filename_without_extension = filename_with_extension.split(".")[0]
+	var dir = DirAccess.open("res://player_screenshots/")
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	while file_name != "":
+		if !file_name.begins_with(".") and file_name.find(filename_without_extension) != -1:
+			ssCount += 1
+		file_name = dir.get_next()
+	dir.list_dir_end()
 	print("Screenshot")
-	var parts = Global.loaded_map.split("/")
-	var filename_with_extension = parts[-1]
-	var filename_without_extension = filename_with_extension.split(".")[0]
-	
 	print("map name:" ,filename_without_extension)
 	var viewport = get_viewport()
 	var img = viewport.get_texture().get_image()

@@ -160,7 +160,6 @@ func _ready():
 		#spawn_resources()
 		call_deferred("save_game")
 		Global.new_map = false
-		#print("MapID: ", Global.uploaded_map_id)
 		
 	# else load existing map
 	else:
@@ -280,6 +279,8 @@ func save_game():
 	var save_data = {
 		"objects": objects_data,
 		"map_id": 0,
+		"created_by": Global.player_user_name,
+		"thumbnail": null,
 		"description": Global.map_dsc,
 		"privacy": Global.map_privacy
 	}
@@ -304,7 +305,7 @@ func save_game():
 		in_file.close()
 		if Global.player_id != 99999 && Global.upload_map== true:
 			print("privacy from PMC: ", Global.map_privacy)
-			Network._upload_map(Global.player_id, scene_data,json_data, Global.map_name,Global.map_privacy, Global.map_dsc)
+			Network._upload_map(Global.player_id, scene_data,json_data, Global.map_name,Global.map_privacy, Global.map_dsc,null,null)
 		else:
 			print("Upload conditions not met")
 			

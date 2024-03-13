@@ -25,7 +25,6 @@ var map_options = ['Default Map', 'Randomized Map', 'Create new Map']
 @onready var password_input = get_node("%Password")
 var map_name = ""
 var image_name = ""
-var loggedusername
 var download_queue = []
 var is_request_active = false
 
@@ -174,23 +173,17 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 			
 	# If not requesting a nonce, we handle all other requests here:
 	# Check if the response contains a 'greeting' field and extract the username:
-	if 'greeting' in response['response'] and 'player_id' in response['response']:
+	if  'player_id' in response['response']:
 		Global.player_id = response['response']['player_id']
-		print("Player ID: %s" % Global.player_id)
-		var greeting_message = response['response']['greeting']
-		var username_start = greeting_message.find("Hello, ") + 7
-		var username = greeting_message.substr(username_start)
-		print("\nUsername: " + username)
+		Global.player_user_name = response['response']['user_name']
 		Global.isUserLoggedIn = true
 		if Global.isUserLoggedIn == true:
 			LoginContainer.visible = false
 			MainContainer.visible = true
 			#var welcomeLabel = $Welcome
-			$MainContainer/Welcome.text = "Welcome, " + username
+			$MainContainer/Welcome.text = "Welcome, " + Global.player_user_name
 			Network.connect("images_received", Callable(self, "_on_images_received"))
 			Network._get_images(Global.player_id)
-			
-			#welcomeLabel.text = "Welcome, " + username
 
 func request_nonce():
 	var client = HTTPClient.new()
@@ -243,14 +236,19 @@ func _on_images_received():
 	_setup_requests(Global.image_urls)
 
 func _on_map_received():
-	print("\nSignal fired\n")
 	_setup_map_requests(Global.map_urls)
 
 func _setup_requests(urls):
 	for link in urls:
 		var image_info = {"url": link["url"], "filename": link["filename"]}
 		download_queue.push_back(image_info)
-	_process_next_request()			
+	_process_next_request()		
+	
+func _setup_map_requests(urls):
+	for link in urls:
+		var map_info = {"url": link["url"], "filename": link["filename"]}
+		download_queue.push_back(map_info)
+	_process_next_map_request()			
 	
 func _process_next_request():
 	if download_queue.is_empty() or is_request_active:
@@ -265,9 +263,23 @@ func _process_next_request():
 	
 	var http_request = HTTPRequest.new()
 	http_request.request_completed.connect(self._http_request_completed2)
-	#http_request.connect("request_completed", self, "_http_request_completed2", [file_name])
 	add_child(http_request)
 	var error = http_request.request(image_url)	
+	
+func _process_next_map_request():
+	if download_queue.is_empty() or is_request_active:
+		return # Exit if no items are in the queue or a request is active
+	is_request_active = true
+	var next_item = download_queue.pop_front()
+	var map_url = next_item["url"]
+	var file_name = next_item["filename"]
+	map_name = file_name
+	#Global.map_list.append(file_name) 
+	
+	var http_request = HTTPRequest.new()
+	http_request.request_completed.connect(self._http_map_request_completed)
+	add_child(http_request)
+	var error = http_request.request(map_url)	
 
 func _http_request_completed2(result, response_code, headers, body):
 	var file_name = image_name 
@@ -285,32 +297,22 @@ func _http_request_completed2(result, response_code, headers, body):
 			print("Image already downloaded")
 	_process_next_request() # Process the next item in the queue
 			
-func _setup_map_requests(urls):
-	print(urls)
-	for link in urls:
-		var scene_url = link["url1"]
-		var json_url = link["url2"]
-		map_name = link["filename"]
-		var http_request = HTTPRequest.new()
-		add_child(http_request)
-		http_request.request_completed.connect(self._http_map_request_completed)
-		Global.active_requests +=1
-		#request_to_filename[http_request] = filename 
-		var error = http_request.request(scene_url)
-		
 func _http_map_request_completed(result, response_code, headers, body):
+	var file_name = map_name
+	is_request_active = false 
 	var save_path = "res://player_maps/"
 	if result == HTTPRequest.RESULT_SUCCESS:
-		#var filer_namme = 
-		# overwriting all images to .png, if the image was not orginally png GODOT will not import it into the game
-		var full_save_path = save_path + map_name
+		var full_save_path = save_path + map_name		
+		print("Saving: ", full_save_path)
 		var out_file = FileAccess.open(full_save_path, FileAccess.WRITE)
 		#var filer_name = request_to_filename[http_request]
 		if out_file:
 			out_file.store_buffer(body)
 			out_file.close()
 			print("Map Downloaded")
-			
+	else:
+		print("Resuls not sucessful")
+	_process_next_map_request()	
 
 func _generate_random_string(length: int) -> String:
 	var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -347,11 +349,11 @@ func _get_maps(PlayerID):
 	var data = {"PlayerID" : PlayerID}
 	request_queue.push_back({"command" : command, "data" : data})
 
-func _upload_map(PlayerID, scene,position_data, file_name,privacy,description):
+func _upload_map(PlayerID, scene,position_data, file_name,privacy,description, thumbnail,thumb_file_name):
 	print("upload map called")
 	print("dsc from _upload_map(): ", description)
 	var command = "upload_map"
-	var data = {"PlayerID" : PlayerID, "scene": scene, "pos_data": position_data, "file_name": file_name, "privacy": privacy, "description": description}
+	var data = {"PlayerID" : PlayerID, "scene": scene, "pos_data": position_data, "file_name": file_name, "privacy": privacy, "description": description, "thumbnail": thumbnail,"thumb_name": thumb_file_name}
 	request_queue.push_back({"command" : command, "data" : data})
 
 func _remove_map(PlayerID, MapID):
@@ -359,9 +361,11 @@ func _remove_map(PlayerID, MapID):
 	var data = {"PlayerID" : PlayerID, "map_id": MapID}
 	request_queue.push_back({"command" : command, "data" : data})
 
-func _update_map(PlayerID, MapID,scene,position_data, file_name,privacy,description):
+func _update_map(PlayerID, MapID,scene,position_data, file_name,privacy,description, thumbnail,thumb_file_name):
 	var command = "update_map"
-	var data = {"PlayerID" : PlayerID,"Map_id": MapID, "scene": scene, "pos_data": position_data, "file_name": file_name, "privacy": privacy, "description": description}
+	if position_data == null:
+		print("Error json file empty")
+	var data = {"PlayerID" : PlayerID,"Map_id": MapID, "scene": scene, "pos_data": position_data, "file_name": file_name, "privacy": privacy, "description": description, "thumbnail": thumbnail, "thumb_name":thumb_file_name}
 	request_queue.push_back({"command" : command, "data" : data})
 	
 func get_map_list():

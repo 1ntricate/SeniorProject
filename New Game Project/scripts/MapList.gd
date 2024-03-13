@@ -2,10 +2,10 @@ extends Control
 
 var image_folder_path = "res://player_maps/"
 var popup_options = ["Play Map", "Delete Map Locally","Edit Properties"] # Define your options here
-
+var no_img_icon = "res://no_image.png"
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$ItemList.icon_mode = ItemList.ICON_MODE_TOP # Ensure this is set
+	$ItemList.icon_mode = ItemList.ICON_MODE_LEFT 
 	load_items_into_gallery(image_folder_path)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,8 +35,6 @@ func load_items_into_gallery(path):
 						print("Failed to parse JSON from file:", map+".json")
 						return
 					var save_data = json.data
-					var desc = save_data["description"]
-
 					var map_description = save_data["description"]
 					var privacy_setting = save_data["privacy"]
 					var privacy
@@ -44,11 +42,21 @@ func load_items_into_gallery(path):
 						privacy = "private"
 					else :
 						privacy = "public"
-					var display_text = "%s" % [map]
-					$ItemList.add_item(display_text)
+					var display_text = "%s"% [map]
+					var thumbnail = save_data["thumbnail"]
+					if thumbnail != null and FileAccess.file_exists(thumbnail):
+						var texture = load_image_as_thumbnail(thumbnail)
+						if texture:
+							$ItemList.add_item(display_text, texture)
+					else:
+						var texture = load_image_as_thumbnail(no_img_icon)
+						if texture:
+							$ItemList.add_item(display_text,texture)
 					$ItemList.set_item_tooltip($ItemList.get_item_count() - 1, map_description)	
 				else:
 					print("error opening json")
+					
+
 func load_image_as_thumbnail(path):
 	var image = Image.load_from_file(path) 
 	var texture = ImageTexture.create_from_image(image)

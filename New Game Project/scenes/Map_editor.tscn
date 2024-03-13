@@ -32,9 +32,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -120.0
+offset_left = -500.0
 offset_top = -116.5
-offset_right = 120.0
+offset_right = -260.0
 offset_bottom = 116.5
 grow_horizontal = 2
 grow_vertical = 2
@@ -52,67 +52,60 @@ placeholder_text = "Descrption"
 
 [node name="Label" type="Label" parent="MapMenu"]
 layout_mode = 0
-offset_left = -106.0
-offset_top = -214.0
-offset_right = 95.0
-offset_bottom = -156.0
+offset_left = -120.0
+offset_top = -286.0
+offset_right = 194.0
+offset_bottom = -228.0
 theme_override_colors/font_color = Color(0.811765, 0.509804, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 33
-text = "Create Map"
+text = "Edit Map Properties"
 
 [node name="SaveButton" type="Button" parent="MapMenu"]
 layout_mode = 0
-offset_left = 25.0
-offset_top = 70.0
-offset_right = 127.0
-offset_bottom = 102.0
+offset_left = 30.0
+offset_top = 221.0
+offset_right = 132.0
+offset_bottom = 253.0
 text = "Save"
 
 [node name="ReturnButton" type="Button" parent="MapMenu"]
 layout_mode = 0
-offset_left = -186.0
-offset_top = 68.0
-offset_right = -88.0
-offset_bottom = 99.0
+offset_left = -250.0
+offset_top = 221.0
+offset_right = -152.0
+offset_bottom = 252.0
 text = "Return"
 
-[node name="TextEdit" type="TextEdit" parent="MapMenu"]
+[node name="CreatedBy" type="Label" parent="MapMenu"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 329.0
-offset_top = -124.0
-offset_right = 481.0
-offset_bottom = 56.0
-placeholder_text = "Elements"
-wrap_mode = 1
-
-[node name="Label2" type="Label" parent="MapMenu"]
-layout_mode = 0
-offset_left = 329.0
+offset_left = -120.0
 offset_top = -156.0
-offset_right = 479.0
+offset_right = 30.0
 offset_bottom = -123.0
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-text = "Elements Identfied "
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 
 [node name="OnServer" type="CheckBox" parent="MapMenu"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 153.0
-offset_top = -112.0
-offset_right = 179.0
-offset_bottom = -88.0
+offset_left = -197.0
+offset_top = -85.0
+offset_right = -171.0
+offset_bottom = -61.0
 tooltip_text = "If Checked, map is backed up on Server. Uncheck to remove Map."
+theme_override_colors/font_disabled_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
 
 [node name="PrivacyButton" type="OptionButton" parent="MapMenu"]
 layout_mode = 0
-offset_left = 143.0
-offset_top = -18.0
-offset_right = 243.0
-offset_bottom = 13.0
+offset_left = -231.0
+offset_top = -6.0
+offset_right = -131.0
+offset_bottom = 25.0
 tooltip_text = "Set whether others can download your map."
 item_count = 2
 selected = 0
@@ -122,21 +115,53 @@ popup/item_0/id = 0
 popup/item_1/text = "Public"
 popup/item_1/id = 1
 
-[node name="Label" type="Label" parent="."]
-offset_left = 708.0
-offset_top = 181.0
-offset_right = 789.0
-offset_bottom = 220.0
+[node name="ItemList" type="ItemList" parent="MapMenu"]
+unique_name_in_owner = true
+offset_left = 46.0
+offset_top = -170.0
+offset_right = 439.0
+offset_bottom = 166.0
+allow_reselect = true
+item_count = 1
+item_0/text = ""
+
+[node name="PopupMenu" type="PopupMenu" parent="MapMenu"]
+unique_name_in_owner = true
+initial_position = 4
+visible = true
+
+[node name="ScreenshotsLabel" type="Label" parent="MapMenu"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = -206.0
+offset_right = 202.0
+offset_bottom = -171.0
+text = "Map Screenshots"
+
+[node name="OnServerLabel" type="Label" parent="."]
+offset_left = 356.0
+offset_top = 208.0
+offset_right = 437.0
+offset_bottom = 247.0
 text = "On Server"
 
-[node name="Label2" type="Label" parent="."]
-offset_left = 719.0
-offset_top = 273.0
-offset_right = 800.0
-offset_bottom = 312.0
+[node name="PrivacyLabel" type="Label" parent="."]
+offset_left = 356.0
+offset_top = 279.0
+offset_right = 437.0
+offset_bottom = 318.0
 text = "Privacy"
+
+[node name="PlayerName" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 92.0
+offset_top = 168.0
+offset_right = 256.0
+offset_bottom = 201.0
 
 [connection signal="pressed" from="MapMenu/SaveButton" to="MapMenu" method="_on_save_button_pressed"]
 [connection signal="pressed" from="MapMenu/ReturnButton" to="MapMenu" method="_on_return_button_pressed"]
 [connection signal="toggled" from="MapMenu/OnServer" to="MapMenu" method="_on_local_only_toggled"]
 [connection signal="item_selected" from="MapMenu/PrivacyButton" to="MapMenu" method="_on_privacy_button_item_selected"]
+[connection signal="item_selected" from="MapMenu/ItemList" to="MapMenu" method="_on_item_list_item_selected"]
+[connection signal="id_pressed" from="MapMenu/PopupMenu" to="MapMenu" method="_on_popup_menu_id_pressed"]

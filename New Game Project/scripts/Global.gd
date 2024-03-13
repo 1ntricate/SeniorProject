@@ -36,7 +36,7 @@ var skeleton_on_snow = false
 # player credentials
 var player_id = 99999
 var isUserLoggedIn = false
-
+var player_user_name = null
 # map misc
 var map_name = ""
 var selected_map = ""
