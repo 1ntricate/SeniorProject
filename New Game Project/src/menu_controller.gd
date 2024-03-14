@@ -34,6 +34,8 @@ signal map_received
 signal map_uploaded
 signal map_removed
 signal map_updated
+signal pulbic_map_list_ready
+
 # Config file
 # Move it into a singleton 
 var SettingsFile = ConfigFile.new()
@@ -145,6 +147,7 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 			# Store the URLs in array
 			var map_list = response["response"]
 			Global.map_list = map_list
+			Network.connect("map_list_received", Callable(self, "_on_map_list_received"))
 			# After successfully fetching the map list
 			emit_signal("map_list_received")
 	if response['command'] == 'upload_map':
@@ -235,6 +238,9 @@ func _send_request(request: Dictionary):
 func _on_images_received():
 	_setup_requests(Global.image_urls)
 
+func _on_map_list_received():
+	_setup_p_maps_requests(Global.map_list)
+
 func _on_map_received():
 	_setup_map_requests(Global.map_urls)
 
@@ -243,6 +249,12 @@ func _setup_requests(urls):
 		var image_info = {"url": link["url"], "filename": link["filename"]}
 		download_queue.push_back(image_info)
 	_process_next_request()		
+
+func _setup_p_maps_requests(urls):
+	for link in urls:
+		var image_info = {"url": link["url"], "MapName": link["MapName"]}
+		download_queue.push_back(image_info)
+	_process_next_p_map_request()		
 	
 func _setup_map_requests(urls):
 	for link in urls:
@@ -265,21 +277,43 @@ func _process_next_request():
 	http_request.request_completed.connect(self._http_request_completed2)
 	add_child(http_request)
 	var error = http_request.request(image_url)	
-	
-func _process_next_map_request():
+
+func _process_next_p_map_request():
 	if download_queue.is_empty() or is_request_active:
+		print("\n\n")
+		print(Global.thumb_list)
+		emit_signal("pulbic_map_list_ready")
 		return # Exit if no items are in the queue or a request is active
+	
 	is_request_active = true
 	var next_item = download_queue.pop_front()
-	var map_url = next_item["url"]
-	var file_name = next_item["filename"]
-	map_name = file_name
-	#Global.map_list.append(file_name) 
+	var image_url = next_item["url"]
+	var map_name = next_item["MapName"]
+	image_name = map_name
+	Global.image_list.append(map_name) 
 	
 	var http_request = HTTPRequest.new()
-	http_request.request_completed.connect(self._http_map_request_completed)
+	http_request.request_completed.connect(self._http_p_map_request_completed)
 	add_child(http_request)
-	var error = http_request.request(map_url)	
+	var error = http_request.request(image_url)	
+
+
+func _http_p_map_request_completed(result, response_code, headers, body):
+	var file_name = image_name 
+	is_request_active = false # Mark the current request as completed
+	var save_path = "res://player_images/"
+	var full_save_path = save_path + file_name
+	if result == HTTPRequest.RESULT_SUCCESS:
+		var image = Image.new()
+		var error = image.load_png_from_buffer(body)
+		if error == OK:
+			var texture = ImageTexture.create_from_image(image)
+			var image_info = {"filename": file_name, "texture": texture}
+			# Append the dictionary to the thumb_list array
+			Global.thumb_list.append(image_info)
+		else:
+			print("Error")
+	_process_next_p_map_request()# Process the next item in the queue
 
 func _http_request_completed2(result, response_code, headers, body):
 	var file_name = image_name 
@@ -296,15 +330,39 @@ func _http_request_completed2(result, response_code, headers, body):
 		else:
 			print("Image already downloaded")
 	_process_next_request() # Process the next item in the queue
+
+
+func _process_next_map_request():
+	if download_queue.is_empty() or is_request_active:
+		return # Exit if no items are in the queue or a request is active
+	is_request_active = true
+	var next_item = download_queue.pop_front()
+	var map_url = next_item["url"]
+	var file_name = next_item["filename"]
+	map_name = file_name
+	#Global.map_list.append(file_name) 
+	
+	var http_request = HTTPRequest.new()
+	http_request.request_completed.connect(self._http_map_request_completed)
+	add_child(http_request)
+	var error = http_request.request(map_url)	
+
 			
 func _http_map_request_completed(result, response_code, headers, body):
 	var file_name = map_name
+	var out_file
 	is_request_active = false 
-	var save_path = "res://player_maps/"
+	var save_path1 = "res://player_maps/"
+	var save_path2 = "res://player_screenshots/"
 	if result == HTTPRequest.RESULT_SUCCESS:
-		var full_save_path = save_path + map_name		
-		print("Saving: ", full_save_path)
-		var out_file = FileAccess.open(full_save_path, FileAccess.WRITE)
+		var full_save_path1 = save_path1 + file_name	
+		var full_save_path2 = save_path2 + file_name
+		print("checking map name: ", file_name)
+		if file_name.ends_with(".png"):
+			print("PNG detected")
+			out_file = FileAccess.open(full_save_path2, FileAccess.WRITE)
+		else:
+			out_file = FileAccess.open(full_save_path1, FileAccess.WRITE)
 		#var filer_name = request_to_filename[http_request]
 		if out_file:
 			out_file.store_buffer(body)
@@ -360,6 +418,18 @@ func _remove_map(PlayerID, MapID):
 	var command = "remove_map"
 	var data = {"PlayerID" : PlayerID, "map_id": MapID}
 	request_queue.push_back({"command" : command, "data" : data})
+
+func _upvote_map(MapID):
+	var command = "upvote_map"
+	var data = {"map_id": MapID}
+	request_queue.push_back({"command" : command, "data" : data})
+
+func _downvote_map(MapID):
+	var command = "downvote_map"
+	var data = {"map_id": MapID}
+	request_queue.push_back({"command" : command, "data" : data})
+
+
 
 func _update_map(PlayerID, MapID,scene,position_data, file_name,privacy,description, thumbnail,thumb_file_name):
 	var command = "update_map"

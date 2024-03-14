@@ -46,6 +46,7 @@ var map_privacy = 0
 var map_dsc = ""
 var new_map = false
 var map_list = []
+var thumb_list = []
 var map_urls = []
 var upload_map = false
 var uploaded_map_id = null

@@ -47,10 +47,14 @@ func load_items_into_gallery(path):
 					if thumbnail != null and FileAccess.file_exists(thumbnail):
 						var texture = load_image_as_thumbnail(thumbnail)
 						if texture:
+							var myVector2i = Vector2i(100, 100)
+							texture.set_size_override(myVector2i)
 							$ItemList.add_item(display_text, texture)
 					else:
 						var texture = load_image_as_thumbnail(no_img_icon)
 						if texture:
+							var myVector2i = Vector2i(100, 100)
+							texture.set_size_override(myVector2i)
 							$ItemList.add_item(display_text,texture)
 					$ItemList.set_item_tooltip($ItemList.get_item_count() - 1, map_description)	
 				else:
