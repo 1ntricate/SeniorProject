@@ -113,17 +113,17 @@ func read_input():
 		#Global.is_changing_key_input = false
 		
 	# press I for inventory
-	if  Input.is_action_just_pressed("inventory") and inventory_on == false:
+	if  (Input.is_action_just_pressed("inventory") or Global.player_on_screen_button_right == "inven") and inventory_on == false:
 		inventory.visible = true
 		inventory_on = true
-	elif Input.is_action_just_pressed("inventory") and inventory_on == true:
+	elif(Input.is_action_just_pressed("inventory") or Global.player_on_screen_button_right == "inven") and inventory_on == true:
 		inventory.visible = false
 		inventory_on = false
 		
 	# check what weapons are equipped	
 		 # equipped on slot 1 
 	if Global.melee_equipped == "axe":
-		if Input.is_action_pressed("axe_attack") and $axe_timer.is_stopped():
+		if (Input.is_action_pressed("axe_attack") or Global.player_on_screen_button_right == "atk") and $axe_timer.is_stopped():
 			Global.player_axe_atk = true
 			Global.player_current_atk = true
 			#Global.player_atk = true
@@ -140,7 +140,7 @@ func read_input():
 			axe.visible = false
 			
 	elif Global.melee_equipped == "sword":
-		if Input.is_action_pressed("axe_attack") and $axe_timer.is_stopped():
+		if (Input.is_action_pressed("axe_attack") or Global.player_on_screen_button_right == "atk") and $axe_timer.is_stopped():
 			Global.player_axe_atk = true
 			Global.player_current_atk = true
 			#Global.player_atk = true
@@ -219,26 +219,26 @@ func attack_slowdown():
 		
 # WASD movements 	
 func check_moving_input():
-	if Input.is_action_pressed("up"):
+	if Input.is_action_pressed("up") or Global.player_on_screen_button_left == "w":
 		last_dir = "up"
 		new_direction = "up"
 		velocity.y -= 1
 		direction = Vector2(0, -1)
 		movement = 1
-	elif Input.is_action_pressed("down"):
+	elif Input.is_action_pressed("down") or Global.player_on_screen_button_left == "s":
 		new_direction = "down"
 		last_dir = new_direction
 		velocity.y += 1
 		direction = Vector2(0, 1)
 		movement = 1
 
-	if Input.is_action_pressed("left"):
+	if Input.is_action_pressed("left") or Global.player_on_screen_button_left == "a":
 		new_direction = "left"
 		last_dir = new_direction
 		velocity.x -= 1
 		direction = Vector2(-1, 0)
 		movement = 1
-	elif Input.is_action_pressed("right"):
+	elif Input.is_action_pressed("right") or Global.player_on_screen_button_left == "d":
 		new_direction = "right"
 		last_dir = new_direction
 		velocity.x += 1

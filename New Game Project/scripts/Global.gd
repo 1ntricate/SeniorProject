@@ -20,6 +20,8 @@ var shoot_laser = false
 var auto_movement_enabled = true
 var player_on_water = false
 var player_on_sand = false
+var player_on_screen_button_left  = ""
+var player_on_screen_button_right = ""
 
 # enemy count/control
 var skeleton_count = 0

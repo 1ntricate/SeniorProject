@@ -1,0 +1,79 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2mbd1at4t0ds"]
+
+[ext_resource type="Script" path="res://scenes/OnScreenButton/OnScreenButton.gd" id="1_bco4w"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="W" type="Button" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_left = 40.0
+offset_right = 60.0
+offset_bottom = 20.0
+text = "W"
+script = ExtResource("1_bco4w")
+
+[node name="S" type="Button" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_left = 40.0
+offset_top = 64.0
+offset_right = 60.0
+offset_bottom = 96.0
+text = "S"
+script = ExtResource("1_bco4w")
+
+[node name="A" type="Button" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 32.0
+offset_right = 37.0
+offset_bottom = 64.0
+text = "A"
+script = ExtResource("1_bco4w")
+
+[node name="D" type="Button" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_left = 75.0
+offset_top = 32.0
+offset_right = 107.0
+offset_bottom = 64.0
+text = "D"
+script = ExtResource("1_bco4w")
+
+[node name="ATK" type="Button" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_left = 400.0
+offset_top = 32.0
+offset_right = 432.0
+offset_bottom = 64.0
+text = "ATK"
+script = ExtResource("1_bco4w")
+
+[node name="I" type="Button" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_left = 450.0
+offset_top = 32.0
+offset_right = 488.0
+offset_bottom = 64.0
+text = "Inventory"
+script = ExtResource("1_bco4w")
+
+[connection signal="pressed" from="W" to="W" method="_on_W_pressed"]
+[connection signal="pressed" from="S" to="W" method="_on_button_S_pressed"]
+[connection signal="pressed" from="A" to="W" method="_on_button_A_pressed"]
+[connection signal="pressed" from="D" to="W" method="_on_button_D_pressed"]
+[connection signal="pressed" from="ATK" to="W" method="_on_button_atk_pressed"]
+[connection signal="pressed" from="I" to="W" method="_on_button_I_pressed"]
