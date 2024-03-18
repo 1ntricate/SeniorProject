@@ -6,5 +6,6 @@ func _can_drop_data(_pos, data):
 		Global.melee_equipped = data.w_name
 	elif slot_type == 2:
 		Global.ranged_equipped = data.w_name
+	Global.weapon_dmg = data.ATK
 	return data is TextureRect and data.slot_type == slot_type
 	

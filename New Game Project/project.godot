@@ -93,6 +93,15 @@ screenshot={
 ]
 }
 
+[layer_names]
+
+2d_render/layer_1="map"
+2d_render/layer_2="player"
+2d_render/layer_3="slime"
+2d_render/layer_4="skeleton"
+2d_render/layer_5="spider"
+2d_render/layer_6="goblin"
+
 [mono]
 
 project/assembly_name="New Game Project"
@@ -103,4 +112,5 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+environment/defaults/default_clear_color=Color(0.152941, 0.313726, 0.443137, 1)
 environment/defaults/default_environment="res://default_env.tres"

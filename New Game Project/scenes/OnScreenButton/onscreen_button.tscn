@@ -71,9 +71,15 @@ offset_bottom = 64.0
 text = "Inventory"
 script = ExtResource("1_bco4w")
 
+[connection signal="mouse_exited" from="W" to="W" method="_on_w_mouse_exited"]
 [connection signal="pressed" from="W" to="W" method="_on_W_pressed"]
+[connection signal="mouse_exited" from="S" to="W" method="_on_s_mouse_exited"]
 [connection signal="pressed" from="S" to="W" method="_on_button_S_pressed"]
+[connection signal="mouse_exited" from="A" to="W" method="_on_a_mouse_exited"]
 [connection signal="pressed" from="A" to="W" method="_on_button_A_pressed"]
+[connection signal="mouse_exited" from="D" to="W" method="_on_d_mouse_exited"]
 [connection signal="pressed" from="D" to="W" method="_on_button_D_pressed"]
+[connection signal="mouse_exited" from="ATK" to="W" method="_on_atk_mouse_exited"]
 [connection signal="pressed" from="ATK" to="W" method="_on_button_atk_pressed"]
+[connection signal="mouse_exited" from="I" to="W" method="_on_I_mouse_exited"]
 [connection signal="pressed" from="I" to="W" method="_on_button_I_pressed"]

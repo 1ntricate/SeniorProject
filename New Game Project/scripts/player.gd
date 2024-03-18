@@ -28,13 +28,14 @@ var new_direction = "none"
 var slow_attack = false
 var drown = true
 
-@onready var button = $InputKey
-@onready var animation = $AnimatedSprite2D
+@onready var mobile_button	  = $onscreen_button
+@onready var button 		  = $InputKey
+@onready var animation 		  = $AnimatedSprite2D
 @onready var weapon_animation = $AnimationPlayer
-@onready var inventory = $Inventory
-@onready var weapon = $weapon
-@onready var axe    = $weapon/axe
-@onready var sword  = $weapon/sword
+@onready var inventory 		  = $Inventory
+@onready var weapon 		  = $weapon
+@onready var axe    		  = $weapon/axe
+@onready var sword  		  = $weapon/sword
 
 @onready var bullet = preload("res://scenes/bullet.tscn")
 
@@ -53,6 +54,10 @@ func _ready():
 	animation.set_flip_h(false)
 	$hunger_timer.start()
 	$thirsty_timer.start()
+	if Global.mobile_joined:
+		mobile_button.visible = true
+	else:
+		mobile_button.visible = false
 	
 func _physics_process(delta):
 	timer_label.text = "%02d:%02d" % survival_timer()
@@ -119,6 +124,7 @@ func read_input():
 	elif(Input.is_action_just_pressed("inventory") or Global.player_on_screen_button_right == "inven") and inventory_on == true:
 		inventory.visible = false
 		inventory_on = false
+	
 		
 	# check what weapons are equipped	
 		 # equipped on slot 1 
@@ -131,7 +137,7 @@ func read_input():
 			axe.visible = true
 			weapon_animation.play("axe" +last_dir)
 			$axe_timer.start()	
-		elif Input.is_action_just_released("axe_attack"):
+		elif Input.is_action_just_released("axe_attack") or Global.player_on_screen_button_right == "":
 			is_attacking = false
 			Global.player_axe_atk = false
 			Global.player_current_atk = false
@@ -148,7 +154,7 @@ func read_input():
 			sword.visible = true
 			weapon_animation.play("axe" +last_dir)
 			$axe_timer.start()	
-		elif Input.is_action_just_released("axe_attack"):
+		elif Input.is_action_just_released("axe_attack") or Global.player_on_screen_button_right == "":
 			is_attacking = false
 			Global.player_axe_atk = false
 			Global.player_current_atk = false

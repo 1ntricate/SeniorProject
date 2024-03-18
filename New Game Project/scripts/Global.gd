@@ -1,5 +1,6 @@
 extends Node
 
+var mobile_joined = false
 var instance = null
 var melee_equipped = ""
 var ranged_equipped = ""
@@ -11,6 +12,7 @@ var player_in_range = false
 var player_axe_atk = false
 
 var player_base_dmg = 10
+var weapon_dmg = ""
 
 var tree_fallen = false
 var is_changing_key_input = false

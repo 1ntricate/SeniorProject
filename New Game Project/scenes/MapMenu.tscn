@@ -39,6 +39,10 @@ offset_bottom = 116.5
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="mobile_button" type="Button" parent="MapMenu/MainMapContainer"]
+layout_mode = 2
+text = "Mobile"
+
 [node name="default_map_button" type="Button" parent="MapMenu/MainMapContainer"]
 layout_mode = 2
 text = "Default Map"
@@ -72,6 +76,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 33
 text = "Map Menu"
 
+[connection signal="pressed" from="MapMenu/MainMapContainer/mobile_button" to="MapMenu" method="_on_mobile_button_pressed"]
 [connection signal="pressed" from="MapMenu/MainMapContainer/default_map_button" to="MapMenu" method="_on_default_map_button_pressed"]
 [connection signal="pressed" from="MapMenu/MainMapContainer/random_map" to="MapMenu" method="_on_random_map_pressed"]
 [connection signal="pressed" from="MapMenu/MainMapContainer/new_map_button" to="MapMenu" method="_on_new_map_button_pressed"]

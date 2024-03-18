@@ -76,10 +76,8 @@ func deal_dmg():
 	if player_inrange and Global.player_current_atk == true:
 		if dmg_taken_cooldown == true:
 			if Global.player_axe_atk:
-				if Global.melee_equipped == "axe":
-					health -= Global.player_base_dmg * 10
-				elif Global.melee_equipped == "sword":
-					health -= Global.player_base_dmg * 3
+				if Global.melee_equipped != null:
+					health -= Global.player_base_dmg * Global.weapon_dmg
 			else: 
 				health -= 25
 			$take_dmg_cooldown.start()

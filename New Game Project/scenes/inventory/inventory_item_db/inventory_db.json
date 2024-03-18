@@ -2,7 +2,7 @@
 	"0": {
 		"texture"   : "FlowerAxe.png",
 		"slot_type" : 1,
-		"ATK"		: 3 ,
+		"ATK"		: 8,
 		"w_name"	: "axe"
 	},
 	"1": {

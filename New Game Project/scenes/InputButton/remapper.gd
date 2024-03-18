@@ -29,7 +29,6 @@ func _unhandled_input(event):
 				button_pressed = false
 				release_focus()
 				update_text()
-
 		
 func update_text():
 	text = InputMap.action_get_events(action)[0].as_text()
