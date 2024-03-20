@@ -6,7 +6,7 @@ extends Control
 # Check out Colorblind addon for godot : https://github.com/paulloz/godot-colorblindness
 #--
 var http_request : HTTPRequest = HTTPRequest.new()
-#const SERVER_URL = "http://174.134.25.64:5444/godot.php"
+const SERVER_URL = "http://174.134.25.64:5444/godot.php"
 #const SERVER_URL = "http://192.168.1.229/godot.php"
 const SERVER_HEADERS = ["Content-Type: application/x-www-form-urlencoded", "Cache-Control: max-age=0"]
 const SECRET_KEY = "1234567890"
@@ -419,17 +419,10 @@ func _remove_map(PlayerID, MapID):
 	var data = {"PlayerID" : PlayerID, "map_id": MapID}
 	request_queue.push_back({"command" : command, "data" : data})
 
-func _upvote_map(MapID):
-	var command = "upvote_map"
-	var data = {"map_id": MapID}
+func _vote_map(MapID,PlayerID, vote):
+	var command = "vote_map"
+	var data = {"map_id": MapID,"player_id": PlayerID, "vote": vote}
 	request_queue.push_back({"command" : command, "data" : data})
-
-func _downvote_map(MapID):
-	var command = "downvote_map"
-	var data = {"map_id": MapID}
-	request_queue.push_back({"command" : command, "data" : data})
-
-
 
 func _update_map(PlayerID, MapID,scene,position_data, file_name,privacy,description, thumbnail,thumb_file_name):
 	var command = "update_map"
@@ -438,9 +431,9 @@ func _update_map(PlayerID, MapID,scene,position_data, file_name,privacy,descript
 	var data = {"PlayerID" : PlayerID,"Map_id": MapID, "scene": scene, "pos_data": position_data, "file_name": file_name, "privacy": privacy, "description": description, "thumbnail": thumbnail, "thumb_name":thumb_file_name}
 	request_queue.push_back({"command" : command, "data" : data})
 	
-func get_map_list():
+func get_map_list(flag):
 	var command = "get_map_list"
-	var data = {"Dummy" : 1029}
+	var data = {"flag" : flag}
 	request_queue.push_back({"command" : command, "data" : data})
 
 func download_map(map_id,flag):

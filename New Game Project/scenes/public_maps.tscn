@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://irio0fngojm1"]
+[gd_scene load_steps=6 format=3 uid="uid://irio0fngojm1"]
 
 [ext_resource type="Script" path="res://scripts/PublicMaps.gd" id="1_q4dwq"]
 [ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_mthpi"]
+[ext_resource type="Texture2D" uid="uid://dvcgbf5nwdppq" path="res://star.png" id="3_434w2"]
+[ext_resource type="Texture2D" uid="uid://b8qr12uyjmyei" path="res://half_star.png" id="4_w8tc8"]
+[ext_resource type="Script" path="res://scenes/star_rating.gd" id="5_yprxr"]
 
 [node name="Public_maps" type="Control"]
 layout_mode = 3
@@ -50,6 +53,123 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Maps"
 
+[node name="OptionButton" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 855.0
+offset_top = 137.0
+offset_right = 987.0
+offset_bottom = 168.0
+item_count = 5
+selected = 0
+popup/item_0/text = "Downloads"
+popup/item_0/id = 0
+popup/item_1/text = "Difficulty"
+popup/item_1/id = 1
+popup/item_2/text = "New"
+popup/item_2/id = 2
+popup/item_3/text = "Upvotes"
+popup/item_3/id = 3
+popup/item_4/text = "Downvotes"
+popup/item_4/id = 4
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 893.0
+offset_top = 100.0
+offset_right = 948.0
+offset_bottom = 123.0
+text = "Sort by"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 136.0
+offset_top = 268.0
+offset_right = 176.0
+offset_bottom = 308.0
+
+[node name="Star" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("3_434w2")
+
+[node name="HalfStar" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("4_w8tc8")
+
+[node name="Control" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+anchors_preset = 0
+offset_left = 40.0
+offset_top = 177.0
+offset_right = 196.0
+offset_bottom = 276.0
+tooltip_text = "Click on a star for a half rating."
+script = ExtResource("5_yprxr")
+
+[node name="Star1" type="TextureButton" parent="Control"]
+layout_mode = 0
+offset_top = 23.0
+offset_right = 50.0
+offset_bottom = 73.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Star2" type="TextureButton" parent="Control"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 23.0
+offset_right = 75.0
+offset_bottom = 73.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Star3" type="TextureButton" parent="Control"]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 23.0
+offset_right = 100.0
+offset_bottom = 73.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Star4" type="TextureButton" parent="Control"]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 23.0
+offset_right = 125.0
+offset_bottom = 73.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Star5" type="TextureButton" parent="Control"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 23.0
+offset_right = 155.0
+offset_bottom = 73.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 9.0
+offset_top = -29.0
+offset_right = 118.0
+offset_bottom = -6.0
+text = "Rate Difficulty"
+
 [connection signal="item_selected" from="ItemList" to="." method="_on_item_list_item_selected"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_popup_menu_id_pressed"]
 [connection signal="pressed" from="return_button" to="." method="_on_button_pressed"]
+[connection signal="item_selected" from="OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="HBoxContainer/Star" to="." method="_on_star_pressed"]
+[connection signal="pressed" from="HBoxContainer/HalfStar" to="." method="_on_half_star_pressed"]
+[connection signal="focus_exited" from="Control" to="." method="_on_control_focus_exited"]
+[connection signal="mouse_entered" from="Control/Star1" to="." method="_on_star_1_mouse_entered"]
+[connection signal="pressed" from="Control/Star1" to="." method="_on_star_1_pressed"]
+[connection signal="mouse_entered" from="Control/Star2" to="." method="_on_star_2_mouse_entered"]
+[connection signal="pressed" from="Control/Star2" to="." method="_on_star_2_pressed"]
+[connection signal="mouse_entered" from="Control/Star3" to="." method="_on_star_3_mouse_entered"]
+[connection signal="pressed" from="Control/Star3" to="." method="_on_star_3_pressed"]
+[connection signal="mouse_entered" from="Control/Star4" to="." method="_on_star_4_mouse_entered"]
+[connection signal="pressed" from="Control/Star4" to="." method="_on_star_4_pressed"]
+[connection signal="mouse_entered" from="Control/Star5" to="." method="_on_star_5_mouse_entered"]
+[connection signal="pressed" from="Control/Star5" to="." method="_on_star_5_pressed"]
+[connection signal="mouse_entered" from="Control/Label" to="." method="_on_label_mouse_entered"]

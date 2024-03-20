@@ -1,6 +1,2 @@
-sky: 21
-stone: 7
-grass: 6
-tree: 13
-water: 6
-mountain: 7
+grass: 55
+tree: 5
