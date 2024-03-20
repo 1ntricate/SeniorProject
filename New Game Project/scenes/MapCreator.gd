@@ -16,6 +16,7 @@ func _process(delta):
 
 func _on_save_button_pressed():
 	Global.map_name = map_name.get_text()
+	print("map_name in map creator is: ", Global.map_name)
 	Global.map_dsc = map_dsc.get_text()
 	Global.new_map = true
 	get_tree().change_scene_to_file("res://scenes/processed_game_map.tscn")

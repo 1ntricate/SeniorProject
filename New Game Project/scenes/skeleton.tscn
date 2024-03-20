@@ -77,7 +77,7 @@ radius = 119.34
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iyyl1"]
 size = Vector2(33.5, 39)
 
-[node name="skeleton" type="CharacterBody2D"]
+[node name="skeleton" type="CharacterBody2D" groups=["enemy"]]
 script = ExtResource("1_v2qdc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -90,6 +90,7 @@ animation = &"dead"
 frame_progress = 0.21065
 
 [node name="detection_area" type="Area2D" parent="."]
+visible = false
 collision_layer = 2
 collision_mask = 2
 
@@ -97,6 +98,7 @@ collision_mask = 2
 shape = SubResource("CircleShape2D_ltvja")
 
 [node name="hitbox_area" type="Area2D" parent="."]
+visible = false
 
 [node name="hitbox_shape" type="CollisionShape2D" parent="hitbox_area"]
 shape = SubResource("RectangleShape2D_iyyl1")

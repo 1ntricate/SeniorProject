@@ -56,7 +56,6 @@ radius = 9.0
 radius = 16.0
 
 [node name="enemy" type="CharacterBody2D" groups=["enemy"]]
-collision_mask = 3
 script = ExtResource("1_c0gl1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

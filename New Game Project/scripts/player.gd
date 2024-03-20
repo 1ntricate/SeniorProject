@@ -195,18 +195,19 @@ func read_input():
 			slow_attack = true
 			print("slow attack")
 		set_velocity(velocity * 100)
-		thirsty += .05
+		thirsty += .10
 		velocity = velocity
 	elif Global.player_on_sand:
 		$drown_timer.stop()
 		drown = false
 		slow_attack = false
-		thirsty -= .05
+		thirsty -= .005
 		set_velocity(velocity * 150)
 		velocity = velocity
 	else:
 		drown = false
 		$drown_timer.stop()
+		$AnimatedSprite2D.modulate = Color.WHITE
 		slow_attack = false
 		set_velocity(velocity * 200)
 		velocity = velocity
@@ -462,4 +463,5 @@ func drown_player():
 func _on_drown_timer_timeout():
 	print("drown timer ended")
 	drown = true
-	
+	$AnimatedSprite2D.modulate = Color.AQUA
+			

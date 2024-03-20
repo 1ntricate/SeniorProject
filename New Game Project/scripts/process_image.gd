@@ -29,7 +29,7 @@ func _on_process_button_pressed():
 	var arguments = [knn_path, weightValueStr, image_path]
 	# Run the Python script and redirect output to files
 	var result = OS.execute(script_path,arguments, output,true)
-	
+	var elements_counts = {}
 	# Check if the script execution was successful
 	if result == OK:
 		# Read what elements were identfied in the knn scipt
@@ -38,7 +38,16 @@ func _on_process_button_pressed():
 		if file != null:
 			var file_contents = file.get_as_text()
 			Global.elements_identfied = file_contents
+			while not file.eof_reached():
+				var line = file.get_line().strip_edges()
+				if line != "":
+					var parts = line.split(":")
+					if parts.size() == 2:
+						var element = parts[0].strip_edges()
+						var count = int(parts[1].strip_edges())
+						elements_counts[element] = count
 			file.close()
+			Global.elements_count = elements_counts
 			print("Elements Identfied:")
 			print(file_contents)
 			get_tree().change_scene_to_file("res://scenes/Map_Creator.tscn")

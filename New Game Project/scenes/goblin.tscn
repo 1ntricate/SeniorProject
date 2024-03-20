@@ -36,7 +36,7 @@ radius = 38.0132
 [sub_resource type="CircleShape2D" id="CircleShape2D_s66n5"]
 radius = 20.0998
 
-[node name="goblin" type="CharacterBody2D"]
+[node name="goblin" type="CharacterBody2D" groups=["enemy"]]
 script = ExtResource("1_ghqo8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

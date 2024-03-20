@@ -116,7 +116,7 @@ radius = 59.4138
 [sub_resource type="CircleShape2D" id="CircleShape2D_8p14t"]
 radius = 17.0
 
-[node name="spider" type="CharacterBody2D"]
+[node name="spider" type="CharacterBody2D" groups=["enemy"]]
 script = ExtResource("1_roatu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -129,6 +129,7 @@ animation = &"move_right"
 frame_progress = 0.904751
 
 [node name="detection_area" type="Area2D" parent="."]
+visible = false
 collision_layer = 2
 collision_mask = 2
 
@@ -137,6 +138,7 @@ visible = false
 shape = SubResource("CircleShape2D_lucum")
 
 [node name="hitbox_area" type="Area2D" parent="."]
+visible = false
 
 [node name="hitbox_shape" type="CollisionShape2D" parent="hitbox_area"]
 position = Vector2(5, 0)
@@ -145,6 +147,10 @@ shape = SubResource("CircleShape2D_8p14t")
 [node name="take_dmg_cooldown" type="Timer" parent="."]
 
 [node name="Spider_Hp" parent="." instance=ExtResource("3_jkrjy")]
+
+[node name="DamageIndicator" type="Sprite2D" parent="."]
+position = Vector2(-61, -71.5)
+scale = Vector2(0.661111, 0.602778)
 
 [connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]

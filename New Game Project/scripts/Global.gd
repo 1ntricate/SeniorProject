@@ -58,6 +58,7 @@ var uploaded_map_id = null
 # image misc
 var selected_image_path = ""
 var elements_identfied = ""
+var elements_count = {}
 var image_urls = []
 var image_list = []
 var active_requests = 0

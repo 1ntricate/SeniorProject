@@ -6,6 +6,7 @@ func _ready():
 	enemybar = $Skeleton_Hp
 	
 func _physics_process(delta):
+	var separation_force = Vector2.ZERO
 	deal_dmg()
 	update_enemy_hp()
 	if auto_movement_enabled:
@@ -35,6 +36,13 @@ func _physics_process(delta):
 		emit_signal("position_changed", global_transform.origin,"skeleton")	
 	else:
 		$AnimatedSprite2D.play("idle")
+	
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if enemy != self and position.distance_to(enemy.position) < 100: 
+			separation_force += position.direction_to(enemy.position).normalized()
+	
+	if separation_force.length() > 0:
+		position -= separation_force.normalized() * speed * delta  * 2
 
 func _on_detection_area_body_entered(body):
 	player = body
@@ -50,6 +58,9 @@ func _on_dead_timer_timeout():
 func _on_hitbox_area_area_entered(area):
 	if area.is_in_group("projectile"):
 		health -= 100
+		$AnimatedSprite2D.modulate = Color.RED
+		await get_tree().create_timer(0.1).timeout
+		$AnimatedSprite2D.modulate = Color.WHITE
 		if health <= 0:
 			$AnimatedSprite2D.play("dead")
 			$dead_timer.start()

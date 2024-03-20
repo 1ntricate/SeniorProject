@@ -8,12 +8,15 @@ func _ready():
 
 func screenshot():
 	await RenderingServer.frame_post_draw
-	if Global.loaded_map == null:
+	print("loaded_map is :", Global.loaded_map)
+	if Global.loaded_map == "":
 		filename_without_extension = Global.map_name
+		print("loaded_map is null, Using map name: ", filename_without_extension)
 	else:
 		var parts = Global.loaded_map.split("/")
 		var filename_with_extension = parts[-1]
 		filename_without_extension = filename_with_extension.split(".")[0]
+		print("Loaded map is not null, Using map name: ", filename_without_extension)
 	var dir = DirAccess.open("res://player_screenshots/")
 	dir.list_dir_begin()
 	var file_name = dir.get_next()

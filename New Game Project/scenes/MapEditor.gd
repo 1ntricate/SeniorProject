@@ -5,6 +5,7 @@ extends Control
 @onready var dsc_box = $MainMapContainer/MapDescription
 @onready var map_name_box = $MainMapContainer/MapName
 @onready var player = $PlayerName
+
 var image_folder_path = "res://player_screenshots/"
 var popup_options = ["Use as Thumbnail", "Delete Image"] # Define your options here
 
@@ -56,6 +57,13 @@ func get_map_info():
 		var save_data = json.data
 		var created_by = save_data["created_by"]
 		var thumb_nail = save_data["thumbnail"]
+		var init_on_server = save_data["on_server"]
+		if init_on_server == 0:
+			$OnServer.button_pressed = false
+		else:
+			$OnServer.button_pressed = true
+			print("Map on server")
+			on_server = true
 		if thumb_nail != null:
 			cur_thumbnail = thumb_nail
 		#if created_by != null:
@@ -65,9 +73,6 @@ func get_map_info():
 		print("MapID: ", map_id)
 		if map__id != 0:
 			map_id = map__id
-			print("Map on server")
-			$OnServer.button_pressed = true
-			on_server = true
 		dsc_box.text = map_description
 		var privacy_setting = save_data["privacy"]
 		if privacy_setting == null:
@@ -81,10 +86,12 @@ func get_map_info():
 		
 func _on_save_button_pressed():
 	new_name = map_name.get_text()
+	print("new_name on_save: ", new_name)
 	new_dsc = map_dsc.get_text()
+	#new_privacy = 
 	update_json()
 	check_on_server()
-	reload()
+	#reload()
 	
 func _on_return_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
@@ -119,6 +126,10 @@ func update_json():
 			save_data["privacy"] = new_privacy
 		if new_thumbnail !=null:
 			save_data["thumbnail"] = new_thumbnail
+		if on_server == false and prev_setting == true:
+			save_data["on_server"] = 0
+		else:
+			save_data["on_server"] = 1
 		var json_data = json.stringify(save_data)
 		var out_file = FileAccess.open(Global.selected_map_path,FileAccess.WRITE)
 		path1 = Global.selected_map_path #json path
@@ -176,11 +187,13 @@ func check_on_server():
 		var base64_data = result[0]  
 		var filename = result[1]  
 		Network._update_map(Global.player_id, map_id,scene_data,json_data, new_name,privacy,new_dsc,base64_data,filename)
-
+		
+		
+		
 # upload map to server
 func upload_map():
 	print("Upload map called")
-	var paths_data = prepare_paths()
+	var paths_data = parse_json()
 	var scene_data = paths_data[0]  
 	var json_data = paths_data[1]  
 	var privacy = paths_data[2]
@@ -188,6 +201,7 @@ func upload_map():
 	var base64_data = result[0]  
 	var filename = result[1]  
 	Network._upload_map(Global.player_id, scene_data,json_data, new_name,privacy, new_dsc,base64_data,filename)
+
 
 '''
 var json = JSON.new()
@@ -226,6 +240,30 @@ func prepare_paths():
 		privacy = new_privacy
 	return [scene_data,json_data,privacy]
 
+func parse_json():
+	var scene_file = FileAccess.open(path2, FileAccess.READ)
+	if scene_file:
+		scene_data = scene_file.get_as_text()
+		scene_file.close()
+		
+	var json_file = FileAccess.open(path1, FileAccess.READ)
+	print("Path1 from prepare_paths: ",path1)
+	if json_file:
+		var json_text = json_file.get_as_text()
+		json_file.close()
+		var json = JSON.new()
+		#var json_result = json.parse(json_text)
+		var json_data = json.stringify(json_text)
+		
+	var privacy
+	if new_privacy == null:
+		privacy = old_privacy
+	else:
+		privacy = new_privacy
+	return [scene_data,json_data,privacy]
+	
+
+
 func prepare_thumbnail():
 	var data
 	var base64_data
@@ -241,10 +279,12 @@ func prepare_thumbnail():
 	else:
 		print("returning null & null")
 		return [null,null]
+		
 # for newly uploaded maps, update local json file with the new mapID
 func _on_map_uploaded():
 	print("map uploaded")
-	var json_path = "res://player_maps/" +  Global.map_name+ ".json"
+	print("new_name in on_map_uploaded: ", new_name)
+	var json_path = "res://player_maps/" +  new_name + ".json"
 	var in_file = FileAccess.open(path1, FileAccess.READ)
 	if in_file:
 		var json_text = in_file.get_as_text()

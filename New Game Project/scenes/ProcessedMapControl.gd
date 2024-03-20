@@ -3,8 +3,8 @@ extends TileMap
 var moisture = FastNoiseLite.new()
 var temperature = FastNoiseLite.new()
 var altitude= FastNoiseLite.new()
-var width = 150
-var height = 150
+var width = 350
+var height = 350
 @onready var player = get_parent().get_child(1)
 var offset_range = 1800
 var elements = Global.elements_identfied
@@ -115,7 +115,7 @@ func _ready():
 	var skeleton = preload("res://scenes/skeleton.tscn")
 	var goblin = preload("res://scenes/goblin.tscn")
 	var spider = preload("res://scenes/spider.tscn")
-
+	print("elements: ", elements)
 	# Spawn seperately to ensure unqique spawn positions
 	for i in range(monster_count):  # You can adjust the number of copies as needed
 		var new_slime = slime.instantiate()
@@ -188,6 +188,7 @@ func _on_map_uploaded():
 			return
 		var save_data = json.data
 		save_data["map_id"] = Global.uploaded_map_id
+		save_data["on_server"] = 1
 		var json_data = json.stringify(save_data)
 		var out_file = FileAccess.open(json_path,FileAccess.WRITE)
 		if out_file:
@@ -199,19 +200,17 @@ func generate_chunk(position,elements):
 	for x in range(width):
 		for y in range(height):
 			var set_pos = Vector2((tile_pos.x-width/2 + x)*10, (tile_pos.y-height/2 + y)*10)
-			#print("set_pos: ",set_pos)
+			var x_offset = tile_pos.x - width / 2 + x
+			var y_offset = tile_pos.y - height / 2 + y
 			chosen_tile = null
-			var moist = moisture.get_noise_2d(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y)*10
-			var temp = temperature.get_noise_2d(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y)*10
-			var alt = altitude.get_noise_2d(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y)*10
-			if moist > 5:
-				moist = 5
-			if temp > 5:
-				temp = 5
-			if alt > 5:
-				alt = 5
+			var moist = moisture.get_noise_2d(x_offset, y_offset)*10
+			var temp = temperature.get_noise_2d(x_offset, y_offset)*10
+			var alt = altitude.get_noise_2d(x_offset, y_offset)*10
+			moist = min(moist, 5)
+			temp = min(temp, 5)
+			alt = min(alt, 5)
 			# choose map tile 
-			if "grass" in elements or "tree" in elements and chosen_tile == null:
+			if chosen_tile == null and ("grass" in elements or "tree" in elements):
 				chosen_tile = choose_grass_tile(moist,temp, alt)
 			if chosen_tile == null and "water" in elements:
 				chosen_tile = choose_water_tile(moist,temp,alt)
@@ -219,14 +218,135 @@ func generate_chunk(position,elements):
 				chosen_tile = chose_sand_tile(moist,temp,alt)
 			# Finally, set the chosen tile
 			if chosen_tile:
-				set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, chosen_tile)
+				set_cell(0, Vector2i(x_offset,y_offset), 0, chosen_tile)
 				if chosen_tile in grass_tiles:
-					grass_positions.append(Vector2(tile_pos.x - width / 2 + x, tile_pos.y - height / 2 + y))
+					grass_positions.append(Vector2(x_offset,y_offset))
 				if chosen_tile in sand_tiles:
-					sand_positions.append(Vector2(tile_pos.x - width / 2 + x, tile_pos.y - height / 2 + y))
+					sand_positions.append(Vector2(x_offset,y_offset))
+			# if no chosen_tile get the nearest tile type
 			else:
-				set_cell(0, Vector2i(tile_pos.x-width/2 + x, tile_pos.y-height/2 + y), 0, steel_tile)
-				
+				# get list of neighboring tiles - 4 adjacent
+				var neighbors = get_neighboring_tiles(Vector2i(x_offset,y_offset))
+				# if there are neighbors, chose the most common
+				if neighbors !=null:
+					if neighbors.size() > 0:
+						#var chosen_tile_type = most_common_tile(neighbors)
+						#chosen_tile = choose_tile_from_type(chosen_tile_type)
+						chosen_tile = most_common_tile(neighbors)
+						set_cell(0, Vector2i(x_offset,y_offset), 0, chosen_tile)
+				# if no neighbors, use fall back tile
+				else:
+					print("neighbors is null")
+					set_cell(0, Vector2i(x_offset,y_offset), 0, steel_tile)
+
+# builds the map following the ratio of identified elements
+func generate_chunk_to_scale(position,elements):
+	var tile_pos = local_to_map(position)
+	
+	var total_elements = 0
+	for count in Global.elements_counts.values():
+		total_elements += count
+		
+	var element_ratios = {}
+	for element in Global.elements_counts.keys():
+		Global.element_ratios[element] = Global.elements_counts[element] / float(total_elements)
+	
+	for x in range(width):
+		for y in range(height):
+			var set_pos = Vector2((tile_pos.x-width/2 + x)*10, (tile_pos.y-height/2 + y)*10)
+			var x_offset = tile_pos.x - width / 2 + x
+			var y_offset = tile_pos.y - height / 2 + y
+			chosen_tile = null
+			var moist = moisture.get_noise_2d(x_offset, y_offset)*10
+			var temp = temperature.get_noise_2d(x_offset, y_offset)*10
+			var alt = altitude.get_noise_2d(x_offset, y_offset)*10
+			moist = min(moist, 5)
+			temp = min(temp, 5)
+			alt = min(alt, 5)
+			# choose map tile 
+			if chosen_tile == null and ("grass" in elements or "tree" in elements):
+				chosen_tile = choose_grass_tile(moist,temp, alt)
+			if chosen_tile == null and "water" in elements:
+				chosen_tile = choose_water_tile(moist,temp,alt)
+			if chosen_tile == null and "sand" in elements:
+				chosen_tile = chose_sand_tile(moist,temp,alt)
+			# Finally, set the chosen tile
+			if chosen_tile:
+				set_cell(0, Vector2i(x_offset,y_offset), 0, chosen_tile)
+				if chosen_tile in grass_tiles:
+					grass_positions.append(Vector2(x_offset,y_offset))
+				if chosen_tile in sand_tiles:
+					sand_positions.append(Vector2(x_offset,y_offset))
+			# if no chosen_tile get the nearest tile type
+			else:
+				# get list of neighboring tiles - 4 adjacent
+				var neighbors = get_neighboring_tiles(Vector2i(x_offset,y_offset))
+				# if there are neighbors, chose the most common
+				if neighbors.size() > 0:
+					#var chosen_tile_type = most_common_tile(neighbors)
+					#chosen_tile = choose_tile_from_type(chosen_tile_type)
+					chosen_tile = most_common_tile(neighbors)
+					set_cell(0, Vector2i(x_offset,y_offset), 0, chosen_tile)
+				# if no neighbors, use fall back tile
+				else:
+					set_cell(0, Vector2i(x_offset,y_offset), 0, steel_tile)
+func choose_tile_from_type(tile_type):
+	if tile_type == 'grass':
+		var index = randi() % grass_tiles.size()
+		return grass_tiles[index]
+	if tile_type == 'sand':
+		var index = randi() % sand_tiles.size()
+		return grass_tiles[index]
+	if tile_type == 'water':
+		var index = randi() % water_tiles.size()
+		return grass_tiles[index]
+	if tile_type == 'snow':
+		pass
+	pass
+
+func get_tile_type(tile_pos):
+	var tile_atlas_coords = get_cell_atlas_coords(0, tile_pos)
+	for grass_tile in grass_tiles:
+		if tile_atlas_coords == grass_tile:
+			return grass_tile 
+	for water_tile in water_tiles:
+		if tile_atlas_coords == water_tile:
+			return water_tile  
+	for sand_tile in sand_tiles:
+		if tile_atlas_coords == sand_tile:
+			return sand_tile  
+	# else 
+	return null  
+		
+func get_neighboring_tiles(tile_pos):
+	var neighbors = []
+	# Define offsets for directly adjacent tiles (4-connectivity)
+	var offsets = [Vector2i(-1, 0), Vector2i(1, 0), Vector2i(0, -1), Vector2i(0, 1)]
+	for offset in offsets:
+		var neighbor_pos = tile_pos + offset
+		var tile_type = get_tile_type(neighbor_pos) # Assume this function exists and returns the type of tile
+		if tile_type != null:
+			neighbors.append(tile_type)
+			return neighbors
+
+func most_common_tile(neighbors):
+	var counts = {}
+	# count each tile type (grass,water, sand, etc..)
+	for tile in neighbors:
+		if tile in counts:
+			counts[tile] += 1
+		else:
+			counts[tile] = 1
+	
+	var most_common = null
+	var highest_count = 0
+	# get the most common tile 
+	for tile in counts.keys():
+		if counts[tile] > highest_count:
+			highest_count = counts[tile]
+			most_common = tile
+	return most_common
+
 func choose_grass_tile(moist,temp,alt):
 	if "grass" in elements and moist  >= -7 and moist <= -2.5 and temp >=-7 and temp <=-2.5:
 		return grass_tile_1
@@ -279,6 +399,7 @@ func save_game():
 	var save_data = {
 		"objects": objects_data,
 		"map_id": 0,
+		"on_server" : 0,
 		"created_by": Global.player_user_name,
 		"thumbnail": null,
 		"description": Global.map_dsc,

@@ -78,6 +78,7 @@ func deal_dmg():
 			if Global.player_axe_atk:
 				if Global.melee_equipped != null:
 					health -= Global.player_base_dmg * Global.weapon_dmg
+					$AnimatedSprite2D.modulate = Color.RED
 			else: 
 				health -= 25
 			$take_dmg_cooldown.start()
@@ -90,6 +91,7 @@ func deal_dmg():
 				Global.slime_count -= 1
 
 func _on_take_dmg_cooldown_timeout():
+	$AnimatedSprite2D.modulate = Color.WHITE
 	dmg_taken_cooldown = true
 
 func update_enemy_hp():
@@ -97,12 +99,13 @@ func update_enemy_hp():
 
 func _on_enemyhitbox_area_entered(area):
 	if area.is_in_group("projectile"):
-		print("bullet in range")
 		health -=25
+		$AnimatedSprite2D.modulate = Color.RED
+		await get_tree().create_timer(0.1).timeout
+		$AnimatedSprite2D.modulate = Color.WHITE
 		if health <= 40 and health > 0:
 			$AnimatedSprite2D.play("dead")
 		elif health <= 0:
 			self.queue_free()
 			Global.slime_count -= 1
-	
 	

@@ -51,7 +51,14 @@ func _physics_process(delta):
 	if health <= 0:
 		self.queue_free()
 		Global.spider_count -= 1
+	var separation_force = Vector2.ZERO
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if enemy != self and position.distance_to(enemy.position) < 60: 
+			separation_force += position.direction_to(enemy.position).normalized()
 	
+	if separation_force.length() > 0:
+		position -= separation_force.normalized() * speed * delta  * 0.8
+		
 func _on_detection_area_body_entered(body):
 	player = body
 	player_chase = true
@@ -63,6 +70,9 @@ func spider():
 func _on_hitbox_area_area_entered(area):
 	if area.is_in_group("projectile"):
 		health -= 35
+		$AnimatedSprite2D.modulate = Color(1, 1, 1,0.5)
+		await get_tree().create_timer(0.1).timeout
+		$AnimatedSprite2D.modulate = Color(1, 1, 1,1)
 		if health <= 0:
 			$AnimatedSprite2D.play("dead")
 			self.queue_free()
