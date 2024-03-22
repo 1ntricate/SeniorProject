@@ -36,20 +36,25 @@ func load_map_list():
 	
 	for map in Global.map_list:
 		var map_name = map["MapName"].replace(".tscn", "")
-		
 		var map_id = map["MapID"]
 		var description = map["Description"]
 		var user_name = map["UserName"]
 		var upvotes = map["Upvotes"]
 		var downvotes = map["Downvotes"]
 		var downloads = map["Downloads"]
+		var diff = map["Difficulty"]
 		var texture
+		var display_text
 		for thumb in Global.thumb_list:
 			#print("Checking: ", thumb["filename"], " against ", map_name + '.tscn')
 			if thumb["filename"] == map_name+'.tscn':
 				#print("thumbnail found")
-				texture = thumb["texture"]	
-		var display_text = "%s (Created By: %s, Upvotes: %d, Downvotes: %d, Downloads: %d)" % [map_name, user_name, upvotes, downvotes,downloads]
+				texture = thumb["texture"]
+				break
+		if diff != null:
+			display_text = "%s (Created By: %s, Upvotes: %d, Downvotes: %d, Downloads: %d, Difficulty: %.2f )" % [map_name, user_name, upvotes, downvotes,downloads, diff]
+		else:
+			display_text = "%s (Created By: %s, Upvotes: %d, Downvotes: %d, Downloads: %d)" % [map_name, user_name, upvotes, downvotes,downloads]
 		if texture:
 			var myVector2i = Vector2i(100, 100)
 			texture.set_size_override(myVector2i)

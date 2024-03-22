@@ -1,2 +1,4 @@
-grass: 55
-tree: 5
+tree: 25
+sky: 25
+sand: 9
+mountain: 1
