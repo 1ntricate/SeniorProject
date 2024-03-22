@@ -145,6 +145,7 @@ func _http_request_completed(_result, _response_code, _headers, _body):
 	if response['command'] == 'get_map_list':
 		if response.has("response") and response["response"] is Array:
 			# Store the URLs in array
+			
 			var map_list = response["response"]
 			Global.map_list = map_list
 			Network.connect("map_list_received", Callable(self, "_on_map_list_received"))
@@ -423,6 +424,12 @@ func _vote_map(MapID,PlayerID, vote):
 	var command = "vote_map"
 	var data = {"map_id": MapID,"player_id": PlayerID, "vote": vote}
 	request_queue.push_back({"command" : command, "data" : data})
+
+func _rate_map_difficulty(PlayerID,MapID, Rating):
+	var command = "rate_map_diff"
+	var data = {"map_id": MapID,"player_id": PlayerID, "rating": Rating}
+	request_queue.push_back({"command" : command, "data" : data})
+	
 
 func _update_map(PlayerID, MapID,scene,position_data, file_name,privacy,description, thumbnail,thumb_file_name):
 	var command = "update_map"

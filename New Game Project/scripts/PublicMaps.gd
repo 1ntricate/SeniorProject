@@ -4,10 +4,13 @@ var image_folder_path = "res://player_maps/"
 var popup_options = ["Download Map", "UpVote", "DownVote", "Rate Difficulty"] 
 var map_ids = []
 var no_img_icon = "res://no_image.png"
-
+var rating_set = false
 var max_stars = 5
 var current_rating = 0
-
+var final_rating = 0
+var current_map_id = null
+var prev_map_id = null
+var cur_map = ""
 var empty_star_texture = load("res://empty_star.png")
 var half_star_texture = load("res://half_star.png")
 var full_star_texture = load("res://star.png")
@@ -18,7 +21,7 @@ func _ready():
 	
 	#load_items_into_gallery(image_folder_path)
 	Network.connect("pulbic_map_list_ready", Callable(self, "_on_public_list"))
-	Network.get_map_list(1)
+	Network.get_map_list(0)
 	
 
 func _on_public_list():
@@ -30,8 +33,10 @@ func _process(delta):
 	
 
 func load_map_list():
+	
 	for map in Global.map_list:
 		var map_name = map["MapName"].replace(".tscn", "")
+		
 		var map_id = map["MapID"]
 		var description = map["Description"]
 		var user_name = map["UserName"]
@@ -56,9 +61,12 @@ func load_map_list():
 		map_ids.append(map_id)
 
 func _on_popup_menu_id_pressed(id):
+	
 	# Download map selected
 	var selected_index = $ItemList.get_selected_items()[0]
 	var map_id = map_ids[selected_index-1]
+	cur_map = Global.map_list[selected_index-1]["MapName"].replace(".tscn", "")
+	current_map_id = map_id
 	if id == 0:
 		print("Map ID selected:", map_id)
 		Network.download_map(map_id,1)
@@ -120,6 +128,9 @@ func reload():
 
 func _on_option_button_item_selected(index):
 	# sort by downloads
+	Global.map_list = []
+	Global.thumb_list = []
+	$ItemList.clear()
 	if index == 0:
 		Network.get_map_list(0)
 		pass
@@ -139,59 +150,126 @@ func _on_option_button_item_selected(index):
 	if index == 4:
 		Network.get_map_list(4)
 		pass
-	pass # Replace with function body.
+	
 
-'''
 func _on_star_1_mouse_entered():
-	%Control/Star1.texture = full_star_texture
-	pass # Replace with function body.
-
+	if !rating_set:
+		%Control/Star1.texture_normal = full_star_texture
 
 func _on_star_2_mouse_entered():
-	%Control/Star2.texture = full_star_texture
-	pass # Replace with function body.
-
+	if !rating_set:
+		%Control/Star1.texture_normal = full_star_texture
+		%Control/Star2.texture_normal = full_star_texture
 
 func _on_star_3_mouse_entered():
-	%Control/Star3.texture = full_star_texture
-	pass # Replace with function body.
-
+	if !rating_set:
+		%Control/Star1.texture_normal = full_star_texture
+		%Control/Star2.texture_normal = full_star_texture
+		%Control/Star3.texture_normal = full_star_texture
 
 func _on_star_4_mouse_entered():
-	%Control/Star4.texture = full_star_texture
-	pass # Replace with function body.
-
+	if !rating_set:
+		%Control/Star1.texture_normal = full_star_texture
+		%Control/Star2.texture_normal = full_star_texture
+		%Control/Star3.texture_normal = full_star_texture
+		%Control/Star4.texture_normal = full_star_texture
 
 func _on_star_5_mouse_entered():
-	%Control/Star5.texture = full_star_texture
-	pass # Replace with function body.
+	if !rating_set:
+		%Control/Star1.texture_normal = full_star_texture
+		%Control/Star2.texture_normal = full_star_texture
+		%Control/Star3.texture_normal = full_star_texture
+		%Control/Star4.texture_normal = full_star_texture
+		%Control/Star5.texture_normal = full_star_texture
 
+func _on_control_mouse_exited():
+	if !rating_set:
+		%Control/Star1.texture_normal = empty_star_texture
+		%Control/Star2.texture_normal = empty_star_texture
+		%Control/Star3.texture_normal = empty_star_texture
+		%Control/Star4.texture_normal = empty_star_texture
+		%Control/Star5.texture_normal = empty_star_texture
+	if current_map_id != prev_map_id:
+		%Control.visible = false
+		
+func _on_star_1_mouse_exited():
+	if !rating_set:
+		%Control/Star1.texture_normal = empty_star_texture
 
-func _on_label_mouse_entered():
-	pass # Replace with function body.
-
-
-func _on_star_1_pressed():
-	%Control/Star1.texture = half_star_texture
-	pass # Replace with function body.
-
-func _on_star_2_pressed():
-	%Control/Star2.texture = half_star_texture
-
-func _on_star_3_pressed():
-	%Control/Star3.texture = half_star_texture
+func _on_star_2_mouse_exited():
+	if !rating_set:
+		%Control/Star2.texture_normal = empty_star_texture
 	
-func _on_star_4_pressed():
-	%Control/Star4.texture = half_star_texture
+func _on_star_3_mouse_exited():
+	if !rating_set:
+		%Control/Star3.texture_normal = empty_star_texture
+
+func _on_star_4_mouse_exited():
+	if !rating_set:
+		%Control/Star4.texture_normal = empty_star_texture
 	
-func _on_star_5_pressed():
-	%Control/Star5.texture = half_star_texture
+func _on_star_5_mouse_exited():
+	if !rating_set:
+		%Control/Star5.texture_normal = empty_star_texture
 
-func _on_control_focus_exited():
-	%Control/Star1.texture = empty_star_texture
-	%Control/Star2.texture = empty_star_texture
-	%Control/Star3.texture = empty_star_texture
-	%Control/Star4.texture = empty_star_texture
-	%Control/Star5.texture = empty_star_texture
+func _on_confirm_rating_button_pressed():
+	final_rating = current_rating
+	rating_set = false
+	Network._rate_map_difficulty(Global.player_id,current_map_id, final_rating)
+	%Control/ConfirmRatingButton.hide()
+	%Control/CancelRatingButton.hide()
+	%Control/ConfrimLabel.hide()
 
-'''
+func _on_cancel_rating_button_pressed():
+	rating_set = false
+	current_rating = 0
+	%Control/ConfirmRatingButton.hide()
+	%Control/CancelRatingButton.hide()
+	%Control/ConfrimLabel.hide()
+	
+func _on_star_1_gui_input(event):
+	if event is InputEventMouseButton:
+		check_input(event,1)
+
+func _on_star_2_gui_input(event):
+	if event is InputEventMouseButton:
+		check_input(event,2)
+
+func _on_star_3_gui_input(event):
+	if event is InputEventMouseButton:
+		check_input(event,3)
+			
+
+func _on_star_4_gui_input(event):
+	if event is InputEventMouseButton:
+		check_input(event,4)
+			
+func _on_star_5_gui_input(event):
+	if event is InputEventMouseButton:
+		check_input(event,5)
+		
+func check_input(event,rating):
+	if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		rating_set = true
+		current_rating = rating
+		%Control/ConfirmRatingButton.show()
+		%Control/CancelRatingButton.show()
+		%Control/ConfrimLabel.text = "Confirm " + str(current_rating) +" star rating for " + str(cur_map) + "?"
+		%Control/ConfrimLabel.show()
+	if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		rating_set = true
+		current_rating = (rating - 0.5)
+		var node_path = "%Control/Star" +str(rating)
+		print("start node: ", node_path)
+		var star_node = get_node(node_path)
+		star_node.texture_normal = half_star_texture
+		%Control/ConfirmRatingButton.show()
+		%Control/CancelRatingButton.show()
+		%Control/ConfrimLabel.text = "Confirm " + str(current_rating) +" star rating for " + str(cur_map) + "?"
+		%Control/ConfrimLabel.show()
+		
+
+
+func _on_control_mouse_entered():
+	prev_map_id = current_map_id
+	
