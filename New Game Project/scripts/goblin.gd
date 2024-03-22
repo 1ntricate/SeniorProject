@@ -4,6 +4,9 @@ func _ready():
 	health = 200
 	enemybar = $Goblin_Hp
 	
+func update_enemy_hp():
+	enemybar.value = health
+	
 func _physics_process(delta):
 	deal_dmg()
 	update_enemy_hp()

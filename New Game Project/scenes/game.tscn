@@ -5,20 +5,20 @@
 [ext_resource type="Texture2D" uid="uid://d3ksju6mjmhm8" path="res://assets/plains.png" id="3_ro4ub"]
 [ext_resource type="Texture2D" uid="uid://cgg6a60ivovha" path="res://assets/Graphical Assets/environment/Props/pine.png" id="4_i5dcb"]
 [ext_resource type="Texture2D" uid="uid://bek70wqq0ehmu" path="res://assets/Graphical Assets/environment/Props/plant-house.png" id="5_m2jl5"]
-[ext_resource type="PackedScene" uid="uid://cxe851fhabkwf" path="res://scenes/player.tscn" id="8_pfypu"]
-[ext_resource type="PackedScene" uid="uid://dtjrn7t220l8q" path="res://scenes/player_hp.tscn" id="9_p5cha"]
+[ext_resource type="PackedScene" uid="uid://cy6ghtuve6rxv" path="res://scenes/player.tscn" id="8_pfypu"]
+[ext_resource type="PackedScene" path="res://scenes/player_hp.tscn" id="9_p5cha"]
 [ext_resource type="PackedScene" path="res://scenes/thirsty_bar.tscn" id="10_tu5sg"]
 [ext_resource type="PackedScene" path="res://scenes/hunger_bar.tscn" id="11_dfiox"]
-[ext_resource type="PackedScene" uid="uid://bnaq0ucejxfl7" path="res://scenes/enemy.tscn" id="13_qjdar"]
-[ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="15_3iv6o"]
-[ext_resource type="PackedScene" uid="uid://dj37ri57e1q1q" path="res://scenes/rock.tscn" id="16_u4a32"]
-[ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="16_xynwb"]
-[ext_resource type="PackedScene" uid="uid://o4kn4ounrgsr" path="res://scenes/RockHp.tscn" id="17_asqd4"]
+[ext_resource type="PackedScene" uid="uid://dwsb3godbgyir" path="res://scenes/enemy.tscn" id="13_qjdar"]
+[ext_resource type="PackedScene" path="res://scenes/tree.tscn" id="15_3iv6o"]
+[ext_resource type="PackedScene" path="res://scenes/rock.tscn" id="16_u4a32"]
+[ext_resource type="PackedScene" path="res://scenes/TreeHp.tscn" id="16_xynwb"]
+[ext_resource type="PackedScene" path="res://scenes/RockHp.tscn" id="17_asqd4"]
 [ext_resource type="PackedScene" uid="uid://g7uu0doorq5l" path="res://scenes/pause_menu.tscn" id="17_rahrg"]
-[ext_resource type="PackedScene" uid="uid://gsy5ymrus631" path="res://scenes/skeleton.tscn" id="17_ymraw"]
-[ext_resource type="PackedScene" uid="uid://bwxmuo3iatovc" path="res://scenes/spider.tscn" id="18_gg1ec"]
-[ext_resource type="PackedScene" uid="uid://8kuxoo6lla18" path="res://scenes/water.tscn" id="18_hhh5v"]
-[ext_resource type="PackedScene" uid="uid://ba7woy5l0jyqq" path="res://scenes/goblin.tscn" id="19_ljvhl"]
+[ext_resource type="PackedScene" uid="uid://bh1irs4sebaaa" path="res://scenes/skeleton.tscn" id="17_ymraw"]
+[ext_resource type="PackedScene" uid="uid://dyd01ael2gkop" path="res://scenes/spider.tscn" id="18_gg1ec"]
+[ext_resource type="PackedScene" uid="uid://drk3i30rh1bx1" path="res://scenes/water.tscn" id="18_hhh5v"]
+[ext_resource type="PackedScene" uid="uid://dm083uuith4vx" path="res://scenes/goblin.tscn" id="19_ljvhl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xovyt"]
 texture = ExtResource("2_ohq8h")
@@ -591,14 +591,6 @@ offset_right = -202.0
 offset_bottom = -35.6364
 scale = Vector2(0.5, 0.5)
 
-[node name="enemy" parent="." instance=ExtResource("13_qjdar")]
-position = Vector2(254.545, -189.091)
-platform_floor_layers = 4294967041
-platform_wall_layers = 30
-
-[node name="enemy2" parent="." instance=ExtResource("13_qjdar")]
-position = Vector2(-341.818, 119.091)
-
 [node name="tree" parent="." instance=ExtResource("15_3iv6o")]
 position = Vector2(-81.8182, -178.182)
 
@@ -649,3 +641,9 @@ position = Vector2(136.364, 57.2727)
 
 [node name="goblin" parent="." instance=ExtResource("19_ljvhl")]
 position = Vector2(208.182, -48.1818)
+
+[node name="enemy" parent="." instance=ExtResource("13_qjdar")]
+position = Vector2(108.182, -139.091)
+
+[node name="enemy2" parent="." instance=ExtResource("13_qjdar")]
+position = Vector2(-229.091, 93.6364)

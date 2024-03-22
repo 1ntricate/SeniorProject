@@ -1,6 +1,7 @@
 extends Node
 
 var mobile_joined = false
+var water_sound = false
 var instance = null
 var melee_equipped = ""
 var ranged_equipped = ""

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://8kuxoo6lla18"]
+[gd_scene load_steps=5 format=3 uid="uid://drk3i30rh1bx1"]
 
 [ext_resource type="Texture2D" uid="uid://hv1uaynkyfqc" path="res://assets/water_made.PNG" id="1_slin0"]
 [ext_resource type="Script" path="res://scripts/water.gd" id="1_wsonm"]

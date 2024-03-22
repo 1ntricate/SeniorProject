@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dao1wk6r464gw"]
 
-[ext_resource type="PackedScene" uid="uid://bnaq0ucejxfl7" path="res://scenes/enemy.tscn" id="9_2o2p6"]
-[ext_resource type="PackedScene" uid="uid://c5fm3xokdbomq" path="res://scenes/EnemyHp.tscn" id="10_wsvxd"]
+[ext_resource type="PackedScene" uid="uid://dupllib0o0kd3" path="res://scenes/EnemyHp.tscn" id="9_2o2p6"]
+[ext_resource type="PackedScene" uid="uid://dupllib0o0kd3" path="res://scenes/EnemyHp.tscn" id="10_wsvxd"]
 
 [sub_resource type="GDScript" id="GDScript_h24wr"]
 script/source = "extends Node2D

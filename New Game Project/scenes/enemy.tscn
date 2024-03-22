@@ -1,8 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bnaq0ucejxfl7"]
+[gd_scene load_steps=12 format=3 uid="uid://dwsb3godbgyir"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_c0gl1"]
 [ext_resource type="Texture2D" uid="uid://ta118tx0iku7" path="res://assets/slime blink (1).png" id="2_8yaf1"]
-[ext_resource type="PackedScene" uid="uid://c5fm3xokdbomq" path="res://scenes/EnemyHp.tscn" id="3_t2ruj"]
+[ext_resource type="PackedScene" uid="uid://dupllib0o0kd3" path="res://scenes/EnemyHp.tscn" id="3_t2ruj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0jc3t"]
 atlas = ExtResource("2_8yaf1")

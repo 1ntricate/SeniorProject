@@ -21,9 +21,9 @@ offset_bottom = 502.0
 [node name="Inventory" type="GridContainer" parent="UI"]
 layout_mode = 0
 offset_left = 2.0
-offset_top = -2.0
-offset_right = 130.0
-offset_bottom = 126.0
+offset_top = 3.0
+offset_right = 134.0
+offset_bottom = 134.0
 columns = 3
 script = ExtResource("1_lm6hs")
 
@@ -64,18 +64,19 @@ script = ExtResource("2_8c1ru")
 
 [node name="EquipSlot" parent="UI/Character" instance=ExtResource("4_3igg3")]
 layout_mode = 0
+offset_right = 41.0
 slot_type = 1
 
 [node name="EquipSlot2" parent="UI/Character" instance=ExtResource("4_3igg3")]
 layout_mode = 0
-offset_left = 1.0
 offset_top = 45.0
-offset_right = 41.0
 offset_bottom = 85.0
 slot_type = 2
 
 [node name="ATK" type="Label" parent="UI"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 6.0
+offset_top = 21.0
+offset_right = 46.0
+offset_bottom = 44.0

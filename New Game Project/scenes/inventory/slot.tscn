@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dyuin28nla2tp"]
+[gd_scene load_steps=5 format=3 uid="uid://dyuin28nla2tp"]
 
 [ext_resource type="Script" path="res://scenes/inventory/slot.gd" id="1_n858f"]
 [ext_resource type="Script" path="res://scenes/inventory/item_info.gd" id="2_va0bm"]
+[ext_resource type="Texture2D" uid="uid://bdmvm5cu3xqis" path="res://assets/bar_asset/invenui.png" id="3_p6j51"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_rk70g"]
 
@@ -11,7 +12,7 @@ offset_bottom = 40.0
 script = ExtResource("1_n858f")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-modulate = Color(1, 1, 0.2, 1)
+modulate = Color(1, 1, 0.0352941, 1)
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_rk70g")
@@ -23,3 +24,8 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 8
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(21, 19)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("3_p6j51")

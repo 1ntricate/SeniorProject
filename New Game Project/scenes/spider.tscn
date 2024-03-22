@@ -1,8 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://bwxmuo3iatovc"]
+[gd_scene load_steps=20 format=3 uid="uid://dyd01ael2gkop"]
 
 [ext_resource type="Texture2D" uid="uid://2pu8ljv075vt" path="res://assets/spider.png" id="1_o7fuy"]
 [ext_resource type="Script" path="res://scripts/spider.gd" id="1_roatu"]
-[ext_resource type="PackedScene" uid="uid://b5go6x6iaqoc6" path="res://scenes/spider_hp.tscn" id="3_jkrjy"]
+[ext_resource type="PackedScene" path="res://scenes/spider_hp.tscn" id="3_jkrjy"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8ssr5"]
 radius = 16.0

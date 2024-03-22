@@ -37,7 +37,13 @@ var drown = true
 @onready var axe    		  = $weapon/axe
 @onready var sword  		  = $weapon/sword
 
-@onready var bullet = preload("res://scenes/bullet.tscn")
+#sound
+@onready var ocean			  = $ocean
+@onready var main_sound		  = $main_sound
+@onready var slash			  = $weapon/slash
+@onready var gun_shot		  = $Gun/shot_sound
+
+@onready var bullet = preload("res://scenes//bullet.tscn")
 
 var gravity := 50
 #@onready var pause_menu = $PauseMenu
@@ -54,6 +60,9 @@ func _ready():
 	animation.set_flip_h(false)
 	$hunger_timer.start()
 	$thirsty_timer.start()
+	$ocean/ocean_timer.start()
+	$main_sound/main_sound_timer.start()
+	
 	if Global.mobile_joined:
 		mobile_button.visible = true
 	else:
@@ -74,7 +83,11 @@ func _physics_process(delta):
 	if drown:
 		drown_player()
 	#shoot()
-
+	if Global.water_sound:
+		ocean.stream_paused = false
+	else:
+		ocean.stream_paused = true
+		
 	if health <= 0:
 		alive = false 
 		health = 0
@@ -98,6 +111,7 @@ func shoot():
 		b.rotation = atan2(direction.y,direction.x)
 		# Start the timer after shooting
 		$shoot_timer.start()
+		gun_shot.play()
 
 func survival_timer():
 	var time_left = countdown.time_left
@@ -112,7 +126,7 @@ func read_input():
 		button.visible = true
 		key_input = true
 		Global.is_changing_key_input = true
-	elif Input.is_action_just_pressed("key_input") and key_input == true:
+	elif(Input.is_action_just_pressed("key_input")) and key_input == true:
 		button.visible = false
 		key_input = false
 		#Global.is_changing_key_input = false
@@ -137,12 +151,13 @@ func read_input():
 			axe.visible = true
 			weapon_animation.play("axe" +last_dir)
 			$axe_timer.start()	
-		elif Input.is_action_just_released("axe_attack") or Global.player_on_screen_button_right == "":
+			slash.play()
+			
+		elif Input.is_action_just_released("axe_attack"):
 			is_attacking = false
 			Global.player_axe_atk = false
 			Global.player_current_atk = false
 			#Global.player_atk = false
-			is_attacking = false
 			axe.visible = false
 			
 	elif Global.melee_equipped == "sword":
@@ -154,19 +169,22 @@ func read_input():
 			sword.visible = true
 			weapon_animation.play("axe" +last_dir)
 			$axe_timer.start()	
-		elif Input.is_action_just_released("axe_attack") or Global.player_on_screen_button_right == "":
+			slash.play()
+			
+		elif Input.is_action_just_released("axe_attack"):
 			is_attacking = false
 			Global.player_axe_atk = false
 			Global.player_current_atk = false
 			#Global.player_atk = false
-			is_attacking = false
 			sword.visible = false
 		 
 		#equipped on slot 2	
 	if Global.ranged_equipped == "gun":	
-		if Input.is_action_pressed("shoot"):
+		if  Input.is_action_pressed("shoot"):
 			is_attacking = true
 			shoot()
+		elif(Input.is_action_just_released("shoot")):
+			is_attacking = false
 		else:
 		#press 'k' to attack	
 			if Input.is_action_pressed("attack"):
@@ -464,4 +482,9 @@ func _on_drown_timer_timeout():
 	print("drown timer ended")
 	drown = true
 	$AnimatedSprite2D.modulate = Color.AQUA
-			
+		
+func _on_ocean_timer_timeout():
+	ocean.playing = true
+
+func _on_main_sound_timer_timeout():
+	main_sound.playing = true

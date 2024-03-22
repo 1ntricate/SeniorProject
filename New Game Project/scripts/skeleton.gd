@@ -4,6 +4,9 @@ func _ready():
 	speed = 30
 	health = 400
 	enemybar = $Skeleton_Hp
+
+func update_enemy_hp():
+	enemybar.value = health
 	
 func _physics_process(delta):
 	var separation_force = Vector2.ZERO

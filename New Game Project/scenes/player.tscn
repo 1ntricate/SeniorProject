@@ -1,23 +1,27 @@
-[gd_scene load_steps=79 format=3 uid="uid://cxe851fhabkwf"]
+[gd_scene load_steps=83 format=3 uid="uid://cy6ghtuve6rxv"]
 
 [ext_resource type="Texture2D" uid="uid://m5a1pkrdrit2" path="res://assets/player.png" id="1"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://dxiqjcoxy11fd" path="res://scenes/axe.tscn" id="3_172lf"]
+[ext_resource type="PackedScene" uid="uid://bj1h71k0a0bl7" path="res://scenes/axe.tscn" id="3_172lf"]
 [ext_resource type="Texture2D" uid="uid://rp0jee2yuw44" path="res://MaleWalkGun1.png" id="3_tdo3q"]
 [ext_resource type="Texture2D" uid="uid://bvm3uwn83lal1" path="res://MaleWalkGun2.png" id="4_7w6vy"]
-[ext_resource type="PackedScene" uid="uid://6xol2hh13ub" path="res://scenes/gun.tscn" id="4_5145r"]
+[ext_resource type="PackedScene" path="res://scenes/gun.tscn" id="4_5145r"]
 [ext_resource type="Texture2D" uid="uid://bpd3iiu70610b" path="res://MaleWalk.png" id="5_k821y"]
 [ext_resource type="Texture2D" uid="uid://cvfm008xx2t0g" path="res://MSideWalk.png" id="5_q8fwd"]
 [ext_resource type="Texture2D" uid="uid://db3gfb0j2tdg2" path="res://MaleWalk (1).png" id="6_8tasv"]
 [ext_resource type="Texture2D" uid="uid://dmful28cdelj7" path="res://MSideWalk2.png" id="6_pcysg"]
-[ext_resource type="PackedScene" uid="uid://bcs8l2qoja2fl" path="res://scenes/sword.tscn" id="6_q8h5v"]
+[ext_resource type="PackedScene" path="res://scenes/sword.tscn" id="6_q8h5v"]
 [ext_resource type="Script" path="res://scenes/mouse_cursor.gd" id="7_1whx2"]
 [ext_resource type="PackedScene" uid="uid://dud21yqmqmlcr" path="res://scenes/inventory/inventory.tscn" id="7_q00sa"]
 [ext_resource type="Texture2D" uid="uid://05di8rqjxhxc" path="res://MBackWalk1.png" id="9_6avpl"]
 [ext_resource type="Script" path="res://scenes/gun.gd" id="9_nes4p"]
 [ext_resource type="Texture2D" uid="uid://bu3nh2i26dpgo" path="res://MBackWalk2.png" id="10_ylpfa"]
+[ext_resource type="AudioStream" uid="uid://dmqhms8oxxo15" path="res://assets/sound/slash.wav" id="12_rd3sg"]
 [ext_resource type="PackedScene" uid="uid://tx4d5lu6n2kt" path="res://scenes/InputButton/input_key.tscn" id="17_fx6v5"]
 [ext_resource type="PackedScene" uid="uid://d2mbd1at4t0ds" path="res://scenes/OnScreenButton/onscreen_button.tscn" id="18_l5t6e"]
+[ext_resource type="AudioStream" uid="uid://bqmt3cg5aeukf" path="res://assets/sound/gun.wav" id="18_qh8dx"]
+[ext_resource type="AudioStream" uid="uid://dcs07icn2ffya" path="res://assets/sound/ocean.mp3" id="19_65cmx"]
+[ext_resource type="AudioStream" uid="uid://b73s6uv5jcql2" path="res://assets/sound/main_theme.mp3" id="20_4ob3w"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(15, 16)
@@ -959,6 +963,9 @@ visible = false
 [node name="sword" parent="weapon" instance=ExtResource("6_q8h5v")]
 visible = false
 
+[node name="slash" type="AudioStreamPlayer" parent="weapon"]
+stream = ExtResource("12_rd3sg")
+
 [node name="Marker2D" type="Marker2D" parent="."]
 visible = false
 position = Vector2(10, 2)
@@ -976,6 +983,9 @@ show_behind_parent = true
 position = Vector2(7, 2)
 script = ExtResource("9_nes4p")
 
+[node name="shot_sound" type="AudioStreamPlayer" parent="Gun"]
+stream = ExtResource("18_qh8dx")
+
 [node name="Inventory" parent="." instance=ExtResource("7_q00sa")]
 visible = false
 position = Vector2(-60, -68)
@@ -985,10 +995,26 @@ wait_time = 10.0
 one_shot = true
 
 [node name="onscreen_button" parent="." instance=ExtResource("18_l5t6e")]
+visible = false
 offset_left = -200.0
 offset_top = 44.0
 offset_right = -200.0
 offset_bottom = 44.0
+
+[node name="ocean" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("19_65cmx")
+
+[node name="ocean_timer" type="Timer" parent="ocean"]
+one_shot = true
+autostart = true
+
+[node name="main_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_4ob3w")
+
+[node name="main_sound_timer" type="Timer" parent="main_sound"]
+wait_time = 1.5
+one_shot = true
+autostart = true
 
 [connection signal="body_entered" from="player-hitbox" to="." method="_on_playerhitbox_body_entered"]
 [connection signal="body_exited" from="player-hitbox" to="." method="_on_playerhitbox_body_exited"]
@@ -1002,3 +1028,5 @@ offset_bottom = 44.0
 [connection signal="timeout" from="spawn_immunity" to="." method="_on_spawn_immunity_timeout"]
 [connection signal="timeout" from="survival_timer" to="." method="_on_survival_timer_timeout"]
 [connection signal="timeout" from="drown_timer" to="." method="_on_drown_timer_timeout"]
+[connection signal="timeout" from="ocean/ocean_timer" to="." method="_on_ocean_timer_timeout"]
+[connection signal="timeout" from="main_sound/main_sound_timer" to="." method="_on_main_sound_timer_timeout"]

@@ -20,7 +20,6 @@ func _ready():
 	
 func _physics_process(delta):
 	deal_dmg()
-	update_enemy_hp()
 	if auto_movement_enabled:
 		# Move automatically left or right
 		position += movement_direction * speed * delta
@@ -93,9 +92,6 @@ func deal_dmg():
 func _on_take_dmg_cooldown_timeout():
 	$AnimatedSprite2D.modulate = Color.WHITE
 	dmg_taken_cooldown = true
-
-func update_enemy_hp():
-	enemybar.value = health
 
 func _on_enemyhitbox_area_entered(area):
 	if area.is_in_group("projectile"):

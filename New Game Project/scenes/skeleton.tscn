@@ -1,9 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://gsy5ymrus631"]
+[gd_scene load_steps=16 format=3 uid="uid://bh1irs4sebaaa"]
 
 [ext_resource type="Script" path="res://scripts/skeleton.gd" id="1_v2qdc"]
 [ext_resource type="Texture2D" uid="uid://b1pab4f8pyv75" path="res://assets/skeleton.png" id="2_ci4a7"]
 [ext_resource type="Texture2D" uid="uid://b08dio7yeveqx" path="res://assets/skeleton1.png" id="2_co034"]
-[ext_resource type="PackedScene" uid="uid://b6xo3bv2b6ugl" path="res://scenes/skeleton_hp.tscn" id="4_6vs2t"]
+[ext_resource type="PackedScene" path="res://scenes/skeleton_hp.tscn" id="4_6vs2t"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j348r"]
 radius = 17.0

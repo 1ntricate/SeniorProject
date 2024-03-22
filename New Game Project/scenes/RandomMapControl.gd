@@ -177,9 +177,11 @@ func check_player_position2():
 	
 	if tile_atlas_coords in water_tiles:
 		Global.player_on_water = true
+		Global.water_sound = true
 		#print("Player is on water")
 	else: 
 		Global.player_on_water = false
+		Global.water_sound = false
 		
 	if tile_atlas_coords in sand_tiles:
 		Global.player_on_sand = true

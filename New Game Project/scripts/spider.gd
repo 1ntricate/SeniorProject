@@ -6,6 +6,9 @@ func _ready():
 	health = 150
 	enemybar = $Spider_Hp
 	
+func update_enemy_hp():
+	enemybar.value = health
+	
 func check_direction():
 	var player_pos = player.position
 	var enemy_pos = position
