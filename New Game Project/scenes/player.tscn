@@ -5,12 +5,12 @@
 [ext_resource type="PackedScene" uid="uid://bj1h71k0a0bl7" path="res://scenes/axe.tscn" id="3_172lf"]
 [ext_resource type="Texture2D" uid="uid://rp0jee2yuw44" path="res://MaleWalkGun1.png" id="3_tdo3q"]
 [ext_resource type="Texture2D" uid="uid://bvm3uwn83lal1" path="res://MaleWalkGun2.png" id="4_7w6vy"]
-[ext_resource type="PackedScene" path="res://scenes/gun.tscn" id="4_5145r"]
+[ext_resource type="PackedScene" uid="uid://6xol2hh13ub" path="res://scenes/gun.tscn" id="4_5145r"]
 [ext_resource type="Texture2D" uid="uid://bpd3iiu70610b" path="res://MaleWalk.png" id="5_k821y"]
 [ext_resource type="Texture2D" uid="uid://cvfm008xx2t0g" path="res://MSideWalk.png" id="5_q8fwd"]
 [ext_resource type="Texture2D" uid="uid://db3gfb0j2tdg2" path="res://MaleWalk (1).png" id="6_8tasv"]
 [ext_resource type="Texture2D" uid="uid://dmful28cdelj7" path="res://MSideWalk2.png" id="6_pcysg"]
-[ext_resource type="PackedScene" path="res://scenes/sword.tscn" id="6_q8h5v"]
+[ext_resource type="PackedScene" uid="uid://bcs8l2qoja2fl" path="res://scenes/sword.tscn" id="6_q8h5v"]
 [ext_resource type="Script" path="res://scenes/mouse_cursor.gd" id="7_1whx2"]
 [ext_resource type="PackedScene" uid="uid://dud21yqmqmlcr" path="res://scenes/inventory/inventory.tscn" id="7_q00sa"]
 [ext_resource type="Texture2D" uid="uid://05di8rqjxhxc" path="res://MBackWalk1.png" id="9_6avpl"]
@@ -947,7 +947,7 @@ wait_time = 2.0
 one_shot = true
 autostart = true
 
-[node name="survival_timer" type="Timer" parent="."]
+[node name="wave_timer" type="Timer" parent="."]
 wait_time = 10.0
 autostart = true
 
@@ -1016,6 +1016,8 @@ wait_time = 1.5
 one_shot = true
 autostart = true
 
+[node name="TimeSurvived" type="Timer" parent="."]
+
 [connection signal="body_entered" from="player-hitbox" to="." method="_on_playerhitbox_body_entered"]
 [connection signal="body_exited" from="player-hitbox" to="." method="_on_playerhitbox_body_exited"]
 [connection signal="timeout" from="atk_cooldown" to="." method="_on_atk_cooldown_timeout"]
@@ -1026,7 +1028,8 @@ autostart = true
 [connection signal="timeout" from="skeleton_atk_cooldown" to="." method="_on_skelton_atk_cooldown_timeout"]
 [connection signal="timeout" from="spider_atk_cooldown" to="." method="_on_spider_atk_cooldown_timeout"]
 [connection signal="timeout" from="spawn_immunity" to="." method="_on_spawn_immunity_timeout"]
-[connection signal="timeout" from="survival_timer" to="." method="_on_survival_timer_timeout"]
+[connection signal="timeout" from="wave_timer" to="." method="_on_survival_timer_timeout"]
 [connection signal="timeout" from="drown_timer" to="." method="_on_drown_timer_timeout"]
 [connection signal="timeout" from="ocean/ocean_timer" to="." method="_on_ocean_timer_timeout"]
 [connection signal="timeout" from="main_sound/main_sound_timer" to="." method="_on_main_sound_timer_timeout"]
+[connection signal="timeout" from="TimeSurvived" to="." method="_on_time_survived_timeout"]

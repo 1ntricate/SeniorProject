@@ -110,6 +110,9 @@ func spawn_resoruces():
 
 func _ready():
 	Network.connect("map_uploaded", Callable(self,"_on_map_uploaded"))
+	Global.last_played_map = Global.loaded_map
+	
+	#var root = get_tree().root 
 	# spawn enemies
 	var slime = preload("res://scenes/enemy.tscn")
 	var skeleton = preload("res://scenes/skeleton.tscn")
@@ -188,6 +191,7 @@ func _on_map_uploaded():
 			return
 		var save_data = json.data
 		save_data["map_id"] = Global.uploaded_map_id
+		save_data["map_id"] = Global.last_played_map_id
 		save_data["on_server"] = 1
 		var json_data = json.stringify(save_data)
 		var out_file = FileAccess.open(json_path,FileAccess.WRITE)

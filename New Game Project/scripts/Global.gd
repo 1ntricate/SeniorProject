@@ -5,7 +5,6 @@ var water_sound = false
 var instance = null
 var melee_equipped = ""
 var ranged_equipped = ""
-
 var drink = 0
 var player_cur_dir = Vector2.LEFT
 var player_current_atk = false
@@ -42,11 +41,15 @@ var skeleton_on_snow = false
 var player_id = 99999
 var isUserLoggedIn = false
 var player_user_name = null
+
 # map misc
 var map_name = ""
 var selected_map = ""
 var loaded_map = ""
 var selected_map_path = ""
+var last_played_map = ""
+var last_played_map_id = 0
+var time_survived = 0
 var map_privacy = 0
 var map_dsc = ""
 var new_map = false
@@ -66,6 +69,7 @@ var active_requests = 0
 
 func _ready():
 	instance = self
+	Global.last_played_map = "res://scenes/game.tscn"
 
 func _process(delta):
 	update_tree_hp()

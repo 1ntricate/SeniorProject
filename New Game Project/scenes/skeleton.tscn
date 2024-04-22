@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/skeleton.gd" id="1_v2qdc"]
 [ext_resource type="Texture2D" uid="uid://b1pab4f8pyv75" path="res://assets/skeleton.png" id="2_ci4a7"]
 [ext_resource type="Texture2D" uid="uid://b08dio7yeveqx" path="res://assets/skeleton1.png" id="2_co034"]
-[ext_resource type="PackedScene" path="res://scenes/skeleton_hp.tscn" id="4_6vs2t"]
+[ext_resource type="PackedScene" uid="uid://b6xo3bv2b6ugl" path="res://scenes/skeleton_hp.tscn" id="4_6vs2t"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j348r"]
 radius = 17.0
@@ -90,7 +90,6 @@ animation = &"dead"
 frame_progress = 0.21065
 
 [node name="detection_area" type="Area2D" parent="."]
-visible = false
 collision_layer = 2
 collision_mask = 2
 
@@ -98,7 +97,8 @@ collision_mask = 2
 shape = SubResource("CircleShape2D_ltvja")
 
 [node name="hitbox_area" type="Area2D" parent="."]
-visible = false
+collision_layer = 3
+collision_mask = 3
 
 [node name="hitbox_shape" type="CollisionShape2D" parent="hitbox_area"]
 shape = SubResource("RectangleShape2D_iyyl1")

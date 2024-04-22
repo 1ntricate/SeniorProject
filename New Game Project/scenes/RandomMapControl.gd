@@ -5,7 +5,7 @@ var temperature = FastNoiseLite.new()
 var altitude= FastNoiseLite.new()
 var width = 500
 var height = 500
-var monster_count = 25
+var monster_count = 10
 var resoruce_objects_count = 25
 
 @onready var player = get_parent().get_child(1)
@@ -39,7 +39,7 @@ func _ready():
 	var spider = preload("res://scenes/spider.tscn")
 	var rock = preload("res://scenes/rock_scene.tscn")
 	var tree = preload("res://scenes/tree_scene.tscn")
-	
+	Global.last_played_map = "res://scenes/randomized_game_map.tscn"
 	moisture.seed = randi()
 	temperature.seed = randi()
 	generate_chunk(player.position)

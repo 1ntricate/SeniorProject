@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/goblin.gd" id="1_ghqo8"]
 [ext_resource type="Texture2D" uid="uid://bdc2vy25ut3kw" path="res://assets/goblin (1).png" id="1_k7dsi"]
-[ext_resource type="PackedScene" path="res://scenes/goblin_hp.tscn" id="3_pvl0r"]
+[ext_resource type="PackedScene" uid="uid://dtcgan6w0wnm5" path="res://scenes/goblin_hp.tscn" id="3_pvl0r"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4fh41"]
 radius = 11.0
@@ -55,6 +55,8 @@ collision_mask = 2
 shape = SubResource("CircleShape2D_ro6i5")
 
 [node name="hitbox_area" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
 
 [node name="hitbox_shape" type="CollisionShape2D" parent="hitbox_area"]
 shape = SubResource("CircleShape2D_s66n5")

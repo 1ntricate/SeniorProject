@@ -6,13 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://dtjrn7t220l8q" path="res://scenes/player_hp.tscn" id="5_itgrs"]
 [ext_resource type="PackedScene" uid="uid://dwav3fobau2b6" path="res://scenes/thirsty_bar.tscn" id="6_y4gya"]
 [ext_resource type="PackedScene" uid="uid://o5u0satefgk0" path="res://scenes/hunger_bar.tscn" id="7_fsxlf"]
-[ext_resource type="PackedScene" uid="uid://cxe851fhabkwf" path="res://scenes/player.tscn" id="8_ao5h6"]
+[ext_resource type="PackedScene" uid="uid://cy6ghtuve6rxv" path="res://scenes/player.tscn" id="8_ao5h6"]
 [ext_resource type="PackedScene" uid="uid://g7uu0doorq5l" path="res://scenes/pause_menu.tscn" id="9_bp2qh"]
 [ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="16_temx2"]
 [ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="17_sn3yw"]
 [ext_resource type="PackedScene" uid="uid://dj37ri57e1q1q" path="res://scenes/rock.tscn" id="18_vykgv"]
 [ext_resource type="PackedScene" uid="uid://o4kn4ounrgsr" path="res://scenes/RockHp.tscn" id="19_tin2b"]
-[ext_resource type="PackedScene" uid="uid://8kuxoo6lla18" path="res://scenes/water.tscn" id="20_si233"]
+[ext_resource type="PackedScene" uid="uid://drk3i30rh1bx1" path="res://scenes/water.tscn" id="20_si233"]
 
 [node name="RandomziedGameMap" type="Node2D"]
 position = Vector2(1, 0)

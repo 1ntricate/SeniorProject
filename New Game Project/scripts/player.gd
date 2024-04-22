@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @onready var timer_label = $countdown
-@onready var countdown = $survival_timer
+@onready var countdown = $wave_timer
 
 var enemy_in_range = false
 var goblin_in_range = false
@@ -15,6 +15,7 @@ var is_attacking = false
 var alive = true
 var inventory_on = false
 var key_input = false
+var elapsed_time = 0
 
 var health = 100
 var hunger = 100
@@ -53,8 +54,8 @@ var player_immunity = true
 var last_dir: String = "Down"
 
 func _ready():
-	Engine.time_scale = 1
-	#countdown.wait_time = 1.0
+	Global.time_survived = 0
+	process_mode = $PauseMenu.PROCESS_MODE_ALWAYS
 	countdown.start()
 	animation.play("m_walk_down")
 	animation.set_flip_h(false)
@@ -62,7 +63,7 @@ func _ready():
 	$thirsty_timer.start()
 	$ocean/ocean_timer.start()
 	$main_sound/main_sound_timer.start()
-	
+	$TimeSurvived.start()
 	if Global.mobile_joined:
 		mobile_button.visible = true
 	else:
@@ -336,14 +337,17 @@ func healing():
 		Global.current_tree_hp_0 = false
 		
 func pauseMenu():
-	if isPaused:
-		%PauseMenu.hide()
-		Engine.time_scale = 1
+	var root = get_tree().root # Get the root of the scene tree
+	if get_tree().paused:
+		%PauseMenu.hide() 
+		$TimeSurvived.start()
+		get_tree().paused = false # Resume the game
 	else:
-		%PauseMenu.show()
-		Engine.time_scale = 0
-		
+		%PauseMenu.show() 
+		$TimeSurvived.stop()
+		get_tree().paused = true # Pause the game
 	isPaused = !isPaused
+
 	
 func _on_playerhitbox_body_entered(body):
 	if body.has_method("enemy"):
@@ -488,3 +492,9 @@ func _on_ocean_timer_timeout():
 
 func _on_main_sound_timer_timeout():
 	main_sound.playing = true
+
+
+func _on_time_survived_timeout():
+	elapsed_time += 1
+	Global.time_survived = elapsed_time
+	print("Survival Time: " + str(elapsed_time) + " seconds")

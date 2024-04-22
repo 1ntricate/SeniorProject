@@ -20,6 +20,7 @@ func _ready():
 	
 func _physics_process(delta):
 	deal_dmg()
+	update_enemy_hp()
 	if auto_movement_enabled:
 		# Move automatically left or right
 		position += movement_direction * speed * delta
@@ -68,7 +69,7 @@ func _on_enemyhitbox_body_entered(body):
 		player_inrange = true
 
 func _on_enemyhitbox_body_exited(body):
-	if body.has_method("player"):
+	if body.has_method("player") or body.is_in_group("player"):
 		player_inrange = false
 
 func deal_dmg():
@@ -105,3 +106,5 @@ func _on_enemyhitbox_area_entered(area):
 			self.queue_free()
 			Global.slime_count -= 1
 	
+func update_enemy_hp():
+	enemybar.value = health

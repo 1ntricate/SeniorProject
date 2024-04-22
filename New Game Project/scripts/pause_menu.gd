@@ -16,5 +16,7 @@ func _on_resume_button_pressed():
 	
 
 func _on_quit_button_pressed():
+	var root = get_tree().root # Get the root of the scene tree
+	get_tree().paused = false # Resume the game
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 	pass # Replace with function body.

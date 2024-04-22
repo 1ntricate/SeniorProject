@@ -115,6 +115,8 @@ shape = SubResource("CircleShape2D_yuhqy")
 [node name="take_dmg_cooldown" type="Timer" parent="."]
 
 [node name="area_of_harvest" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
 
 [node name="harvest_shape" type="CollisionShape2D" parent="area_of_harvest"]
 position = Vector2(75.4545, 50)
@@ -127,6 +129,8 @@ sprite_frames = SubResource("SpriteFrames_852r0")
 animation = &"tree_40"
 
 [node name="pickup_area" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
 
 [node name="pickup_shape" type="CollisionShape2D" parent="pickup_area"]
 position = Vector2(79.6414, 49.8753)

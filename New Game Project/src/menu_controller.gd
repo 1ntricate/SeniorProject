@@ -437,7 +437,12 @@ func _update_map(PlayerID, MapID,scene,position_data, file_name,privacy,descript
 		print("Error json file empty")
 	var data = {"PlayerID" : PlayerID,"Map_id": MapID, "scene": scene, "pos_data": position_data, "file_name": file_name, "privacy": privacy, "description": description, "thumbnail": thumbnail, "thumb_name":thumb_file_name}
 	request_queue.push_back({"command" : command, "data" : data})
-	
+
+func _upload_time(PlayerID, MapID,time):
+	var command = "upload_time"
+	var data = {"PlayerID" : PlayerID,"Map_id": MapID, "Time": time}
+	request_queue.push_back({"command" : command, "data" : data})
+
 func get_map_list(flag):
 	var command = "get_map_list"
 	var data = {"flag" : flag}

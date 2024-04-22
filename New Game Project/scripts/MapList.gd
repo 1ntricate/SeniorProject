@@ -36,6 +36,8 @@ func load_items_into_gallery(path):
 						return
 					var save_data = json.data
 					var map_description = save_data["description"]
+					var map_id = save_data["map_id"]
+					#print("map id: ",map_id)
 					var privacy_setting = save_data["privacy"]
 					var privacy
 					if privacy_setting == 0:
@@ -50,6 +52,7 @@ func load_items_into_gallery(path):
 							var myVector2i = Vector2i(100, 100)
 							texture.set_size_override(myVector2i)
 							$ItemList.add_item(display_text, texture)
+							$ItemList.set_item_metadata($ItemList.get_item_count() - 1,map_id)
 					else:
 						var texture = load_image_as_thumbnail(no_img_icon)
 						if texture:
@@ -74,10 +77,12 @@ func _on_popup_menu_id_pressed(id):
 	print("id selected: ", id)
 	var selected_item = $ItemList.get_selected_items()[0]
 	var file_name = $ItemList.get_item_text(selected_item)
+	print("Map ID: ",$ItemList.get_item_metadata(selected_item))
+	Global.last_played_map_id = int($ItemList.get_item_metadata(selected_item))
 	# Handle the selected option here
 	print("Option selected for:", file_name, ", Option:", popup_options[id])
 	var absolute_path = ProjectSettings.globalize_path("res://") + "/player_maps/"
-	# process image selected
+
 	if id == 0:
 		var path = absolute_path + file_name + ".tscn"
 		Global.loaded_map = path

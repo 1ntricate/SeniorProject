@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c53yo0rg5us25"]
+[gd_scene load_steps=4 format=3 uid="uid://c53yo0rg5us25"]
 
 [ext_resource type="Texture2D" uid="uid://dsvgixj5433ux" path="res://images/game_over.png" id="1_7w8vn"]
 [ext_resource type="Script" path="res://scripts/Gameover.gd" id="1_g160c"]
+[ext_resource type="Texture2D" uid="uid://bswq8atrch2uy" path="res://back.png" id="3_dlcjg"]
 
 [node name="Gameover" type="Node2D"]
 script = ExtResource("1_g160c")
@@ -11,13 +12,35 @@ position = Vector2(574.75, 326.5)
 scale = Vector2(0.64202, 0.631836)
 texture = ExtResource("1_7w8vn")
 
-[node name="Label" type="Label" parent="Sprite2D"]
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="Time" type="Label" parent="Sprite2D"]
+top_level = true
+offset_left = 590.0
+offset_top = 388.0
+offset_right = 716.0
+offset_bottom = 462.0
+theme_override_colors/font_color = Color(1, 0.803922, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 23
+text = "00:00:00"
 
 [node name="Label2" type="Label" parent="Sprite2D"]
-offset_right = 40.0
-offset_bottom = 23.0
+top_level = true
+offset_left = 468.0
+offset_top = 384.0
+offset_right = 624.0
+offset_bottom = 433.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 26
+text = "Survived:"
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D"]
+modulate = Color(1, 1, 1, 0.682353)
+position = Vector2(-2.72574, 138.485)
+scale = Vector2(0.898207, 0.701659)
+texture = ExtResource("3_dlcjg")
 
 [node name="MainContainer" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
