@@ -71,17 +71,18 @@ func _ready():
 	
 func _physics_process(delta):
 	timer_label.text = "%02d:%02d" % survival_timer()
-	healing()
-	read_input()
-	enemy_atk()
-	goblin_atk()
-	skeleton_atk()
-	spider_atk()
+	if !isPaused:
+		healing()
+		read_input()
+		enemy_atk()
+		goblin_atk()
+		skeleton_atk()
+		spider_atk()
 	update_hp()
 	update_hunger_bar()
 	update_thirsty_bar()
 	attack_slowdown()
-	if drown:
+	if drown and !isPaused:
 		drown_player()
 	#shoot()
 	if Global.water_sound:
@@ -191,8 +192,8 @@ func read_input():
 			if Input.is_action_pressed("attack"):
 				is_attacking = true
 				play_attack_animation()
-			
-	check_moving_input() #check WASD for movement
+	if !isPaused:
+		check_moving_input() #check WASD for movement
 			
 			
 	# update direction
@@ -326,7 +327,6 @@ func health_condition():
 	if health > 100:
 		health = 100
 		
-
 func player():
 	pass
 
@@ -341,13 +341,27 @@ func pauseMenu():
 	if get_tree().paused:
 		%PauseMenu.hide() 
 		$TimeSurvived.start()
+		$hunger_timer.start()
+		$thirsty_timer.start()
+		$ocean/ocean_timer.start()
+		$hunger_timer.set_paused(false)
+		$thirsty_timer.set_paused(false)
+		isPaused = false
 		get_tree().paused = false # Resume the game
+		
 	else:
 		%PauseMenu.show() 
 		$TimeSurvived.stop()
-		get_tree().paused = true # Pause the game
-	isPaused = !isPaused
-
+		if !$hunger_timer.is_stopped():
+			$hunger_timer.set_paused(true)
+		if !$thirsty_timer.is_stopped():
+			$thirsty_timer.set_paused(true)
+		$ocean/ocean_timer.start()
+		isPaused = false
+		
+		isPaused = true
+		get_tree().paused = true # Pause the 
+		
 	
 func _on_playerhitbox_body_entered(body):
 	if body.has_method("enemy"):
@@ -374,7 +388,7 @@ func _on_playerhitbox_body_exited(body):
 
 func enemy_atk():
 	#slime attack dmg
-	if enemy_in_range and enemy_atk_cooldown == true and player_immunity == false:
+	if enemy_in_range and enemy_atk_cooldown == true and player_immunity == false and !isPaused:
 		health -= 3
 		enemy_atk_cooldown = false
 		$atk_cooldown.start()
@@ -382,7 +396,7 @@ func enemy_atk():
 
 func goblin_atk():	
 	#goblin attack dmg
-	if goblin_in_range and goblin_atk_cooldown == true and player_immunity == false:
+	if goblin_in_range and goblin_atk_cooldown == true and player_immunity == false and !isPaused:
 		health -= 8
 		goblin_atk_cooldown = false
 		$goblin_atk_cooldown.start()
@@ -390,14 +404,14 @@ func goblin_atk():
 		
 func skeleton_atk():	
 	#goblin attack dmg
-	if skeleton_in_range and skeleton_atk_cooldown == true and player_immunity == false:
+	if skeleton_in_range and skeleton_atk_cooldown == true and player_immunity == false and !isPaused:
 		health -= 10
 		skeleton_atk_cooldown = false
 		$skeleton_atk_cooldown.start()
 		#print(health)	
 
 func spider_atk():	
-	if spider_in_range and spider_atk_cooldown == true and player_immunity == false:
+	if spider_in_range and spider_atk_cooldown == true and player_immunity == false and !isPaused:
 		health -= 5
 		spider_atk_cooldown = false
 		$spider_atk_cooldown.start()
@@ -434,15 +448,16 @@ func update_hp():
 
 func _on_hunger_timer_timeout():
 	# Decrease hunger by 1 every second
-	if hunger > 0:
-		hunger -= 1
-		#print("Hunger:", hunger)
+	if !isPaused:
+		if hunger > 0:
+			hunger -= 1
+			#print("Hunger:", hunger)
 
-	# Check if the player is starving
-	if hunger == 0:
-		health -= 1
-		hunger = 0
-		print("You are starving!")
+		# Check if the player is starving
+		if hunger == 0:
+			health -= 1
+			hunger = 0
+			print("You are starving!")
 		
 func update_hunger_bar():
 	var hungerbar = $HungerBar
@@ -451,16 +466,17 @@ func update_hunger_bar():
 		hunger = 100
 
 func _on_thirsty_timer_timeout():
-	# Decrease thirsty by 1 every second
-	if thirsty > 0:
-		thirsty -= 1
-		#print("Thirsty:", thirsty)
+	if !isPaused:
+		# Decrease thirsty by 1 every second
+		if thirsty > 0:
+			thirsty -= 1
+			#print("Thirsty:", thirsty)
 
-	# Check if the player is starving
-	if thirsty == 0:
-		health -= 1
-		thirsty = 0
-		print("You need water!")
+		# Check if the player is starving
+		if thirsty == 0:
+			health -= 1
+			thirsty = 0
+			print("You need water!")
 	
 func update_thirsty_bar():
 	var thirstybar = $ThirstyBar
@@ -479,8 +495,9 @@ func _on_survival_timer_timeout():
 	pass # Replace with function body.
 
 func drown_player():
-	print("drowning!")
-	health -= 0.5
+	if !isPaused:
+		print("drowning!")
+		health -= 0.5
 
 func _on_drown_timer_timeout():
 	print("drown timer ended")

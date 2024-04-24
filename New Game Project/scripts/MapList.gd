@@ -77,8 +77,10 @@ func _on_popup_menu_id_pressed(id):
 	print("id selected: ", id)
 	var selected_item = $ItemList.get_selected_items()[0]
 	var file_name = $ItemList.get_item_text(selected_item)
-	print("Map ID: ",$ItemList.get_item_metadata(selected_item))
-	Global.last_played_map_id = int($ItemList.get_item_metadata(selected_item))
+	var map_id = $ItemList.get_item_metadata(selected_item)
+	print("Map ID: ", map_id)
+	if map_id !=null:
+		Global.last_played_map_id = int($ItemList.get_item_metadata(selected_item))
 	# Handle the selected option here
 	print("Option selected for:", file_name, ", Option:", popup_options[id])
 	var absolute_path = ProjectSettings.globalize_path("res://") + "/player_maps/"

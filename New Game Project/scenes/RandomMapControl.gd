@@ -31,7 +31,6 @@ var sand_tile_2 = Vector2i(0,3)
 var sand_tile_3 = Vector2i(1,3)
 var sand_tiles = [sand_tile_1,sand_tile_2,sand_tile_3]
 
-
 func _ready():
 	var slime = preload("res://scenes/enemy.tscn")
 	var skeleton = preload("res://scenes/skeleton.tscn")
@@ -85,8 +84,6 @@ func _ready():
 		new_spider.position =  spawn_pos + Vector2(random_offset_x*2, random_offset_y*2)
 		new_spider.connect("position_changed", Callable(self, "_on_enemy_position_changed"))
 		
-	
-
 	for i in range(resoruce_objects_count):  # You can adjust the number of copies as needed
 		var new_rock = rock.instantiate()
 		add_child(new_rock)

@@ -1,4 +1,1 @@
-tree: 25
-sky: 25
-sand: 9
-mountain: 1
+sky: 60

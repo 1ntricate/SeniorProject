@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c16kipcjhl7hv"]
+[gd_scene load_steps=13 format=3 uid="uid://c16kipcjhl7hv"]
 
 [ext_resource type="Script" path="res://scenes/ProcessedMapControl.gd" id="1_h84gs"]
 [ext_resource type="Texture2D" uid="uid://cbo85w3e862vw" path="res://tiles.png" id="1_m5yql"]
@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://dwav3fobau2b6" path="res://scenes/thirsty_bar.tscn" id="7_sap4r"]
 [ext_resource type="PackedScene" uid="uid://bhtrn4v64iw5" path="res://scenes/tree.tscn" id="9_r51ab"]
 [ext_resource type="PackedScene" uid="uid://dajqccjbquwo" path="res://scenes/TreeHp.tscn" id="10_ce2b1"]
-[ext_resource type="PackedScene" uid="uid://drk3i30rh1bx1" path="res://scenes/water.tscn" id="13_5x4n1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c5hju"]
 texture = ExtResource("1_m5yql")
@@ -96,10 +95,6 @@ offset_top = -163.636
 offset_right = -202.0
 offset_bottom = -35.6364
 scale = Vector2(0.5, 0.5)
-
-[node name="water" parent="." instance=ExtResource("13_5x4n1")]
-position = Vector2(-437.273, -32.7273)
-scale = Vector2(2.70909, 2.81818)
 
 [node name="tree" parent="." instance=ExtResource("9_r51ab")]
 visible = false
