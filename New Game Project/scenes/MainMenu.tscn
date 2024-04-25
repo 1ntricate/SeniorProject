@@ -50,14 +50,6 @@ text = "Play"
 layout_mode = 2
 text = "Login"
 
-[node name="BrowseMapsButton" type="Button" parent="MainMenu/MainContainer"]
-layout_mode = 2
-text = "Browse Public Maps"
-
-[node name="manage_img_button" type="Button" parent="MainMenu/MainContainer"]
-layout_mode = 2
-text = "Manage Images"
-
 [node name="Option_button" type="Button" parent="MainMenu/MainContainer"]
 layout_mode = 2
 text = "Settings"
@@ -70,6 +62,10 @@ text = "Exit"
 [node name="Welcome" type="Label" parent="MainMenu/MainContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.811765, 0.509804, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
 horizontal_alignment = 1
 
 [node name="OptionContainer" type="VBoxContainer" parent="MainMenu"]
@@ -455,8 +451,6 @@ text = "Return
 
 [connection signal="pressed" from="MainMenu/MainContainer/Start_button" to="MainMenu" method="_on_start_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Login_button" to="MainMenu" method="_on_login_button_pressed"]
-[connection signal="pressed" from="MainMenu/MainContainer/BrowseMapsButton" to="MainMenu" method="_on_browse_maps_button_pressed"]
-[connection signal="pressed" from="MainMenu/MainContainer/manage_img_button" to="MainMenu" method="_on_manage_img_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Option_button" to="MainMenu" method="_on_option_button_pressed"]
 [connection signal="pressed" from="MainMenu/MainContainer/Exit_button" to="MainMenu" method="_on_exit_button_pressed"]
 [connection signal="item_selected" from="MainMenu/OptionContainer/TabContainer/Video/Resolution_Optionbutton" to="MainMenu" method="_on_resolution_optionbutton_item_selected"]

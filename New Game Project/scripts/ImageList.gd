@@ -114,7 +114,9 @@ func _on_file_dialog_file_selected(path):
 			out_file.store_buffer(data)
 		var base64_data = Marshalls.raw_to_base64(data)
 		print("Image added to directory")
-		Network._upload_image(Global.player_id,path.get_file(),base64_data)
+		if Global.isUserLoggedIn:
+			pass
+			#Network._upload_image(Global.player_id,path.get_file(),base64_data)
 		reload()
 		
 	

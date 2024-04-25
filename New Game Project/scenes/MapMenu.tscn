@@ -41,23 +41,15 @@ grow_vertical = 2
 
 [node name="mobile_button" type="Button" parent="MapMenu/MainMapContainer"]
 layout_mode = 2
-text = "Mobile"
-
-[node name="default_map_button" type="Button" parent="MapMenu/MainMapContainer"]
-layout_mode = 2
-text = "Default Map"
-
-[node name="random_map" type="Button" parent="MapMenu/MainMapContainer"]
-layout_mode = 2
-text = "Randomized Map"
-
-[node name="new_map_button" type="Button" parent="MapMenu/MainMapContainer"]
-layout_mode = 2
-text = "Create New Map"
+text = "Play Mobile"
 
 [node name="browse_maps_button" type="Button" parent="MapMenu/MainMapContainer"]
 layout_mode = 2
-text = "My Maps"
+text = "Select Map"
+
+[node name="Images" type="Button" parent="MapMenu/MainMapContainer"]
+layout_mode = 2
+text = "Manage Images"
 
 [node name="back_button" type="Button" parent="MapMenu/MainMapContainer"]
 layout_mode = 2
@@ -77,8 +69,6 @@ theme_override_font_sizes/font_size = 33
 text = "Map Menu"
 
 [connection signal="pressed" from="MapMenu/MainMapContainer/mobile_button" to="MapMenu" method="_on_mobile_button_pressed"]
-[connection signal="pressed" from="MapMenu/MainMapContainer/default_map_button" to="MapMenu" method="_on_default_map_button_pressed"]
-[connection signal="pressed" from="MapMenu/MainMapContainer/random_map" to="MapMenu" method="_on_random_map_pressed"]
-[connection signal="pressed" from="MapMenu/MainMapContainer/new_map_button" to="MapMenu" method="_on_new_map_button_pressed"]
 [connection signal="pressed" from="MapMenu/MainMapContainer/browse_maps_button" to="MapMenu" method="_on_browse_maps_button_pressed"]
+[connection signal="pressed" from="MapMenu/MainMapContainer/Images" to="MapMenu" method="_on_images_pressed"]
 [connection signal="pressed" from="MapMenu/MainMapContainer/back_button" to="MapMenu" method="_on_back_button_pressed"]

@@ -100,6 +100,10 @@ func _ready():
 	# Connect our request handler:
 	add_child(http_request)
 	http_request.connect("request_completed", Callable(self, "_http_request_completed"))
+	if Global.isUserLoggedIn == true:
+		$MainContainer/Welcome.text = "Welcome, " + Global.player_user_name
+		Network.connect("images_received", Callable(self, "_on_images_received"))
+		Network._get_images(Global.player_id)
 
 	
 func _process(_delta):

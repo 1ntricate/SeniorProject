@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://c77ftjevy5dgq"]
+
+[ext_resource type="Script" path="res://MapSelector.gd" id="1_1wepj"]
+[ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_am0l1"]
+
+[node name="MapSelector" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_1wepj")
+
+[node name="Bg" type="Sprite2D" parent="."]
+position = Vector2(521, 261)
+texture = ExtResource("2_am0l1")
+
+[node name="MainMapContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 472.0
+offset_top = 269.0
+offset_right = 712.0
+offset_bottom = 502.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="new_map_button" type="Button" parent="MainMapContainer"]
+layout_mode = 2
+text = "Create New Map"
+
+[node name="public" type="Button" parent="MainMapContainer"]
+layout_mode = 2
+text = "Browse Public Maps"
+
+[node name="rand_map" type="Button" parent="MainMapContainer"]
+layout_mode = 2
+text = "Play On Randomized Map"
+
+[node name="browse_maps_button" type="Button" parent="MainMapContainer"]
+layout_mode = 2
+text = "My Maps"
+
+[node name="back_button" type="Button" parent="MainMapContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Back"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 461.0
+offset_top = 147.0
+offset_right = 757.0
+offset_bottom = 193.0
+theme_override_colors/font_color = Color(0.811765, 0.509804, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+text = "Select Map To Play"
+
+[connection signal="pressed" from="MainMapContainer/new_map_button" to="." method="_on_new_map_button_pressed"]
+[connection signal="pressed" from="MainMapContainer/public" to="." method="_on_public_pressed"]
+[connection signal="pressed" from="MainMapContainer/rand_map" to="." method="_on_rand_map_pressed"]
+[connection signal="pressed" from="MainMapContainer/browse_maps_button" to="." method="_on_browse_maps_button_pressed"]
+[connection signal="pressed" from="MainMapContainer/back_button" to="." method="_on_back_button_pressed"]
