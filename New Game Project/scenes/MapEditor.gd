@@ -6,7 +6,7 @@ extends Control
 @onready var map_name_box = $MainMapContainer/MapName
 @onready var player = $PlayerName
 
-var image_folder_path = "res://player_screenshots/"
+var image_folder_path = "user://screenshots/"
 var popup_options = ["Use as Thumbnail", "Delete Image"] # Define your options here
 
 var player_label
@@ -158,7 +158,7 @@ func update_json():
 
 # rename map if user updated name
 func rename_files(old_path,new_path):
-	var dir_access = DirAccess.open("res://player_maps/")
+	var dir_access = DirAccess.open("user://maps/")
 	if dir_access:
 		var result = dir_access.rename(old_path, new_path)
 		if result == OK:
@@ -341,7 +341,7 @@ func _on_popup_menu_id_pressed(id):
 	var file_name = $ItemList.get_item_text(selected_item)
 	# Handle the selected option here
 	print("Option selected for:", file_name, ", Option:", popup_options[id])
-	var absolute_path = "res://player_screenshots/"
+	var absolute_path = "user://screenshots/"
 	# use as thumbnail selected
 	if id == 0:
 		var path = absolute_path + file_name

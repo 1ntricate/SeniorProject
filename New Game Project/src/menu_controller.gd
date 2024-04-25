@@ -96,6 +96,9 @@ func _save_settings() -> void:
 
 func _ready():
 	_load_settings()
+	ensure_images_directory_exists()
+	ensure_map_directory_exists()
+	ensure_screen_directory_exists()
 	#Resolution_ob.select(_check_resolution(DisplayServer.screen_get_size()))
 	# Connect our request handler:
 	add_child(http_request)
@@ -104,7 +107,24 @@ func _ready():
 		$MainContainer/Welcome.text = "Welcome, " + Global.player_user_name
 		Network.connect("images_received", Callable(self, "_on_images_received"))
 		Network._get_images(Global.player_id)
-
+		
+func ensure_images_directory_exists():
+	var dir = DirAccess.open("user://")
+	if not dir.dir_exists("images"):
+		dir.make_dir("images")
+	dir.list_dir_end()
+	
+func ensure_map_directory_exists():
+	var dir = DirAccess.open("user://")
+	if not dir.dir_exists("maps"):
+		dir.make_dir("maps")
+	dir.list_dir_end()
+	
+func ensure_screen_directory_exists():
+	var dir = DirAccess.open("user://")
+	if not dir.dir_exists("screenshots"):
+		dir.make_dir("screenshots")
+	dir.list_dir_end()
 	
 func _process(_delta):
 	
@@ -241,6 +261,7 @@ func _send_request(request: Dictionary):
 	#print("Requesting...\n\tCommand: " + request['command'] + "\n\tBody: " + body)
 
 func _on_images_received():
+	print("image urls received", Global.image_urls)
 	_setup_requests(Global.image_urls)
 
 func _on_map_list_received():
@@ -306,7 +327,7 @@ func _process_next_p_map_request():
 func _http_p_map_request_completed(result, response_code, headers, body):
 	var file_name = image_name 
 	is_request_active = false # Mark the current request as completed
-	var save_path = "res://player_images/"
+	var save_path = "res://user/images/"
 	var full_save_path = save_path + file_name
 	if result == HTTPRequest.RESULT_SUCCESS:
 		var image = Image.new()
@@ -321,19 +342,26 @@ func _http_p_map_request_completed(result, response_code, headers, body):
 	_process_next_p_map_request()# Process the next item in the queue
 
 func _http_request_completed2(result, response_code, headers, body):
+	print("request completed 2")
 	var file_name = image_name 
 	is_request_active = false # Mark the current request as completed
-	var save_path = "res://player_images/"
+	var save_path = "user://images/"
 	var full_save_path = save_path + file_name
 	if result == HTTPRequest.RESULT_SUCCESS:
+		print("download sucess, attempting to save")
 		if !FileAccess.file_exists(full_save_path):
 			var out_file = FileAccess.open(full_save_path, FileAccess.WRITE)
 			if out_file:
+				print("out file sucess")
 				out_file.store_buffer(body)
 				out_file.close()
 				print(file_name + " added to directory.")
+			else:
+				print("error opening out file path")
 		else:
 			print("Image already downloaded")
+	else:
+		print("Download error")
 	_process_next_request() # Process the next item in the queue
 
 
@@ -357,8 +385,8 @@ func _http_map_request_completed(result, response_code, headers, body):
 	var file_name = map_name
 	var out_file
 	is_request_active = false 
-	var save_path1 = "res://player_maps/"
-	var save_path2 = "res://player_screenshots/"
+	var save_path1 = "user://maps/"
+	var save_path2 = "user://screenshots/"
 	if result == HTTPRequest.RESULT_SUCCESS:
 		var full_save_path1 = save_path1 + file_name	
 		var full_save_path2 = save_path2 + file_name
@@ -367,6 +395,7 @@ func _http_map_request_completed(result, response_code, headers, body):
 			print("PNG detected")
 			out_file = FileAccess.open(full_save_path2, FileAccess.WRITE)
 		else:
+			print("map path: ",full_save_path1)
 			out_file = FileAccess.open(full_save_path1, FileAccess.WRITE)
 		#var filer_name = request_to_filename[http_request]
 		if out_file:

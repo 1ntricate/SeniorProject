@@ -237,7 +237,7 @@ func spawn_enemies():
 func _on_map_uploaded():
 	print("map uploaded")
 	Global.upload_map = false
-	var json_path = "res://player_maps/" +  Global.map_name+ ".json"
+	var json_path = "user://maps/" +  Global.map_name+ ".json"
 	var in_file = FileAccess.open(json_path, FileAccess.READ)
 	if in_file:
 		var json_text = in_file.get_as_text()
@@ -249,7 +249,8 @@ func _on_map_uploaded():
 			return
 		var save_data = json.data
 		save_data["map_id"] = Global.uploaded_map_id
-		save_data["map_id"] = Global.last_played_map_id
+		print("MapID: ", Global.uploaded_map_id)
+		#save_data["map_id"] = Global.last_played_map_id
 		save_data["on_server"] = 1
 		var json_data = json.stringify(save_data)
 		var out_file = FileAccess.open(json_path,FileAccess.WRITE)
@@ -472,12 +473,12 @@ func save_game():
 	}
 	var json = JSON.new()
 	var json_data = json.stringify(save_data)
-	var j_file_path = "res://player_maps/" +  Global.map_name+ ".json"
+	var j_file_path = "user://maps/" +  Global.map_name+ ".json"
 	var out_file = FileAccess.open(j_file_path,FileAccess.WRITE)
 	if out_file:
 		out_file.store_line(json_data)
 		
-	var scene_path = "res://player_maps/" +  Global.map_name+ ".tscn"
+	var scene_path = "user://maps/" +  Global.map_name+ ".tscn"
 	var current_scene = get_tree().current_scene
 	var packed_scene = PackedScene.new()
 	var result = packed_scene.pack(current_scene)

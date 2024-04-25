@@ -1,9 +1,9 @@
 extends Control
 
-var image_folder_path = "res://player_maps/"
+var image_folder_path = "user://maps/"
 var popup_options = ["Download Map", "UpVote", "DownVote", "Rate Difficulty"] 
 var map_ids = []
-var no_img_icon = "res://no_image.png"
+var no_img_icon = "user://no_image.png"
 var rating_set = false
 var max_stars = 5
 var current_rating = 0
@@ -108,7 +108,7 @@ func _on_item_list_item_selected(index):
 		$PopupMenu.popup() # Show the popup at the current mouse position.
 
 func _on_button_pressed():
-	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/map_selector.tscn")
 	
 func _on_new_image_button_pressed():
 	$FileDialog.popup()

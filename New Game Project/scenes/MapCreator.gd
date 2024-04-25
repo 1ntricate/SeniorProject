@@ -22,7 +22,7 @@ func _on_save_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/processed_game_map.tscn")
 
 func _on_return_button_pressed():
-	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/map_selector.tscn")
 	
 func _on_local_only_toggled(toggled_on):
 	Global.upload_map = true

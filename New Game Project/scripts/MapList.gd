@@ -1,8 +1,8 @@
 extends Control
 
-var image_folder_path = "res://player_maps/"
+var image_folder_path = "user://maps/"
 var popup_options = ["Play Map", "Delete Map Locally","Edit Properties"] # Define your options here
-var no_img_icon = "res://no_image.png"
+var no_img_icon = "user://no_image.png"
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$ItemList.icon_mode = ItemList.ICON_MODE_LEFT 
@@ -83,7 +83,7 @@ func _on_popup_menu_id_pressed(id):
 		Global.last_played_map_id = int($ItemList.get_item_metadata(selected_item))
 	# Handle the selected option here
 	print("Option selected for:", file_name, ", Option:", popup_options[id])
-	var absolute_path = ProjectSettings.globalize_path("res://") + "/player_maps/"
+	var absolute_path = ProjectSettings.globalize_path("user://") + "/maps/"
 
 	if id == 0:
 		var path = absolute_path + file_name + ".tscn"
@@ -118,7 +118,7 @@ func _on_item_list_item_selected(index):
 		$PopupMenu.popup() # Show the popup at the current mouse position.
 
 func _on_button_pressed():
-	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/map_selector.tscn")
 	
 func _on_new_image_button_pressed():
 	$FileDialog.popup()

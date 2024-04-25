@@ -17,7 +17,7 @@ func screenshot():
 		var filename_with_extension = parts[-1]
 		filename_without_extension = filename_with_extension.split(".")[0]
 		print("Loaded map is not null, Using map name: ", filename_without_extension)
-	var dir = DirAccess.open("res://player_screenshots/")
+	var dir = DirAccess.open("user://screenshots/")
 	dir.list_dir_begin()
 	var file_name = dir.get_next()
 	while file_name != "":
@@ -29,7 +29,7 @@ func screenshot():
 	print("map name:" ,filename_without_extension)
 	var viewport = get_viewport()
 	var img = viewport.get_texture().get_image()
-	img.save_png("res://player_screenshots/" +str(filename_without_extension) +str(ssCount) +".png")
+	img.save_png("user://screenshots/" +str(filename_without_extension) +str(ssCount) +".png")
 	ssCount +=1                    
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

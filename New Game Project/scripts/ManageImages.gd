@@ -41,7 +41,7 @@ func load_images_from_directory(path):
 			if file == "":
 				break
 			elif not file.begins_with(".") and (file.ends_with(".png") or file.ends_with(".jpg") or file.ends_with(".jpeg")):
-				image_paths.append("res://images/" + file)  # Store file paths as constant strings
+				image_paths.append("user://images/" + file)  # Store file paths as constant strings
 		dir.list_dir_end()
 	return null
 
