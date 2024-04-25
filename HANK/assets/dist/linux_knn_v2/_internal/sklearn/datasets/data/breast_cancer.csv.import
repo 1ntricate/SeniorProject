@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://clm5nb8j7yova"
+
+[deps]
+
+files=["res://assets/dist/linux_knn_v2/_internal/sklearn/datasets/data/breast_cancer.30.translation", "res://assets/dist/linux_knn_v2/_internal/sklearn/datasets/data/breast_cancer.malignant.translation", "res://assets/dist/linux_knn_v2/_internal/sklearn/datasets/data/breast_cancer.benign.translation"]
+
+source_file="res://assets/dist/linux_knn_v2/_internal/sklearn/datasets/data/breast_cancer.csv"
+dest_files=["res://assets/dist/linux_knn_v2/_internal/sklearn/datasets/data/breast_cancer.30.translation", "res://assets/dist/linux_knn_v2/_internal/sklearn/datasets/data/breast_cancer.malignant.translation", "res://assets/dist/linux_knn_v2/_internal/sklearn/datasets/data/breast_cancer.benign.translation"]
+
+[params]
+
+compress=true
+delimiter=0

@@ -193,11 +193,10 @@ patch_size = (150, 150)
 low_threshold = 50 
 high_threshold = 150  
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-os.chdir(script_dir)
 # Read the CSV file
-csv_file = 'known_data.csv'
-known_data = load_csv(csv_file)
+#csv_file = 'known_data.csv'
+csv_file_path = os.path.join(os.getcwd(), 'assets/dist/knn_v2/known_data.csv')
+known_data = load_csv(csv_file_path)
 
 patch_info = []
 patches = []
@@ -343,8 +342,8 @@ for i, feature_vector in enumerate(normalized_input_features):
     #print("----------------------------------------------------------------\n")
     add_text_to_patches(result_image, label,type, patch_num)
 
-
-with open("identified_elements.txt", "w") as file:
+txt_path = os.path.join(os.getcwd(), 'assets/dist/knn_v2/identified_elements.txt')
+with open(txt_path, "w") as file:
     for type, count in type_counts.items():
         file.write(f"{type}: {count}\n")
 
