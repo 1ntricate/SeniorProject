@@ -30,7 +30,7 @@ var skeleton_count = 0
 var slime_count = 0
 var goblin_count = 0
 var spider_count = 0
-var spawn_enemies = false
+var spawn_enemies = true
 var current_tree_hp_0 = false
 
 var spider_on_sand = false

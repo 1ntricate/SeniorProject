@@ -118,7 +118,8 @@ func load_image_as_thumbnail(path):
 	var image = Image.load_from_file(path) 
 	var texture = ImageTexture.create_from_image(image)
 	var myVector2i = Vector2i(100, 100)
-	texture.set_size_override(myVector2i)
+	if texture:
+		texture.set_size_override(myVector2i)
 	return texture
 
 

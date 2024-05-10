@@ -514,4 +514,4 @@ func _on_main_sound_timer_timeout():
 func _on_time_survived_timeout():
 	elapsed_time += 1
 	Global.time_survived = elapsed_time
-	print("Survival Time: " + str(elapsed_time) + " seconds")
+	#print("Survival Time: " + str(elapsed_time) + " seconds")

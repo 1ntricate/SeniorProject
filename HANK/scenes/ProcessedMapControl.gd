@@ -39,6 +39,7 @@ var steel_tile = Vector2i(2,0)
 
 var grass_positions = []
 var sand_positions = []
+var base_min_count = 10
 
 func check_player_position2():
 	var player_tile_pos = local_to_map(player.position)
@@ -123,6 +124,7 @@ func spawn_resoruces():
 	
 
 func _ready():
+	reset_enemies()
 	Network.connect("map_uploaded", Callable(self,"_on_map_uploaded"))
 	print("loaded map: ", Global.loaded_map)
 	Global.last_played_map = Global.loaded_map
@@ -130,6 +132,7 @@ func _ready():
 	#rand_float.seed = randi()
 	#RandomNumberGenerator.seed(rand_float)
 	spawn_enemies()
+	
 	# if creating new map
 	if Global.new_map:
 		moisture.seed = randi()
@@ -152,6 +155,12 @@ func _ready():
 		print("json path: ",json_path)
 		load_scene_from_file(json_path)
 
+func reset_enemies():
+	Global.skeleton_count = 0
+	Global.slime_count = 0
+	Global.goblin_count = 0
+	Global.spider_count = 0
+	
 func check_water(position):
 	var tile_pos = local_to_map(position)
 	# if no water on map, add some
@@ -192,6 +201,10 @@ func add_water_section(center_x, center_y, radius):
 func _process(delta):
 	#print(player.position)
 	check_player_position2()
+	var time_in_minutes = Global.time_survived / 60  # Convert seconds to minutes
+	var increment_per_minute = 10
+	var min_count = base_min_count + int(time_in_minutes) * increment_per_minute
+	manage_enemy_spawning(min_count)
 
 func spawn_enemies():
 	# spawn enemies
@@ -204,6 +217,7 @@ func spawn_enemies():
 	for i in range(monster_count):
 		var new_slime = slime.instantiate()
 		add_child(new_slime)
+		Global.slime_count += 1
 		# set the position of each copy
 		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
 		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
@@ -212,6 +226,7 @@ func spawn_enemies():
 	for i in range(monster_count):  
 		var new_skeleton = skeleton.instantiate()
 		add_child(new_skeleton)
+		Global.skeleton_count += 1
 		# set the position of each copy
 		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
 		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
@@ -220,6 +235,7 @@ func spawn_enemies():
 	for i in range(monster_count): 
 		var new_spider = spider.instantiate()
 		add_child(new_spider)
+		Global.goblin_count += 1
 		# set the position of each copy
 		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
 		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
@@ -228,10 +244,40 @@ func spawn_enemies():
 	for i in range(monster_count): 
 		var new_goblin = goblin.instantiate()
 		add_child(new_goblin)
+		Global.spider_count += 1
 		# set the position of each copy
 		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
 		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
 		new_goblin.position =  Vector2(random_offset_x, random_offset_y)
+
+func manage_enemy_spawning(min_count):
+	check_enemy_count("enemy", Global.slime_count, min_count)
+	check_enemy_count("skeleton", Global.skeleton_count, min_count)
+	check_enemy_count("goblin", Global.goblin_count, min_count)
+	check_enemy_count("spider", Global.spider_count, min_count)
+
+func check_enemy_count(enemy_type, current_count, min_count):
+	if current_count < min_count:
+		spawn_wave_enemies(enemy_type, min_count - current_count)
+		if enemy_type =="enemy":
+			Global.slime_count += min_count- current_count
+		elif enemy_type =="skeleton":
+			Global.skeleton_count += min_count- current_count
+		elif enemy_type =="goblin":
+			Global.goblin_count += min_count- current_count
+		elif enemy_type == "spider":
+			Global.spider_count += min_count - current_count
+		
+
+func spawn_wave_enemies(enemy_type, amount):
+	var enemy_scene = load("res://scenes/" + enemy_type + ".tscn")
+	print("Spawning %d %s", amount, enemy_type)
+	for i in range(amount):
+		var new_enemy = enemy_scene.instantiate()
+		add_child(new_enemy)
+		var random_offset_x = randf_range(-enemey_offset_range, enemey_offset_range)
+		var random_offset_y = randf_range(-enemey_offset_range, enemey_offset_range)
+		new_enemy.position =  Vector2(random_offset_x, random_offset_y)
 
 
 func _on_map_uploaded():

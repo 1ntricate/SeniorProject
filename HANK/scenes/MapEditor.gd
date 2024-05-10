@@ -44,45 +44,46 @@ func _process(delta):
 	pass
 
 func get_map_info():
-	print("selected map: ", Global.selected_map_path)
+	print("Selected map: ", Global.selected_map_path)
 	var in_file = FileAccess.open(Global.selected_map_path, FileAccess.READ)
 	if in_file:
 		var json_text = in_file.get_as_text()
 		in_file.close()
+		
 		var json = JSON.new()
 		var error = json.parse(json_text)
 		if error != OK:
 			print("Failed to parse JSON")
 			return
-		var save_data = json.data
-		var created_by = save_data["created_by"]
-		var thumb_nail = save_data["thumbnail"]
-		var init_on_server = save_data["on_server"]
-		if init_on_server == 0:
-			$OnServer.button_pressed = false
-		else:
-			$OnServer.button_pressed = true
+		
+		var save_data = json.get_data()
+		
+		# Check and retrieve JSON data with fallbacks where necessary
+		var created_by = save_data.get("created_by", "Unknown")
+		var thumb_nail = save_data.get("thumbnail", null)
+		var init_on_server = save_data.get("on_server", 0)
+		var map_description = save_data.get("description", "No description provided.")
+		var map_id = save_data.get("map_id", 0)
+		var privacy_setting = save_data.get("privacy", 0)
+		
+		# Update UI elements based on the retrieved data
+		$OnServer.button_pressed = init_on_server != 0
+		if $OnServer.button_pressed:
 			print("Map on server")
-			on_server = true
+		
 		if thumb_nail != null:
 			cur_thumbnail = thumb_nail
-		#if created_by != null:
-		#	player_label.text = "Created By: "
-		var map_description = save_data["description"]
-		var map__id = int(save_data["map_id"])
-		print("MapID: ", map_id)
-		if map__id != 0:
-			map_id = map__id
-		dsc_box.text = map_description
-		var privacy_setting = save_data["privacy"]
-		if privacy_setting == null:
-			privacy_setting = 0
-		old_privacy = privacy_setting
-		print("Priacy:", privacy_setting)
-		$PrivacyButton.select(privacy_setting)
 		
+		#player_label.text = "Created by: " + created_by
+		dsc_box.text = map_description
+		
+		print("Map ID: ", map_id)
+		print("Privacy: ", privacy_setting)
+		
+		$PrivacyButton.select(privacy_setting)
 	else:
-		print("error opening json")
+		print("Error opening JSON file")
+
 		
 func _on_save_button_pressed():
 	new_name = map_name.get_text()
@@ -139,20 +140,24 @@ func update_json():
 		if out_file:
 			out_file.store_line(json_data)
 			print("updated json")
+			out_file.close() 
 			# rename map
 			if new_name != null:
 				var dir = Global.selected_map_path.get_base_dir() + "/"
-				var old_json_path = Global.selected_map_path.get_file()
+				var old_json_path = Global.selected_map_path
+				#print("old json: ", old_json_path)
 				var old_map_path = old_json_path.replace(".json", ".tscn")
+				#print("old map path: ", old_map_path)
 				var new_json_path = dir + new_name + ".json"
+				#print("new json: ", new_json_path)
 				var new_map_path = dir + new_name+  ".tscn"
-				print("new_map_path: ", new_map_path)
+				#print("new_map_path: ", new_map_path)
 				path1 = new_json_path
 				path2 = new_map_path
-				rename_files(Global.selected_map_path, new_json_path)
+				rename_files(old_json_path, new_json_path)
 				rename_files(old_map_path, new_map_path)
-		print("path1: ", path1)
-		print("path2: ", path2)
+		#print("path1: ", path1)
+		#print("path2: ", path2)
 	else:
 		print("error updating map")
 
@@ -164,7 +169,8 @@ func rename_files(old_path,new_path):
 		if result == OK:
 			print("File renamed successfully.")
 		else:
-			print("Failed to rename file.")
+			print("Failed to rename file: ", old_path, "\nto ", new_path)
+			print("Error code:", result)
 
 # check if map was on server and if user wishes to upload or remove from server
 func check_on_server():
@@ -374,7 +380,7 @@ func load_images_into_gallery(path):
 			file = dir.get_next()
 			if !file.begins_with(".") and (file.ends_with(".png") or file.ends_with(".jpg") or file.ends_with(".jpeg")) and file.find(Global.selected_map) != -1:
 				var image_path = path + file
-				print(image_path)
+				print("image path: ",image_path)
 				var texture = load_image_as_thumbnail(image_path)
 				if texture:
 					var item_index = $ItemList.add_item(file, texture)
@@ -383,6 +389,7 @@ func load_images_into_gallery(path):
 						$ItemList.set_item_custom_bg_color(item_index,Color(0.5, 0.42, 0, 0.5))
 				else:
 					print("No texture")
+					
 					
 func load_image_as_thumbnail(path):
 	if path != "":
@@ -393,6 +400,7 @@ func load_image_as_thumbnail(path):
 			texture.set_size_override(myVector2i)
 		return texture
 	return null
+
 var image_paths = []
 
 func load_images_from_directory(path):

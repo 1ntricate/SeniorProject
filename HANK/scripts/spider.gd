@@ -43,12 +43,12 @@ func _physics_process(delta):
 			movement_direction = Vector2.DOWN
 		else:
 			movement_direction = Vector2.UP
-		emit_signal("position_changed", global_transform.origin,"spider")		
+		#emit_signal("position_changed", global_transform.origin,"spider")		
 	if player_chase:
 		position += (player.position - position) / speed
 		$AnimatedSprite2D.play("move_right")
 		check_direction()
-		emit_signal("position_changed", global_transform.origin,"spider")		
+		#emit_signal("position_changed", global_transform.origin,"spider")		
 	else:
 		$AnimatedSprite2D.play("idle")
 	if health <= 0:

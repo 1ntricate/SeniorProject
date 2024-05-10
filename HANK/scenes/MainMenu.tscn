@@ -451,10 +451,10 @@ text = "Return
 
 [node name="Label" type="Label" parent="MainMenu"]
 layout_mode = 0
-offset_left = -79.0
-offset_top = -258.0
-offset_right = 109.0
-offset_bottom = -167.0
+offset_left = -81.0
+offset_top = -328.0
+offset_right = 107.0
+offset_bottom = -237.0
 theme_override_colors/font_color = Color(0.811765, 0.509804, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
