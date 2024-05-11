@@ -96,9 +96,11 @@ func _save_settings() -> void:
 
 func _ready():
 	_load_settings()
-	ensure_images_directory_exists()
-	ensure_map_directory_exists()
-	ensure_screen_directory_exists()
+	ensure_directory_exists("images")
+	ensure_directory_exists("maps")
+	ensure_directory_exists("screenshots")
+	ensure_and_copy_knn_v2()
+	
 	#Resolution_ob.select(_check_resolution(DisplayServer.screen_get_size()))
 	# Connect our request handler:
 	add_child(http_request)
@@ -108,23 +110,51 @@ func _ready():
 		Network.connect("images_received", Callable(self, "_on_images_received"))
 		Network._get_images(Global.player_id)
 		
-func ensure_images_directory_exists():
+func ensure_directory_exists(dir_name: String):
 	var dir = DirAccess.open("user://")
-	if not dir.dir_exists("images"):
-		dir.make_dir("images")
+	if not dir.dir_exists(dir_name):
+		dir.make_dir(dir_name)
 	dir.list_dir_end()
-	
-func ensure_map_directory_exists():
-	var dir = DirAccess.open("user://")
-	if not dir.dir_exists("maps"):
-		dir.make_dir("maps")
-	dir.list_dir_end()
-	
-func ensure_screen_directory_exists():
-	var dir = DirAccess.open("user://")
-	if not dir.dir_exists("screenshots"):
-		dir.make_dir("screenshots")
-	dir.list_dir_end()
+
+func copy_directory(source_path: String, dest_path: String):
+	var source_dir = DirAccess.open(source_path)
+	if source_dir:
+		source_dir.list_dir_begin()  # No arguments here
+		var file_name = source_dir.get_next()
+		while file_name != "":
+			if file_name == "." or file_name == "..":
+				file_name = source_dir.get_next()
+				continue
+			var full_source_path = source_path + "/" + file_name
+			var full_dest_path = dest_path + "/" + file_name
+
+			if source_dir.current_is_dir():
+				var dest_dir = DirAccess.open(dest_path)
+				if not dest_dir.dir_exists(file_name):
+					dest_dir.make_dir(file_name)
+				copy_directory(full_source_path, full_dest_path)  # Recursively copy subdirectories
+			else:
+				var source_file = FileAccess.open(full_source_path, FileAccess.ModeFlags.READ)
+				var dest_file = FileAccess.open(full_dest_path, FileAccess.ModeFlags.WRITE)
+				dest_file.store_buffer(source_file.get_buffer(source_file.get_length()))
+				source_file.close()
+				dest_file.close()
+			file_name = source_dir.get_next()
+		source_dir.list_dir_end()
+	else:
+		print("Failed to open source directory: " + source_path)
+
+func ensure_and_copy_knn_v2():
+	var user_path = "user://knn_v2"
+	var res_path = "res://assets/dist/knn_v2"
+	var user_dir = DirAccess.open("user://")
+	if not user_dir.dir_exists("knn_v2"):
+		user_dir.make_dir("knn_v2")  # Ensure the directory structure is there
+		copy_directory(res_path, user_path)  # Copy all contents
+		print("knn_v2 directory copied to user directory.")
+	else:
+		print("knn_v2 directory already exists in user directory.")
+
 	
 func _process(_delta):
 	

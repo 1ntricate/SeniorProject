@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://biyyejk3jgomd"]
 
 [ext_resource type="Script" path="res://src/menu_controller.gd" id="1_scytx"]
-[ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_qat46"]
+[ext_resource type="Texture2D" uid="uid://bemkd2wtra4ld" path="res://images/main_bk.png" id="2_lwaop"]
 [ext_resource type="LabelSettings" uid="uid://1oyxx8ys1m6d" path="res://font.res" id="3_pcog5"]
 [ext_resource type="Script" path="res://src/Scroll_Label.gd" id="4_75hvu"]
 
@@ -23,8 +23,8 @@ script = ExtResource("1_scytx")
 metadata/_edit_use_anchors_ = true
 
 [node name="Bg" type="Sprite2D" parent="MainMenu"]
-position = Vector2(11, -33)
-texture = ExtResource("2_qat46")
+position = Vector2(20, -33)
+texture = ExtResource("2_lwaop")
 
 [node name="MainContainer" type="VBoxContainer" parent="MainMenu"]
 unique_name_in_owner = true
